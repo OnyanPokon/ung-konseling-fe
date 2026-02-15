@@ -30,10 +30,18 @@ export default class Permission extends Model {
     if (Array.isArray(apiData)) return apiData.flatMap((object) => this.fromApiData(object)) as ReturnType<T, ApiData, Permission>;
 
     const arrays = apiData.split('_');
-    const actionsString = arrays.shift();
+    const actionsString = arrays.shift() ?? '';
     const modelString = arrays.join('_');
 
-    const actions = this.actions[actionsString as keyof typeof this.actions] || [Action.NONE];
+    let actions: Action[] = [];
+
+    if (actionsString in this.actions) {
+      actions = this.actions[actionsString as keyof typeof this.actions];
+    } else {
+      const directAction = Action[actionsString?.toUpperCase() as keyof typeof Action];
+
+      actions = directAction ? [directAction] : [Action.NONE];
+    }
 
     env.dev(() => {
       const modelKeyDoesNotExist = !(modelString in Model.children);

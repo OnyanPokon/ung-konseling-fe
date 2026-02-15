@@ -29,36 +29,55 @@ const DashboardSider = ({ collapsed, onCloseMenu }) => {
       const permissionSpecific = hasPermission && !hasRole;
       if (permissionSpecific) return user.eitherCan(...permissions);
 
-      return user.eitherCan(...permissions) || user.eitherIs(...roles);
+      return (!hasRole && user.eitherCan(...permissions)) || (!hasPermission && user.eitherIs(...roles)) || (hasRole && hasPermission && user.eitherIs(...roles) && user.eitherCan(...permissions));
     })
-    .map(({ label, children, icon: Icon }) => ({
-      key: label,
-      label: (
-        <Tooltip title={label} placement="right" color="blue">
-          <span>{label}</span>
-        </Tooltip>
-      ),
-      icon: (
-        <Tooltip title={label} placement="right" color="blue">
-          <Icon />
-        </Tooltip>
-      ),
-      children: children
-        .filter(({ permissions, roles }) => {
-          const hasPermission = !permissions || user?.eitherCan(...permissions);
-          const hasRole = !roles || user?.eitherIs(...roles);
-          return hasPermission && hasRole;
-        })
-        .map(({ path, label }) => ({
-          key: path,
+    .map(({ label, icon: Icon, children, path }) => {
+      if (children && children.length > 0) {
+        return {
+          key: label,
           label: (
             <Tooltip title={label} placement="right" color="blue">
               <span>{label}</span>
             </Tooltip>
           ),
-          onClick: () => navigate(path)
-        }))
-    }));
+          icon: (
+            <Tooltip title={label} placement="right" color="blue">
+              <Icon />
+            </Tooltip>
+          ),
+          children: children
+            .filter(({ permissions, roles }) => {
+              const hasPermission = !permissions || user?.eitherCan(...permissions);
+              const hasRole = !roles || user?.eitherIs(...roles);
+              return hasPermission && hasRole;
+            })
+            .map(({ path, label }) => ({
+              key: path,
+              label: (
+                <Tooltip title={label} placement="right" color="blue">
+                  <span>{label}</span>
+                </Tooltip>
+              ),
+              onClick: () => navigate(path)
+            }))
+        };
+      }
+
+      return {
+        key: path,
+        label: (
+          <Tooltip title={label} placement="right" color="blue">
+            <span>{label}</span>
+          </Tooltip>
+        ),
+        icon: (
+          <Tooltip title={label} placement="right" color="blue">
+            <Icon />
+          </Tooltip>
+        ),
+        onClick: () => navigate(path)
+      };
+    });
 
   return isDesktop ? (
     <Sider theme="light" className="p-4" width={230} collapsed={collapsed}>

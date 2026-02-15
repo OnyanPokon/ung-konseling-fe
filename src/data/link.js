@@ -1,7 +1,10 @@
+import { Action, Role } from '@/constants';
 import * as Auth from '@/pages/auth';
 import * as Dashboard from '@/pages/dashboard';
 import * as Landing from '@/pages/landing';
-import { DashboardOutlined, UserOutlined } from '@ant-design/icons';
+import * as Model from '@/models';
+
+import { CalendarOutlined, DashboardOutlined, UserOutlined } from '@ant-design/icons';
 
 export const landingLink = [
   {
@@ -33,19 +36,27 @@ export const dashboardLink = [
     children: [{ path: '/dashboard', label: 'Dashboard', element: Dashboard.Dashboard }]
   },
   {
-    label: 'Konseli',
+    label: 'Aktor',
     icon: UserOutlined,
-    children: [{ path: '/konselis', label: 'Konselis', element: Dashboard.Konselis }]
+    roles: [Role.ADMIN],
+    children: [
+      { path: '/dashboard/konseli', label: 'Konselis', element: Dashboard.Konselis, permissions: [[Action.CREATE, Model.Konselis]] },
+      { path: '/dashboard/konselor', label: 'Konselor', element: Dashboard.Konselors, permissions: [[Action.CREATE, Model.Konselors]] }
+    ]
   },
   {
-    label: 'Konselor',
-    icon: UserOutlined,
-    children: [{ path: '/konselors', label: 'Konselor', element: Dashboard.Konselors }]
+    label: 'Layanan',
+    icon: CalendarOutlined,
+    roles: [Role.ADMIN],
+    children: [
+      { path: '/dashboard/hari_layanan', label: 'Hari Layanan', element: Dashboard.HariLayanans, permissions: [[Action.CREATE, Model.HariLayanans]] },
+      { path: '/dashboard/jadwal_konselor', label: 'Jadwal Konselor', element: Dashboard.JadwalKonselors, permissions: [[Action.CREATE, Model.JadwalKonselors]] }
+    ]
   }
 ].map((item) => ({
   ...item,
-  permissions: item.children.flatMap((child) => child.permissions).filter((permission) => permission),
-  roles: item.children.flatMap((child) => child.roles).filter((role) => role)
+  permissions: [...(item.permissions || []), ...(item.children?.flatMap((child) => child.permissions || []) ?? [])].filter(Boolean),
+  roles: [...(item.roles || []), ...(item.children?.flatMap((child) => child.roles || []) ?? [])].filter(Boolean)
 }));
 
 export const authLink = [

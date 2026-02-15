@@ -37,6 +37,10 @@ export default class User extends Model {
     return this.role === role;
   }
 
+  eitherIs(...roles: Role[]) {
+    return roles.some((role) => this.is(role));
+  }
+
   can(action: Action, model: ModelChildren) {
     return this.permissions.some((permission) => permission.can(action, model));
   }
@@ -56,7 +60,8 @@ export default class User extends Model {
   static fromApiData(apiData: IncomingApiData, token: string): User {
     const roles = {
       admin: Role.ADMIN,
-      opd_provinsi: Role.PEGAWAI
+      konseli: Role.KONSELI,
+      konselor: Role.KONSELOR
     };
     const role = roles[apiData.role.name as keyof typeof roles] || null;
     const permissions = Permission.fromApiData([...apiData.role.permissions, ...apiData.permissions]);

@@ -34,6 +34,7 @@ export default function AuthProvider({ children }) {
   const { execute: getUser, isLoading: getUserIsLoading } = useService(AuthService.me);
   const [token, setToken] = useLocalStorage('token', '');
   const [user, setUser] = useState(null);
+  const [isAuthBootstrapping, setIsAuthBootstrapping] = useState(true);
 
   env.dev(() => {
     window.token = token;
@@ -41,27 +42,34 @@ export default function AuthProvider({ children }) {
   });
 
   useEffect(() => {
-    if (!token) {
-      setUser(null);
-      return;
-    }
+    const bootstrap = async () => {
+      if (!token) {
+        setUser(null);
+        setIsAuthBootstrapping(false);
+        return;
+      }
 
-    const fetchUser = async () => {
       try {
-        const { code, data } = await getUser(token);
+        const res = await getUser(token);
+
+        const code = res?.code;
+
         if (code === HttpStatusCode.UNAUTHORIZED) {
+          setUser(null);
           setToken('');
-          return;
+        } else {
+          setUser(res.data);
         }
-        setUser(data);
-      } catch (error) {
-        console.error('Error fetching user:', error);
+      } catch {
+        setUser(null);
         setToken('');
+      } finally {
+        setIsAuthBootstrapping(false);
       }
     };
 
-    fetchUser();
-  }, [getUser, setToken, token]);
+    bootstrap();
+  }, [getUser, token, setToken]);
 
   const login = useCallback(
     /**
@@ -135,6 +143,7 @@ export default function AuthProvider({ children }) {
         token,
         user,
         isLoading: loginIsLoading || logoutIsLoading || getUserIsLoading || forgotIsLoading || resetIsLoading,
+        isAuthBootstrapping,
         onUnauthorized
       }}
     >

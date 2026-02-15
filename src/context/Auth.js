@@ -8,7 +8,8 @@ const AuthContext = createContext({
   token: JSON.parse(localStorage.getItem('token'))?.data || '',
   user: null,
   isLoading: false,
-  onUnauthorized: () => {}
+  onUnauthorized: () => {},
+  isAuthBootstrapping: true
 });
 
 export default AuthContext;
