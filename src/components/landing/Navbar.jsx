@@ -3,7 +3,7 @@ import { findItemByKey } from '@/utils/landingLink';
 import { MenuOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Drawer, Grid, Image, Menu, Skeleton } from 'antd';
 import PropTypes from 'prop-types';
-import {useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
@@ -25,10 +25,8 @@ const Navbar = () => {
       navigate(clickedItem.key);
     }
   };
-  
-  const loadingData = false
 
-
+  const loadingData = false;
 
   const isDesktop = breakpoints.lg || breakpoints.xl || breakpoints.xxl;
 
@@ -62,7 +60,7 @@ const Navbar = () => {
         )}
       </div>
       <div className="flex items-center justify-end gap-x-4">
-        <Button variant="solid" color="primary" icon={<UserOutlined />} onClick={() => navigate('/auth/login')}>
+        <Button shape="round" variant="solid" color="primary" icon={<UserOutlined />} onClick={() => navigate('/auth/login')}>
           Masuk
         </Button>
       </div>

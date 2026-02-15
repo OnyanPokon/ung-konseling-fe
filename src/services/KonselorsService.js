@@ -1,21 +1,21 @@
 /* eslint-disable no-unused-vars */
-import { {{model}} } from '@/models';
+import { Konselors } from '@/models';
 import api from '@/utils/api';
 
-export default class {{name}} {
+export default class KonselorsService {
   /**
    * @param {string} token
    * @returns {Promise<{
    *  code: HTTPStatusCode;
    *  status: boolean;
    *  message: string;
-   *  data?: {{model}}[];
+   *  data?: Konselors[];
    * }>}
    * */
-   static getAll({ token, ...filters }) {
+  static getAll({ token, ...filters }) {
     const params = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''));
     const abortController = new AbortController();
-    const response = api.get('{{endpoint}}', {
+    const response = api.get('/konselor', {
       token,
       signal: abortController.signal,
       params
@@ -25,14 +25,13 @@ export default class {{name}} {
       abortController,
       response,
       parser: (apiData) => {
-        const {{model}} = apiData?.{{model}} ?? apiData?.data ?? apiData ?? [];
-        return {{model}}.fromApiData({{model}});
+        const konselor = apiData?.konselor ?? apiData?.data ?? apiData ?? [];
+        return Konselors.fromApiData(konselor);
       }
     };
   }
-
   /**
-   * @param {{{model}}} data
+   * @param {Konselors} data
    * @param {string} token
    * @returns {Promise<{
    *  code: HTTPStatusCode;
@@ -42,12 +41,12 @@ export default class {{name}} {
    * }}
    */
   static async store(data, token) {
-    return await api.post('{{endpoint}}', { body: {{model}}.toApiData(data), token });
+    return await api.post('/konselor', { body: Konselors.toApiData(data), token });
   }
 
   /**
    * @param {number} id
-   * @param {{{model}}} data
+   * @param {Konselors} data
    * @param {string} token
    * @returns {Promise<{
    *  code: HTTPStatusCode;
@@ -57,7 +56,7 @@ export default class {{name}} {
    * }>}
    */
   static async update(id, data, token) {
-    return await api.patch(`{{endpoint}}/edit/${id}`, { body: {{model}}.toApiData(data), token });
+    return await api.put(`/konselor/${id}`, { body: Konselors.toApiData(data), token });
   }
 
   /**
@@ -70,7 +69,7 @@ export default class {{name}} {
    * }>}
    */
   static async delete(id, token) {
-    return await api.delete(`{{endpoint}}/delete/${id}`, { token });
+    return await api.delete(`/konselor/${id}`, { token });
   }
 
   /**
@@ -83,6 +82,6 @@ export default class {{name}} {
    * }>}
    */
   static async deleteBatch(ids, token) {
-    return await api.delete(`{{endpoint}}/multi-delete/?id=${ids.join(',')}`, { token });
+    return await api.delete(`/konselor/multi-delete/?id=${ids.join(',')}`, { token });
   }
 }

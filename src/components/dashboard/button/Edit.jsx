@@ -11,7 +11,7 @@ export default function Edit({ title = strings('edit'), onClick, model, action =
 
   return (
     <Tooltip title={title}>
-      <Button variant="outlined" color="primary" icon={<EditOutlined />} onClick={onClick} />
+      <Button variant="outlined" color="primary" icon={<EditOutlined />} onClick={onClick} shape="circle" />
     </Tooltip>
   );
 }

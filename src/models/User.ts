@@ -70,4 +70,4 @@ export default class User extends Model {
   }
 }
 
-Model.children.pengguna = User;
+Model.children.user = User;

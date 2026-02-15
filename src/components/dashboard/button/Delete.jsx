@@ -10,7 +10,7 @@ export default function Delete({ title = strings('delete'), onClick, model, acti
   if (action !== Action.NONE && (!user || user.cant(action, model))) return null;
   return (
     <Tooltip title={title}>
-      <Button variant="outlined" color="danger" icon={<DeleteOutlined />} onClick={onClick} />
+      <Button variant="outlined" color="danger" icon={<DeleteOutlined />} onClick={onClick} shape="circle" />
     </Tooltip>
   );
 }
