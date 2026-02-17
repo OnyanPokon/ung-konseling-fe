@@ -1,4 +1,5 @@
-export { default as Dashboard } from './Dashboard';
+export { default as AdminDashboard } from './AdminDashboard';
+export { default as KonseliDashboard } from './KonseliDashboard';
 export { default as Konselis } from './Konselis/Konselis';
 export { default as Konselors } from './Konselors/Konselors';
 export { default as HariLayanans } from './Layanans/HariLayanans';

@@ -33,7 +33,8 @@ export const dashboardLink = [
   {
     label: 'Overview',
     icon: DashboardOutlined,
-    children: [{ path: '/dashboard', label: 'Dashboard', element: Dashboard.Dashboard }]
+    roles: [Role.KONSELI],
+    children: [{ path: '/dashboard', label: 'Dashboard', element: Dashboard.KonseliDashboard }]
   },
   {
     label: 'Aktor',
