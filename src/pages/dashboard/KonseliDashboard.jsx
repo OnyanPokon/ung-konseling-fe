@@ -1,7 +1,8 @@
+import CounselingTicket from '@/components/dashboard/ConselingTicket';
 import { useAuth } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
-import { JadwalKonselorsService } from '@/services';
-import { Avatar, Badge, Calendar, Card, Descriptions, Empty, Spin, Tabs, Typography } from 'antd';
+import { JadwalKonselorsService, KonselisService, TiketsService } from '@/services';
+import { Avatar, Badge, Calendar, Card, Descriptions, Empty, Skeleton, Spin, Tabs, Typography } from 'antd';
 import React from 'react';
 
 const dayMap = {
@@ -16,7 +17,9 @@ const dayMap = {
 
 const KonseliDashboard = () => {
   const { onUnauthorized, token, user } = useAuth();
+  const { execute: fetchKonseli, ...getAllKonseli } = useAbortableService(KonselisService.getByUserId, { onUnauthorized });
   const { execute, ...getAllJadwalKonselors } = useAbortableService(JadwalKonselorsService.getAll, { onUnauthorized });
+  const { execute: fetchTickets, ...getAllTickets } = useAbortableService(TiketsService.getAll, { onUnauthorized });
 
   const fetchJadwalKonselors = React.useCallback(() => {
     execute({
@@ -24,14 +27,31 @@ const KonseliDashboard = () => {
     });
   }, [execute, token]);
 
+  const jadwalKonselors = React.useMemo(() => getAllJadwalKonselors.data ?? [], [getAllJadwalKonselors.data]);
+  const konseli = getAllKonseli.data ?? [];
+  const tickets = getAllTickets.data ?? [];
+
   React.useEffect(() => {
     fetchJadwalKonselors();
-  }, [fetchJadwalKonselors, token]);
+    fetchKonseli({
+      token: token,
+      id: user.id
+    });
+  }, [fetchJadwalKonselors, fetchKonseli, fetchTickets, konseli.id, token, user.id]);
+
+  React.useEffect(() => {
+    if (!konseli?.id) return;
+
+    fetchTickets({
+      token: token,
+      page: 1,
+      perPage: 1,
+      konseli_id: konseli.id
+    });
+  }, [fetchTickets, konseli?.id, token]);
 
   const [selectedDate, setSelectedDate] = React.useState(null);
   const [selectedKonselors, setSelectedKonselors] = React.useState([]);
-
-  const jadwalKonselors = React.useMemo(() => getAllJadwalKonselors.data ?? [], [getAllJadwalKonselors.data]);
 
   const groupedData = React.useMemo(() => {
     return jadwalKonselors.reduce((acc, item) => {
@@ -83,11 +103,22 @@ const KonseliDashboard = () => {
       </div>
 
       <hr className="col-span-12 my-2" />
-      <Card className="col-span-4" title={'Kalender'}>
+      <Card className="col-span-4 h-fit" title={'Kalender'}>
         <Calendar fullscreen={false} />
       </Card>
-      <Card className="col-span-8" title={'Status Layanan'}>
-        <Empty description="Tidak ada layanan aktif" />
+      <Card className="col-span-8" title={'Tiket'}>
+        {getAllTickets.isLoading && <Skeleton active />}
+
+        {!getAllTickets.isLoading && tickets.length === 0 && <Empty description="Belum ada tiket" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+        <div className="grid w-full grid-cols-4 gap-4">
+          {!getAllTickets.isLoading &&
+            tickets.length > 0 &&
+            tickets.map((item) => (
+              <div key={item.id} className="col-span-4">
+                <CounselingTicket key={item.id} status={item.status} type={item.type} ticket_number={item.ticket_number} day_name={item.hari_layanan.day_name} desc={item.desc} created_at={item.created_at} service_type={item.service_type} />
+              </div>
+            ))}
+        </div>
       </Card>
 
       <Card title={'Penjadwalan Konselor'} className="col-span-12">

@@ -4,13 +4,18 @@ import * as Dashboard from '@/pages/dashboard';
 import * as Landing from '@/pages/landing';
 import * as Model from '@/models';
 
-import { CalendarOutlined, DashboardOutlined, UserOutlined } from '@ant-design/icons';
+import { CalendarOutlined, DashboardOutlined, PaperClipOutlined, PhoneOutlined, PrinterOutlined, UserOutlined } from '@ant-design/icons';
 
 export const landingLink = [
   {
     label: 'Beranda',
     key: '/',
     element: Landing.Home
+  },
+  {
+    label: 'Daftar Konseli',
+    key: '/konseli_register',
+    element: Landing.KonseliRegister
   }
 ];
 
@@ -33,8 +38,28 @@ export const dashboardLink = [
   {
     label: 'Overview',
     icon: DashboardOutlined,
+    roles: [Role.KONSELOR],
+    children: [{ path: '/konselor_dashboard', label: 'Dashboard', element: Dashboard.KonselorDashboard }]
+  },
+
+  {
+    label: 'Overview',
+    icon: DashboardOutlined,
     roles: [Role.KONSELI],
-    children: [{ path: '/dashboard', label: 'Dashboard', element: Dashboard.KonseliDashboard }]
+    children: [{ path: '/konseli_dashboard', label: 'Dashboard', element: Dashboard.KonseliDashboard }]
+  },
+  {
+    label: 'Daftar Layanan',
+    icon: PrinterOutlined,
+    roles: [Role.KONSELI],
+    path: '/register_service',
+    element: Dashboard.TicketForm
+  },
+  {
+    label: 'Overview',
+    icon: DashboardOutlined,
+    roles: [Role.ADMIN],
+    children: [{ path: '/admin_dashboard', label: 'Dashboard', element: Dashboard.AdminDashboard }]
   },
   {
     label: 'Aktor',
@@ -53,6 +78,18 @@ export const dashboardLink = [
       { path: '/dashboard/hari_layanan', label: 'Hari Layanan', element: Dashboard.HariLayanans, permissions: [[Action.CREATE, Model.HariLayanans]] },
       { path: '/dashboard/jadwal_konselor', label: 'Jadwal Konselor', element: Dashboard.JadwalKonselors, permissions: [[Action.CREATE, Model.JadwalKonselors]] }
     ]
+  },
+  {
+    label: 'Tiket',
+    icon: PaperClipOutlined,
+    path: '/tickets',
+    element: Dashboard.Tickets
+  },
+  {
+    label: 'Sesi Konseling',
+    icon: PhoneOutlined,
+    path: '/sesi_konseling',
+    element: Dashboard.SesiKonselings
   }
 ].map((item) => ({
   ...item,

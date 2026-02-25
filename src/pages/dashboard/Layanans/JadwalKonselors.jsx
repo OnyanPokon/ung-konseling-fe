@@ -1,8 +1,8 @@
-import { Delete, Edit } from '@/components/dashboard/button';
+import { Delete } from '@/components/dashboard/button';
 import Modul from '@/constants/Modul';
 import { useAuth, useCrudModal, useNotification, usePagination, useService } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
-import { Badge, Card, Skeleton, Space } from 'antd';
+import { Badge, Card, Skeleton, Space, Tabs } from 'antd';
 import { JadwalKonselors as JadwalKonselorModel } from '@/models';
 import React from 'react';
 import { Action } from '@/constants';
@@ -23,6 +23,7 @@ const JadwalKonselors = () => {
 
   const pagination = usePagination({ totalData: getAllJadwalKonselors.totalData });
   const [filterValues, setFilterValues] = React.useState({ search: '' });
+  const [activeTab, setActiveTab] = React.useState(null);
 
   const fetchJadwalKonselors = React.useCallback(() => {
     execute({
@@ -41,37 +42,64 @@ const JadwalKonselors = () => {
 
   const [selectedData, setSelectedData] = React.useState([]);
 
-  const jadwalKonselors = getAllJadwalKonselors.data ?? [];
+  const jadwalKonselors = React.useMemo(() => getAllJadwalKonselors.data ?? [], [getAllJadwalKonselors.data]);
   const hariLayanans = getAllHariLayanans.data ?? [];
   const konselors = getAllKonselors.data ?? [];
 
   const storeJadwalKonselors = useService(JadwalKonselorsService.store, onUnauthorized);
-  const updateJadwalKonselors = useService(JadwalKonselorsService.update, onUnauthorized);
   const deleteJadwalKonselors = useService(JadwalKonselorsService.delete, onUnauthorized);
+
+  const groupedData = React.useMemo(() => {
+    return Object.values(
+      jadwalKonselors.reduce((acc, item) => {
+        const workDayId = item.work_day?.id;
+
+        if (!workDayId) return acc;
+
+        if (!acc[workDayId]) {
+          acc[workDayId] = {
+            work_day: item.work_day,
+            konselor: []
+          };
+        }
+
+        acc[workDayId].konselor.push({
+          jadwal_konselor_id: item.id, // ✅ simpan ini
+          konselor_id: item.konselor.id,
+          is_active: item.konselor.is_active,
+          user: item.konselor.user
+        });
+
+        return acc;
+      }, {})
+    );
+  }, [jadwalKonselors]);
+
+  React.useEffect(() => {
+    if (groupedData.length > 0 && !activeTab) {
+      setActiveTab(String(groupedData[0].work_day.id));
+    }
+  }, [activeTab, groupedData]);
+
+  console.log(groupedData);
 
   const column = [
     {
-      title: 'Hari Layanan',
-      dataIndex: ['work_day', 'day_name'],
-      sorter: (a, b) => a.work_day.day_name.length - b.work_day.day_name.length,
-      searchable: true
-    },
-    {
       title: 'Nama',
-      dataIndex: ['konselor', 'user', 'name'],
-      sorter: (a, b) => a.konselor.user.name.length - b.konselor.user.name.length,
+      dataIndex: ['user', 'name'],
+      sorter: (a, b) => a.user.name.length - b.user.name.length,
       searchable: true
     },
     {
       title: 'Email',
-      dataIndex: ['konselor', 'user', 'email'],
-      sorter: (a, b) => a.konselor.user.email.length - b.konselor.user.email.length,
+      dataIndex: ['user', 'email'],
+      sorter: (a, b) => a.user.email.length - b.user.email.length,
       searchable: true
     },
     {
       title: 'Status',
-      dataIndex: ['konselor', 'is_active'],
-      sorter: (a, b) => a.konselor.is_active.length - b.konselor.is_active.length,
+      dataIndex: 'is_active',
+      sorter: (a, b) => a.is_active.length - b.is_active.length,
       searchable: true,
       render: (record) =>
         (() => {
@@ -88,41 +116,20 @@ const JadwalKonselors = () => {
         })()
     }
   ];
-
   if (user && user.eitherCan([UPDATE, JadwalKonselorModel], [DELETE, JadwalKonselorModel], [READ, JadwalKonselorModel])) {
     column.push({
       title: 'Aksi',
       render: (_, record) => (
         <Space size="small">
-          <Edit
-            title={`Edit ${modulName}`}
-            model={JadwalKonselorModel}
-            onClick={() => {
-              modal.edit({
-                title: `Edit ${modulName}`,
-                data: { konselor_id: record.konselor.id, hari_layanan_id: record.work_day.id },
-                formFields: JadwalKonselorFormFields({ options: { hariLayanans, konselors } }),
-                onSubmit: async (values) => {
-                  const { message, isSuccess } = await updateJadwalKonselors.execute(record.id, values, token);
-                  if (isSuccess) {
-                    success('Berhasil', message);
-                    fetchJadwalKonselors({ token: token, page: pagination.page, per_page: pagination.per_page });
-                  } else {
-                    error('Gagal', message);
-                  }
-                  return isSuccess;
-                }
-              });
-            }}
-          />
           <Delete
             title={`Delete ${modulName}`}
             model={JadwalKonselorModel}
             onClick={() => {
+              console.log(record);
               modal.delete.default({
                 title: `Delete ${Modul.JADWAL_KONSELOR}`,
                 onSubmit: async () => {
-                  const { isSuccess, message } = await deleteJadwalKonselors.execute(record.id, token);
+                  const { isSuccess, message } = await deleteJadwalKonselors.execute(record.jadwal_konselor_id, token);
                   if (isSuccess) {
                     success('Berhasil', message);
                     fetchJadwalKonselors({ token: token, page: pagination.page, per_page: pagination.per_page });
@@ -159,16 +166,25 @@ const JadwalKonselors = () => {
   return (
     <Card title={<DataTableHeader model={JadwalKonselorModel} modul={Modul.JADWAL_KONSELOR} onStore={onCreate} selectedData={selectedData} onSearch={(values) => setFilterValues({ ...filterValues, search: values })} />}>
       <Skeleton loading={getAllJadwalKonselors.isLoading}>
-        <div className="w-full max-w-full overflow-x-auto">
-          <DataTable
-            data={jadwalKonselors}
-            columns={column}
-            loading={getAllJadwalKonselors.isLoading}
-            map={(jadwalKonselor) => ({ key: jadwalKonselor.id, ...jadwalKonselor })}
-            handleSelectedData={(_, selectedRows) => setSelectedData(selectedRows)}
-            pagination={pagination}
-          />
-        </div>
+        <Tabs activeKey={activeTab} onChange={(key) => setActiveTab(key)}>
+          {groupedData.map((item) => (
+            <Tabs.TabPane key={item.work_day.id} tab={item.work_day.day_name}>
+              <div className="w-full max-w-full overflow-x-auto">
+                <DataTable
+                  data={item.konselor}
+                  columns={column}
+                  loading={getAllJadwalKonselors.isLoading}
+                  map={(row) => ({
+                    key: row.jadwal_konselor_id,
+                    ...row
+                  })}
+                  handleSelectedData={(_, selectedRows) => setSelectedData(selectedRows)}
+                  pagination={pagination}
+                />
+              </div>
+            </Tabs.TabPane>
+          ))}
+        </Tabs>
       </Skeleton>
     </Card>
   );

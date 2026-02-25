@@ -30,6 +30,26 @@ export default class KonselorsService {
       }
     };
   }
+
+  static getByUserId({ token, id, ...filters }) {
+    const params = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''));
+    const abortController = new AbortController();
+    const response = api.get(`/konselor/user/${id}`, {
+      token,
+      signal: abortController.signal,
+      params
+    });
+
+    return {
+      abortController,
+      response,
+      parser: (apiData) => {
+        const konselor = apiData?.konselor ?? apiData?.data ?? apiData ?? {};
+        return Konselors.fromApiData(konselor);
+      }
+    };
+  }
+
   /**
    * @param {Konselors} data
    * @param {string} token

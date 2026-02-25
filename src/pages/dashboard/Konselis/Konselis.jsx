@@ -8,7 +8,7 @@ import { Konselis as KonselisModel } from '@/models';
 import React from 'react';
 import { Action } from '@/constants';
 import { DataTable, DataTableHeader } from '@/components';
-import { formFields } from './FormFields';
+import { additionalDataFormFields, formFields } from './FormFields';
 
 const { DELETE, UPDATE, READ } = Action;
 const modulName = Modul.KONSELIS;
@@ -82,7 +82,8 @@ const Konselis = () => {
               modal.edit({
                 title: `Edit ${modulName}`,
                 data: { ...record, name: record.user.name, email: record.user.email },
-                formFields: formFields(),
+                formFields: [...formFields(), ...additionalDataFormFields()],
+
                 onSubmit: async (values) => {
                   const { message, isSuccess } = await updateKonselis.execute(record.id, values, token);
                   if (isSuccess) {
@@ -123,7 +124,7 @@ const Konselis = () => {
   const onCreate = () => {
     modal.create({
       title: `Tambah ${modulName}`,
-      formFields: formFields,
+      formFields: [...formFields(), ...additionalDataFormFields()],
       onSubmit: async (values) => {
         const { message, isSuccess } = await storeKonselis.execute({ ...values, password: 'password' }, token);
         if (isSuccess) {

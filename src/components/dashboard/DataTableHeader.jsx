@@ -98,42 +98,45 @@ export default function DataHeader({ modul, selectedData, onStore, onDeleteBatch
             <MenuOutlined />
           </Button>
         </Dropdown>
-        {(children || (user && user.eitherCan([DELETE, model], [CREATE, model]))) && (
-          <div className="hidden flex-col-reverse items-center justify-end gap-2 empty:hidden md:flex md:flex-row">
-            {user && user.can(DELETE, model) && onDeleteBatch && (
-              <Button className="me-auto" icon={<DeleteOutlined />} variant="solid" color="danger" disabled={!selectedData?.length} onClick={onDeleteBatch}>
-                Hapus {selectedData?.length || null} Pilihan
-              </Button>
+        <div className="hidden flex-col-reverse items-center justify-end gap-2 empty:hidden md:flex md:flex-row">
+          <div className="mt-6 inline-flex items-center gap-x-2 lg:mt-0">
+            {onSearch && <Input.Search style={{ margin: 0 }} onSearch={onSearch} className="mt-6 w-full lg:mt-0 lg:w-fit" placeholder="Cari Data" allowClear />}
+            {filter && (
+              <Popover placement="leftBottom" trigger="click" content={<Crud formFields={filter.formFields} initialData={filter.initialData} isLoading={filter.isLoading} onSubmit={filter.onSubmit} type="create" />}>
+                <Button icon={<FilterOutlined />} />
+              </Popover>
             )}
-            <div className="mt-6 inline-flex items-center gap-x-2 lg:mt-0">
-              {onSearch && <Input.Search style={{ margin: 0 }} onSearch={onSearch} className="mt-6 w-full lg:mt-0 lg:w-fit" placeholder="Cari Data" allowClear />}
-              {filter && (
-                <Popover placement="leftBottom" trigger="click" content={<Crud formFields={filter.formFields} initialData={filter.initialData} isLoading={filter.isLoading} onSubmit={filter.onSubmit} type="create" />}>
-                  <Button icon={<FilterOutlined />} />
-                </Popover>
-              )}
-            </div>
-            {user && user.can(CREATE, model) && onStore && (
-              <Button icon={<PlusOutlined />} variant="outlined" color="primary" shape="round" onClick={onStore}>
-                Tambah
-              </Button>
-            )}
-            {onImport && (
-              <div className="hidden lg:flex">
-                <Dropdown.Button icon={<ImportOutlined />} menu={{ items: importMenuItems }}>
-                  Import
-                </Dropdown.Button>
-              </div>
-            )}
-            {onExport && (
-              <Button className="hidden lg:flex" variant="solid" icon={<ExportOutlined />} onClick={onExport}>
-                Export
-              </Button>
-            )}
-
-            {children}
           </div>
-        )}
+          {(children || (user && user.eitherCan([DELETE, model], [CREATE, model]))) && (
+            <>
+              {user && user.can(DELETE, model) && onDeleteBatch && (
+                <Button className="me-auto" icon={<DeleteOutlined />} variant="solid" color="danger" disabled={!selectedData?.length} onClick={onDeleteBatch}>
+                  Hapus {selectedData?.length || null} Pilihan
+                </Button>
+              )}
+
+              {user && user.can(CREATE, model) && onStore && (
+                <Button icon={<PlusOutlined />} variant="outlined" color="primary" shape="round" onClick={onStore}>
+                  Tambah
+                </Button>
+              )}
+              {onImport && (
+                <div className="hidden lg:flex">
+                  <Dropdown.Button icon={<ImportOutlined />} menu={{ items: importMenuItems }}>
+                    Import
+                  </Dropdown.Button>
+                </div>
+              )}
+              {onExport && (
+                <Button className="hidden lg:flex" variant="solid" icon={<ExportOutlined />} onClick={onExport}>
+                  Export
+                </Button>
+              )}
+
+              {children}
+            </>
+          )}
+        </div>
       </div>
       <div className="md:hidden">
         <div className="mb-4 inline-flex w-full items-center gap-x-2 lg:mt-0">

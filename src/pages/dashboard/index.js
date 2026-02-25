@@ -1,6 +1,11 @@
 export { default as AdminDashboard } from './AdminDashboard';
 export { default as KonseliDashboard } from './KonseliDashboard';
+export { default as KonselorDashboard } from './KonselorDashboard';
 export { default as Konselis } from './Konselis/Konselis';
 export { default as Konselors } from './Konselors/Konselors';
 export { default as HariLayanans } from './Layanans/HariLayanans';
 export { default as JadwalKonselors } from './Layanans/JadwalKonselors';
+export { default as KonselisProfile } from './KonselisProfile';
+export { default as TicketForm } from './Tickets/TicketForm';
+export { default as Tickets } from './Tickets/Tickets';
+export { default as SesiKonselings } from './SesiKonselings/SesiKonselings';

@@ -32,6 +32,34 @@ export default class KonselisService {
   }
 
   /**
+   * @param {string} token
+   * @returns {Promise<{
+   *  code: HTTPStatusCode;
+   *  status: boolean;
+   *  message: string;
+   *  data?: Konselis[];
+   * }>}
+   * */
+  static getByUserId({ token, id, ...filters }) {
+    const params = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''));
+    const abortController = new AbortController();
+    const response = api.get(`/konseli/user/${id}`, {
+      token,
+      signal: abortController.signal,
+      params
+    });
+
+    return {
+      abortController,
+      response,
+      parser: (apiData) => {
+        const konselis = apiData?.konselis ?? apiData?.data ?? apiData ?? {};
+        return Konselis.fromApiData(konselis);
+      }
+    };
+  }
+
+  /**
    * @param {Konselis} data
    * @param {string} token
    * @returns {Promise<{

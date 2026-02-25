@@ -1,4 +1,4 @@
-import { User } from '@/models';
+import { Konselis, User } from '@/models';
 import api from '@/utils/api';
 
 export default class AuthService {
@@ -41,19 +41,17 @@ export default class AuthService {
     return await api.post('/auth/logout');
   }
 
-  static async forgot(email) {
-    return await api.post('/auth/forgot-password', { body: { email } });
-  }
-
-  static async reset(token, password, password_confirmation) {
-    return await api.post('/auth/reset-password', { body: { password, password_confirmation, token } });
-  }
-
-  static async changeProfile(token, data) {
-    return await api.put('/auth/change-profile', { body: data, token });
-  }
-
-  static async changePassword(token, data) {
-    return await api.post('/auth/change-password', { body: data, token });
+  /**
+   * @param {Konselis} data
+   * @param {string} token
+   * @returns {Promise<{
+   *  code: HTTPStatusCode;
+   *  status: boolean;
+   *  message: string;
+   *  errors?: { [key: string]: string[] };
+   * }}
+   */
+  static async regisKonseli(data, token) {
+    return await api.post('/register/konseli', { body: Konselis.toApiData(data), token });
   }
 }

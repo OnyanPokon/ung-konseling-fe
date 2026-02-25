@@ -5,3 +5,5 @@ export { default as Konselis } from './Konselis';
 export { default as Konselors } from './Konselors';
 export { default as JadwalKonselors } from './JadwalKonselors';
 export { default as HariLayanans } from './HariLayanans';
+export { default as Tikets } from './Tikets';
+export { default as SesiKonselings } from './SesiKonselings';

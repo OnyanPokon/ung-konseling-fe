@@ -1,21 +1,21 @@
 /* eslint-disable no-unused-vars */
-import { HariLayanans } from '@/models';
+import { Tikets } from '@/models';
 import api from '@/utils/api';
 
-export default class HariLayanansService {
+export default class TiketsService {
   /**
    * @param {string} token
    * @returns {Promise<{
    *  code: HTTPStatusCode;
    *  status: boolean;
    *  message: string;
-   *  data?: HariLayanans[];
+   *  data?: Tikets[];
    * }>}
    * */
   static getAll({ token, ...filters }) {
     const params = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''));
     const abortController = new AbortController();
-    const response = api.get('/hari_layanan', {
+    const response = api.get('/tiket', {
       token,
       signal: abortController.signal,
       params
@@ -25,42 +25,14 @@ export default class HariLayanansService {
       abortController,
       response,
       parser: (apiData) => {
-        const hariLayanan = apiData?.hariLayanan ?? apiData?.data ?? apiData ?? [];
-        return HariLayanans.fromApiData(hariLayanan);
+        const tiket = apiData?.tiket ?? apiData?.data ?? apiData ?? [];
+        return Tikets.fromApiData(tiket);
       }
     };
   }
 
   /**
-   * @param {string} token
-   * @returns {Promise<{
-   *  code: HTTPStatusCode;
-   *  status: boolean;
-   *  message: string;
-   *  data?: HariLayanans[];
-   * }>}
-   * */
-  static getByKonselorId({ token, id, ...filters }) {
-    const params = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''));
-    const abortController = new AbortController();
-    const response = api.get(`/hari_layanan/konselor/${id}`, {
-      token,
-      signal: abortController.signal,
-      params
-    });
-
-    return {
-      abortController,
-      response,
-      parser: (apiData) => {
-        const hariLayanan = apiData?.hariLayanan ?? apiData?.data ?? apiData ?? [];
-        return HariLayanans.fromApiData(hariLayanan);
-      }
-    };
-  }
-
-  /**
-   * @param {HariLayanans} data
+   * @param {Tikets} data
    * @param {string} token
    * @returns {Promise<{
    *  code: HTTPStatusCode;
@@ -70,12 +42,12 @@ export default class HariLayanansService {
    * }}
    */
   static async store(data, token) {
-    return await api.post('/hari_layanan', { body: HariLayanans.toApiData(data), token });
+    return await api.post('/tiket', { body: Tikets.toApiData(data), token });
   }
 
   /**
    * @param {number} id
-   * @param {HariLayanans} data
+   * @param {Tikets} data
    * @param {string} token
    * @returns {Promise<{
    *  code: HTTPStatusCode;
@@ -85,7 +57,7 @@ export default class HariLayanansService {
    * }>}
    */
   static async update(id, data, token) {
-    return await api.put(`/hari_layanan/${id}`, { body: HariLayanans.toApiData(data), token });
+    return await api.put(`/tiket/${id}`, { body: Tikets.toApiData(data), token });
   }
 
   /**
@@ -98,7 +70,7 @@ export default class HariLayanansService {
    * }>}
    */
   static async delete(id, token) {
-    return await api.delete(`/hari_layanan/${id}`, { token });
+    return await api.delete(`/tiket/${id}`, { token });
   }
 
   /**
@@ -111,6 +83,6 @@ export default class HariLayanansService {
    * }>}
    */
   static async deleteBatch(ids, token) {
-    return await api.delete(`/hari_layanan/multi-delete/?id=${ids.join(',')}`, { token });
+    return await api.delete(`/tiket/multi-delete/?id=${ids.join(',')}`, { token });
   }
 }

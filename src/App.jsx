@@ -7,6 +7,9 @@ import Guard from './components/Guard';
 import { useMemo } from 'react';
 
 import './index.css';
+import SuccessRegisterKonseli from './pages/result/SuccessRegisterKonseli';
+import FailedRegisterKonseli from './pages/result/FailedRegisterKonseli';
+import { KonselisProfile } from './pages/dashboard';
 
 function App() {
   const flatLandingLinks = flattenLandingLinks(landingLink);
@@ -20,38 +23,46 @@ function App() {
             path,
             element: <Element />
           })),
+          { path: '/success_register_konseli', element: <SuccessRegisterKonseli /> },
+          { path: '/failed_register_konseli', element: <FailedRegisterKonseli /> },
           { path: '*', element: <Notfound /> }
         ]
       },
       {
         element: <DashboardLayout />,
-        children: dashboardLink.flatMap(({ path, element: Element, permissions = [], roles = [], children }) => {
-          if (children?.length) {
-            return children.map(({ path, element: ChildElement, permissions = [], roles = [] }) => ({
-              path,
-              element: (
-                <Guard permissions={permissions} roles={roles}>
-                  <ChildElement />
-                </Guard>
-              )
-            }));
-          }
-
-          if (path && Element) {
-            return [
-              {
+        children: [
+          ...dashboardLink.flatMap(({ path, element: Element, permissions = [], roles = [], children }) => {
+            if (children?.length) {
+              return children.map(({ path, element: ChildElement, permissions = [], roles = [] }) => ({
                 path,
                 element: (
                   <Guard permissions={permissions} roles={roles}>
-                    <Element />
+                    <ChildElement />
                   </Guard>
                 )
-              }
-            ];
-          }
+              }));
+            }
 
-          return [];
-        })
+            if (path && Element) {
+              return [
+                {
+                  path,
+                  element: (
+                    <Guard permissions={permissions} roles={roles}>
+                      <Element />
+                    </Guard>
+                  )
+                }
+              ];
+            }
+
+            return [];
+          }),
+          {
+            path: '/profile_konseli',
+            element: <KonselisProfile />
+          }
+        ]
       },
 
       // AUTH

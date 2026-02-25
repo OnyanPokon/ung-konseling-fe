@@ -3,20 +3,29 @@ import { useEffect } from 'react';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
 const Auth = () => {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const redirect = searchParams.get('redirect') || '/dashboard';
+  const redirect = searchParams.get('redirect');
 
   useEffect(() => {
-    if (!token) return;
+    if (!token || !user) return;
+
+    const dashboardByRole = {
+      konselor: '/konselor_dashboard',
+      konseli: '/konseli_dashboard',
+      admin: '/admin_dashboard'
+    };
 
     if (redirect && !redirect.includes('/auth')) {
-      navigate(redirect);
-    } else {
-      navigate('/dashboard');
+      navigate(redirect, { replace: true });
+      return;
     }
-  }, [navigate, redirect, token]);
+
+    const roleDashboard = dashboardByRole[user.role?.toLowerCase()] || '/';
+
+    navigate(roleDashboard, { replace: true });
+  }, [token, user, redirect, navigate]);
 
   return (
     <div className="w-full bg-slate-50 font-sans">

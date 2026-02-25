@@ -1,4 +1,5 @@
 import { DashboardFooter, DashboardSider } from '@/components';
+import { Role } from '@/constants';
 import { useAuth } from '@/hooks';
 import { LogoutOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Dropdown, Layout, Skeleton, Space, theme } from 'antd';
@@ -24,7 +25,17 @@ const Dashboard = () => {
       {
         key: '1',
         label: (
-          <button onClick={() => navigate('/dashboard/profile-settings')} className="flex min-w-32 items-center gap-x-2">
+          <button
+            onClick={() => {
+              if (!user) return;
+              if (user?.role === Role.KONSELI) {
+                navigate('/profile_konseli');
+              } else if (user?.role === Role.KONSELOR) {
+                navigate('/profile_konselor');
+              }
+            }}
+            className="flex min-w-32 items-center gap-x-2"
+          >
             <UserOutlined />
             Pengaturan Profil
           </button>
@@ -40,7 +51,7 @@ const Dashboard = () => {
         )
       }
     ],
-    [logout, navigate]
+    [logout, navigate, user]
   );
 
   const {
