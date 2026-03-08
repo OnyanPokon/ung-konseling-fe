@@ -8,7 +8,7 @@ import { DataTableHeader } from '@/components';
 import { KonselisService, KonselorsService, SesiKonselingsService } from '@/services';
 import { Action, Role } from '@/constants';
 import { SesiKonselings as SesiKonselingModel } from '@/models';
-import { CalendarOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { CalendarOutlined, CheckOutlined, CloseOutlined, InfoOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { timeFormFields } from './FormFields';
 import { Delete } from '@/components/dashboard/button';
@@ -75,12 +75,13 @@ const SesiKonselings = () => {
       <Skeleton loading={getAllSesiKonselings.isLoading}>
         <div className="flex w-full max-w-full flex-col gap-y-4 overflow-x-auto p-2">
           {sesiKonselings.map((item) => (
-            <Card onClick={() => setDrawer({ open: true, data: item })} hoverable title={<span className="text-sm">{item.tiket.ticket_number}</span>} className="w-full bg-gray-50" key={item.id}>
+            <Card extra={<Button type="text" onClick={() => setDrawer({ open: true, data: item })} size="middle" icon={<InfoOutlined />} />} title={<span className="text-sm">{item.tiket.ticket_number}</span>} className="w-full" key={item.id}>
               <Descriptions className="w-full" size="small" bordered column={3}>
                 <Descriptions.Item label="No Tiket">{item.tiket.ticket_number}</Descriptions.Item>
                 {user?.is(Role.KONSELOR) && <Descriptions.Item label="Konseli">{item.tiket.konseli.user.name}</Descriptions.Item>}
                 {user?.is(Role.KONSELI) && <Descriptions.Item label="Konseli">{item.konselor.user.name}</Descriptions.Item>}
                 <Descriptions.Item label="Hari">{item.hari_layanan.day_name}</Descriptions.Item>
+                <Descriptions.Item label="Tanggal Sesi">{dayjs(item.counseling_date).format('DD MMM YYYY')}</Descriptions.Item>
                 <Descriptions.Item label="Deskripsi">{item.tiket.desc}</Descriptions.Item>
                 <Descriptions.Item label="Status">
                   {(() => {
@@ -102,7 +103,7 @@ const SesiKonselings = () => {
                   })()}
                 </Descriptions.Item>
                 {user && (user.is(Role.ADMIN) || user.is(Role.KONSELOR)) && (
-                  <Descriptions.Item label="Aksi" span={3}>
+                  <Descriptions.Item label="Aksi" span={3} onClick={(e) => e.stopPropagation()}>
                     <Space size="small">
                       <Popconfirm
                         title="Tandai Selesai?"
@@ -151,7 +152,8 @@ const SesiKonselings = () => {
                             title: `Jadwalkan ulang`,
                             data: {
                               start_time: dayjs(item.start_time, 'HH:mm:ss'),
-                              end_time: dayjs(item.end_time, 'HH:mm:ss')
+                              end_time: dayjs(item.end_time, 'HH:mm:ss'),
+                              counseling_date: dayjs(item.counseling_date, 'YYYY-MM-DD')
                             },
                             formFields: timeFormFields(),
                             onSubmit: async (values) => {
@@ -161,6 +163,7 @@ const SesiKonselings = () => {
                                   ...item,
                                   start_time: dayjs(values.start_time).format('HH:mm'),
                                   end_time: dayjs(values.end_time).format('HH:mm'),
+                                  counseling_date: dayjs(values.counseling_date).format('YYYY-MM-DD'),
                                   status: 'dijadwalkan_ulang'
                                 },
                                 token

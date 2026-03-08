@@ -1,46 +1,40 @@
-import { Delete } from '@/components/dashboard/button';
 import Modul from '@/constants/Modul';
 import { useAuth, useCrudModal, useNotification, usePagination, useService } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
-import { Badge, Card, Skeleton, Space, Tabs } from 'antd';
+import { Avatar, Badge, Button, Card, Descriptions, Skeleton } from 'antd';
 import { JadwalKonselors as JadwalKonselorModel } from '@/models';
 import React from 'react';
-import { Action } from '@/constants';
-import { DataTable, DataTableHeader } from '@/components';
 import { HariLayanansService, JadwalKonselorsService, KonselorsService } from '@/services';
 import { JadwalKonselorFormFields } from './FormFields';
+import { DataTableHeader } from '@/components';
+import { DeleteOutlined } from '@ant-design/icons';
 
-const { DELETE, UPDATE, READ } = Action;
 const modulName = Modul.JADWAL_KONSELOR;
 
 const JadwalKonselors = () => {
   const modal = useCrudModal();
   const { success, error } = useNotification();
-  const { token, user, onUnauthorized } = useAuth();
+  const { token, onUnauthorized } = useAuth();
   const { execute, ...getAllJadwalKonselors } = useAbortableService(JadwalKonselorsService.getAll, { onUnauthorized });
   const { execute: fetchHariLayanans, ...getAllHariLayanans } = useAbortableService(HariLayanansService.getAll, { onUnauthorized });
   const { execute: fetchKonselors, ...getAllKonselors } = useAbortableService(KonselorsService.getAll, { onUnauthorized });
 
   const pagination = usePagination({ totalData: getAllJadwalKonselors.totalData });
-  const [filterValues, setFilterValues] = React.useState({ search: '' });
   const [activeTab, setActiveTab] = React.useState(null);
 
   const fetchJadwalKonselors = React.useCallback(() => {
     execute({
       token: token,
       page: pagination.page,
-      per_page: pagination.perPage,
-      search: filterValues.search
+      per_page: pagination.perPage
     });
-  }, [execute, filterValues.search, pagination.page, pagination.perPage, token]);
+  }, [execute, pagination.page, pagination.perPage, token]);
 
   React.useEffect(() => {
     fetchJadwalKonselors();
     fetchHariLayanans({ token: token });
     fetchKonselors({ token: token });
   }, [fetchHariLayanans, fetchJadwalKonselors, fetchKonselors, token]);
-
-  const [selectedData, setSelectedData] = React.useState([]);
 
   const jadwalKonselors = React.useMemo(() => getAllJadwalKonselors.data ?? [], [getAllJadwalKonselors.data]);
   const hariLayanans = getAllHariLayanans.data ?? [];
@@ -50,29 +44,23 @@ const JadwalKonselors = () => {
   const deleteJadwalKonselors = useService(JadwalKonselorsService.delete, onUnauthorized);
 
   const groupedData = React.useMemo(() => {
-    return Object.values(
-      jadwalKonselors.reduce((acc, item) => {
-        const workDayId = item.work_day?.id;
+    return jadwalKonselors.reduce((acc, item) => {
+      const workDayId = item.work_day?.id;
+      if (!workDayId) return acc;
 
-        if (!workDayId) return acc;
+      if (!acc[workDayId]) {
+        acc[workDayId] = [];
+      }
 
-        if (!acc[workDayId]) {
-          acc[workDayId] = {
-            work_day: item.work_day,
-            konselor: []
-          };
-        }
+      acc[workDayId].push({
+        jadwal_konselor_id: item.id,
+        konselor_id: item.konselor.id,
+        is_active: item.konselor.is_active,
+        user: item.konselor.user
+      });
 
-        acc[workDayId].konselor.push({
-          jadwal_konselor_id: item.id, // ✅ simpan ini
-          konselor_id: item.konselor.id,
-          is_active: item.konselor.is_active,
-          user: item.konselor.user
-        });
-
-        return acc;
-      }, {})
-    );
+      return acc;
+    }, {});
   }, [jadwalKonselors]);
 
   React.useEffect(() => {
@@ -81,70 +69,7 @@ const JadwalKonselors = () => {
     }
   }, [activeTab, groupedData]);
 
-  console.log(groupedData);
-
-  const column = [
-    {
-      title: 'Nama',
-      dataIndex: ['user', 'name'],
-      sorter: (a, b) => a.user.name.length - b.user.name.length,
-      searchable: true
-    },
-    {
-      title: 'Email',
-      dataIndex: ['user', 'email'],
-      sorter: (a, b) => a.user.email.length - b.user.email.length,
-      searchable: true
-    },
-    {
-      title: 'Status',
-      dataIndex: 'is_active',
-      sorter: (a, b) => a.is_active.length - b.is_active.length,
-      searchable: true,
-      render: (record) =>
-        (() => {
-          let status;
-          switch (record) {
-            case true:
-              status = <Badge status="processing" text="Aktif" />;
-              break;
-            case false:
-              status = <Badge status="error" text="Non Aktif" />;
-              break;
-          }
-          return status;
-        })()
-    }
-  ];
-  if (user && user.eitherCan([UPDATE, JadwalKonselorModel], [DELETE, JadwalKonselorModel], [READ, JadwalKonselorModel])) {
-    column.push({
-      title: 'Aksi',
-      render: (_, record) => (
-        <Space size="small">
-          <Delete
-            title={`Delete ${modulName}`}
-            model={JadwalKonselorModel}
-            onClick={() => {
-              console.log(record);
-              modal.delete.default({
-                title: `Delete ${Modul.JADWAL_KONSELOR}`,
-                onSubmit: async () => {
-                  const { isSuccess, message } = await deleteJadwalKonselors.execute(record.jadwal_konselor_id, token);
-                  if (isSuccess) {
-                    success('Berhasil', message);
-                    fetchJadwalKonselors({ token: token, page: pagination.page, per_page: pagination.per_page });
-                  } else {
-                    error('Gagal', message);
-                  }
-                  return isSuccess;
-                }
-              });
-            }}
-          />
-        </Space>
-      )
-    });
-  }
+  const colorVariants = ['bg-yellow-50 text-yellow-500', 'bg-green-50 text-green-500', 'bg-blue-50 text-blue-500', 'bg-purple-50 text-purple-500', 'bg-pink-50 text-pink-500'];
 
   const onCreate = () => {
     modal.create({
@@ -164,27 +89,75 @@ const JadwalKonselors = () => {
   };
 
   return (
-    <Card title={<DataTableHeader model={JadwalKonselorModel} modul={Modul.JADWAL_KONSELOR} onStore={onCreate} selectedData={selectedData} onSearch={(values) => setFilterValues({ ...filterValues, search: values })} />}>
+    <Card title={<DataTableHeader model={JadwalKonselorModel} modul={Modul.JADWAL_KONSELOR} onStore={onCreate} />}>
       <Skeleton loading={getAllJadwalKonselors.isLoading}>
-        <Tabs activeKey={activeTab} onChange={(key) => setActiveTab(key)}>
-          {groupedData.map((item) => (
-            <Tabs.TabPane key={item.work_day.id} tab={item.work_day.day_name}>
-              <div className="w-full max-w-full overflow-x-auto">
-                <DataTable
-                  data={item.konselor}
-                  columns={column}
-                  loading={getAllJadwalKonselors.isLoading}
-                  map={(row) => ({
-                    key: row.jadwal_konselor_id,
-                    ...row
-                  })}
-                  handleSelectedData={(_, selectedRows) => setSelectedData(selectedRows)}
-                  pagination={pagination}
-                />
-              </div>
-            </Tabs.TabPane>
-          ))}
-        </Tabs>
+        <div className="grid w-full grid-cols-12 gap-4">
+          <div
+            className="col-span-12 grid gap-4"
+            style={{
+              gridTemplateColumns: `repeat(${hariLayanans.length}, minmax(0, 1fr))`
+            }}
+          >
+            {hariLayanans.map((day, index) => {
+              const colorClass = colorVariants[index % colorVariants.length];
+              const konselorsPerDay = groupedData[day.id] || [];
+
+              return (
+                <div key={day.id} className="flex flex-col gap-y-4">
+                  <div className={`rounded-md p-2 px-4 font-bold capitalize ${colorClass}`}>{day.day_name}</div>
+
+                  <div className="flex flex-col gap-y-2">
+                    {konselorsPerDay.length === 0 ? (
+                      <div className="text-xs italic text-gray-400">Belum ada jadwal</div>
+                    ) : (
+                      konselorsPerDay.map((konselor) => (
+                        <Card
+                          key={konselor.id}
+                          title={
+                            <div className="inline-flex w-full items-center justify-between">
+                              <div className="my-2 inline-flex items-center gap-x-2">
+                                <Avatar size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                                <div className="flex flex-col">
+                                  <small>{konselor.user.name}</small>
+                                  <span className="text-xs font-normal">{konselor.user.email}</span>
+                                </div>
+                              </div>
+                              <Button
+                                variant="outlined"
+                                color="danger"
+                                size="small"
+                                icon={<DeleteOutlined />}
+                                onClick={() => {
+                                  modal.delete.default({
+                                    title: `Delete ${Modul.JADWAL_KONSELOR}`,
+                                    onSubmit: async () => {
+                                      const { isSuccess, message } = await deleteJadwalKonselors.execute(konselor.jadwal_konselor_id, token);
+                                      if (isSuccess) {
+                                        success('Berhasil', message);
+                                        fetchJadwalKonselors({ token: token, page: pagination.page, per_page: pagination.per_page });
+                                      } else {
+                                        error('Gagal', message);
+                                      }
+                                      return isSuccess;
+                                    }
+                                  });
+                                }}
+                              />
+                            </div>
+                          }
+                        >
+                          <Descriptions column={1} size="small">
+                            <Descriptions.Item label="Status">{konselor.is_active ? <Badge status="processing" text="Aktif" /> : <Badge status="error" text="Non Aktif" />}</Descriptions.Item>
+                          </Descriptions>
+                        </Card>
+                      ))
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </Skeleton>
     </Card>
   );

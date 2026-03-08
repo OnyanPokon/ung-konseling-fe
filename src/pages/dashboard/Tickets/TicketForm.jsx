@@ -1,12 +1,15 @@
-import { useAuth, useNotification, useService } from '@/hooks';
+import { useAuth, useCrudModal, useNotification, useService } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
 import { HariLayanansService, KonselisService, KonselorsService, TiketsService } from '@/services';
-import { Button, Card, Descriptions, Form, Select } from 'antd';
+import { Button, Card, Descriptions, Form, Result, Select } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const RegistrationForm = () => {
   const { success, error } = useNotification();
+  const modal = useCrudModal();
+  const navigate = useNavigate();
   const { token, user, onUnauthorized } = useAuth();
   const [form] = Form.useForm();
   const [selectedKonselor, setSelectedKonselor] = React.useState(null);
@@ -44,6 +47,11 @@ const RegistrationForm = () => {
     });
   };
 
+  const closeModal = () => {
+    form.resetFields();
+    navigate('/tickets');
+  };
+
   const onCreate = async (values) => {
     const { message, isSuccess } = await storeTickets.execute(
       {
@@ -56,6 +64,24 @@ const RegistrationForm = () => {
     );
     if (isSuccess) {
       success('Berhasil', message);
+      modal.show.paragraph({
+        data: {
+          title: 'Pendaftaran Layanan Konseling Berhasil',
+          content: (
+            <Result
+              status="success"
+              title="Pendaftaran Layanan Konseling Berhasil"
+              subTitle="Pendaftaran layanan konseling berhasil, silahkan tunggu konfirmasi dari konselor."
+              extra={
+                <Button type="primary" onClick={closeModal}>
+                  Kembali
+                </Button>
+              }
+            />
+          )
+        },
+        close: navigate('/tickets')
+      });
     } else {
       error('Gagal', message);
     }

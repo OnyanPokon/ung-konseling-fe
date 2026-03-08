@@ -35,7 +35,7 @@ const DetailDrawer = ({ drawer, setDrawer, user }) => {
           </Tabs.TabPane>
         )}
         {(user.is(Role.KONSELI) || user.is(Role.ADMIN)) && (
-          <Tabs.TabPane tab="Detail Konselor" key="konseli">
+          <Tabs.TabPane tab="Detail Konselor" key="konselor">
             <Avatar size={64} className="mb-4" style={{ backgroundColor: '#a5a5a5' }} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
             <Descriptions column={1} bordered size="small">
               <Descriptions.Item label="Nama Konselor">{drawer?.data?.konselor?.user.name}</Descriptions.Item>
@@ -60,6 +60,7 @@ const DetailDrawer = ({ drawer, setDrawer, user }) => {
         )}
         <Tabs.TabPane tab="Detail Sesi Konseling" key="sesi">
           <Descriptions column={1} bordered size="small">
+            <Descriptions.Item label="Tanggal Sesi Berlangsung">{drawer?.data?.counseling_date}</Descriptions.Item>
             <Descriptions.Item label="Jam Mulai">{drawer?.data?.start_time}</Descriptions.Item>
             <Descriptions.Item label="Jam Selesai">{drawer?.data?.end_time}</Descriptions.Item>
             <Descriptions.Item label="Tempat">{drawer?.data?.place}</Descriptions.Item>

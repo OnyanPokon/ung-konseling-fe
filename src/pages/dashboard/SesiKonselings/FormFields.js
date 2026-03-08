@@ -23,21 +23,21 @@ export const formFields = () => [
         message: `Catatan konselor ${Modul.SESI_KONSELINGS} harus diisi`
       }
     ]
-  },
-  {
-    label: `Tempat ${Modul.SESI_KONSELINGS}`,
-    name: 'place',
-    type: InputType.LONGTEXT,
-    rules: [
-      {
-        required: true,
-        message: `Jam berakhir ${Modul.SESI_KONSELINGS} harus diisi`
-      }
-    ]
   }
 ];
 
 export const timeFormFields = () => [
+  {
+    label: `Tanggal ${Modul.SESI_KONSELINGS}`,
+    name: 'counseling_date',
+    type: InputType.DATE,
+    rules: [
+      {
+        required: true,
+        message: `Tanggal ${Modul.SESI_KONSELINGS} harus diisi`
+      }
+    ]
+  },
   {
     label: `Jam mulai ${Modul.SESI_KONSELINGS}`,
     name: 'start_time',

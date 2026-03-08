@@ -37,8 +37,9 @@ export interface IncomingApiData {
   };
   jam_mulai: string;
   jam_selesai: string;
+  tanggal_konseling: string;
   tempat: string;
-  catatan_konselor: number;
+  catatan_konselor: string;
   status: 'dijadwalkan' | 'selesai' | 'dijadwalkan_ulang' | 'dibatalkan';
   created_at: string;
   updated_at: string;
@@ -50,6 +51,7 @@ export interface OutgoingApiData {
   hari_layanan_id: number;
   jam_mulai: string;
   jam_selesai: string;
+  tanggal_konseling: string;
   tempat: string;
   catatan_konselor: string;
   status: 'dijadwalkan' | 'selesai' | 'dijadwalkan_ulang' | 'dibatalkan';
@@ -61,6 +63,7 @@ interface FormValue {
   hari_layanan_id: number;
   start_time: string;
   end_time: string;
+  counseling_date: string;
   place: string;
   note: string;
   status: 'dijadwalkan' | 'selesai' | 'dijadwalkan_ulang' | 'dibatalkan';
@@ -106,8 +109,9 @@ export default class SesiKonselings extends Model {
     },
     public start_time: string,
     public end_time: string,
+    public counseling_date: string,
     public place: string,
-    public note: number,
+    public note: string,
     public status: 'dijadwalkan' | 'selesai' | 'dijadwalkan_ulang' | 'dibatalkan',
     public created_at: string,
     public updated_at: string
@@ -154,6 +158,7 @@ export default class SesiKonselings extends Model {
       },
       apiData.jam_mulai,
       apiData.jam_selesai,
+      apiData.tanggal_konseling,
       apiData.tempat,
       apiData.catatan_konselor,
       apiData.status,
@@ -170,6 +175,7 @@ export default class SesiKonselings extends Model {
       hari_layanan_id: sesiKonselings.hari_layanan_id,
       jam_mulai: sesiKonselings.start_time,
       jam_selesai: sesiKonselings.end_time,
+      tanggal_konseling: sesiKonselings.counseling_date,
       tempat: sesiKonselings.place,
       catatan_konselor: sesiKonselings.note,
       status: sesiKonselings.status

@@ -153,6 +153,7 @@ const Tickets = () => {
                       ...values,
                       start_time: dayjs(values.start_time).format('HH:mm'),
                       end_time: dayjs(values.end_time).format('HH:mm'),
+                      counseling_date: dayjs(values.counseling_date).format('YYYY-MM-DD'),
                       tiket_id: record.id,
                       konselor_id: record.konselor.id,
                       hari_layanan_id: record.hari_layanan.id,
