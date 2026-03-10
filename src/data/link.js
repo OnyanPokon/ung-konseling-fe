@@ -4,7 +4,7 @@ import * as Dashboard from '@/pages/dashboard';
 import * as Landing from '@/pages/landing';
 import * as Model from '@/models';
 
-import { CalendarOutlined, DashboardOutlined, PaperClipOutlined, PhoneOutlined, PrinterOutlined, UserOutlined } from '@ant-design/icons';
+import { CalendarOutlined, DashboardOutlined, PaperClipOutlined, PhoneOutlined, PrinterOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons';
 
 export const landingLink = [
   {
@@ -41,7 +41,11 @@ export const dashboardLink = [
     roles: [Role.KONSELOR],
     children: [{ path: '/konselor_dashboard', label: 'Dashboard', element: Dashboard.KonselorDashboard }]
   },
-
+  {
+    label: 'AI Chat',
+    icon: RobotOutlined,
+    children: [{ path: '/ai_chat', label: 'AI Chat', element: Dashboard.Chats }]
+  },
   {
     label: 'Overview',
     icon: DashboardOutlined,

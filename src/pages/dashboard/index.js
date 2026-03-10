@@ -9,3 +9,4 @@ export { default as KonselisProfile } from './KonselisProfile';
 export { default as TicketForm } from './Tickets/TicketForm';
 export { default as Tickets } from './Tickets/Tickets';
 export { default as SesiKonselings } from './SesiKonselings/SesiKonselings';
+export { default as Chats } from './AI/Chats';
