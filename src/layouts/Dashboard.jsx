@@ -1,8 +1,8 @@
 import { DashboardFooter, DashboardSider } from '@/components';
 import { Role } from '@/constants';
-import { useAuth } from '@/hooks';
-import { LogoutOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Dropdown, Layout, Skeleton, Space, theme } from 'antd';
+import { useAuth, useNotificationPusher } from '@/hooks';
+import { BellOutlined, InboxOutlined, LogoutOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Badge, Button, Dropdown, Layout, Popover, Skeleton, Space, theme } from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
 import { useEffect, useMemo, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -12,6 +12,8 @@ const Dashboard = () => {
   const { logout, token, user } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const { unreadCount, notifications, readNotification } = useNotificationPusher();
 
   useEffect(() => {
     if (token) return;
@@ -79,6 +81,32 @@ const Dashboard = () => {
               ) : (
                 <>
                   <span>Hai, {user.name}</span>
+                  <Popover
+                    content={
+                      <>
+                        <div className="flex max-h-96 w-full max-w-lg flex-col gap-y-2 overflow-auto">
+                          {notifications.map((notif) => (
+                            <div key={notif.id} className={`flex items-center gap-x-2 rounded-lg p-3 ${notif.read_at === null ? 'bg-gray-100' : 'bg-white'}`}>
+                              <Avatar className="bg-color-primary-100 text-color-primary-500 font-semibold">
+                                <InboxOutlined color="#1675ff" />
+                              </Avatar>
+                              <div className="flex flex-col">
+                                <span className="text-xs font-semibold">{notif.data.title}</span>
+                                <span className="text-xs">{notif.data.message}</span>
+                                <button onClick={() => readNotification(notif.id)} size="small" className="mt-1 w-fit text-xs text-blue-500 hover:text-blue-400" type="link">
+                                  Tandai sudah dibaca
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    }
+                  >
+                    <Badge count={unreadCount} size="small">
+                      <BellOutlined style={{ fontSize: 20 }} />
+                    </Badge>
+                  </Popover>
 
                   <Dropdown menu={{ items }}>
                     <a onClick={(e) => e.preventDefault()}>

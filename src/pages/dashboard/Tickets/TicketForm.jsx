@@ -47,11 +47,6 @@ const RegistrationForm = () => {
     });
   };
 
-  const closeModal = () => {
-    form.resetFields();
-    navigate('/tickets');
-  };
-
   const onCreate = async (values) => {
     const { message, isSuccess } = await storeTickets.execute(
       {
@@ -67,18 +62,7 @@ const RegistrationForm = () => {
       modal.show.paragraph({
         data: {
           title: 'Pendaftaran Layanan Konseling Berhasil',
-          content: (
-            <Result
-              status="success"
-              title="Pendaftaran Layanan Konseling Berhasil"
-              subTitle="Pendaftaran layanan konseling berhasil, silahkan tunggu konfirmasi dari konselor."
-              extra={
-                <Button type="primary" onClick={closeModal}>
-                  Kembali
-                </Button>
-              }
-            />
-          )
+          content: <Result status="success" title="Pendaftaran Layanan Konseling Berhasil" subTitle="Pendaftaran layanan konseling berhasil, silahkan tunggu konfirmasi dari konselor." />
         },
         close: navigate('/tickets')
       });
