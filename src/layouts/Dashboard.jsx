@@ -91,8 +91,8 @@ const Dashboard = () => {
                                 <InboxOutlined color="#1675ff" />
                               </Avatar>
                               <div className="flex flex-col">
-                                <span className="text-xs font-semibold">{notif.data.title}</span>
-                                <span className="text-xs">{notif.data.message}</span>
+                                <span className="text-xs font-semibold">{notif?.data?.title}</span>
+                                <span className="text-xs">{notif?.data?.message}</span>
                                 <button onClick={() => readNotification(notif.id)} size="small" className="mt-1 w-fit text-xs text-blue-500 hover:text-blue-400" type="link">
                                   Tandai sudah dibaca
                                 </button>

@@ -8,3 +8,4 @@ export { default as HariLayanans } from './HariLayanans';
 export { default as Tikets } from './Tikets';
 export { default as SesiKonselings } from './SesiKonselings';
 export { default as Notification } from './Notification';
+export { default as Articles } from './Articles';

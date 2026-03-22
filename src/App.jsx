@@ -9,7 +9,8 @@ import { useMemo } from 'react';
 import './index.css';
 import SuccessRegisterKonseli from './pages/result/SuccessRegisterKonseli';
 import FailedRegisterKonseli from './pages/result/FailedRegisterKonseli';
-import { KonselisProfile } from './pages/dashboard';
+import { CreateArticle, EditArticle, KonselisProfile } from './pages/dashboard';
+import { ReadArticle } from './pages/landing';
 
 function App() {
   const flatLandingLinks = flattenLandingLinks(landingLink);
@@ -25,6 +26,7 @@ function App() {
           })),
           { path: '/success_register_konseli', element: <SuccessRegisterKonseli /> },
           { path: '/failed_register_konseli', element: <FailedRegisterKonseli /> },
+          { path: '/artikel/read/:slug', element: <ReadArticle /> },
           { path: '*', element: <Notfound /> }
         ]
       },
@@ -61,7 +63,9 @@ function App() {
           {
             path: '/profile_konseli',
             element: <KonselisProfile />
-          }
+          },
+          { path: '/articles/create', element: <CreateArticle /> },
+          { path: '/articles/edit/:slug', element: <EditArticle /> }
         ]
       },
 

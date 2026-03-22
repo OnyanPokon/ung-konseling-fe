@@ -4,7 +4,7 @@ import * as Dashboard from '@/pages/dashboard';
 import * as Landing from '@/pages/landing';
 import * as Model from '@/models';
 
-import { CalendarOutlined, DashboardOutlined, MessageOutlined, PaperClipOutlined, PhoneOutlined, PrinterOutlined, UserOutlined } from '@ant-design/icons';
+import { CalendarOutlined, DashboardOutlined, FilePdfOutlined, MessageOutlined, PaperClipOutlined, PhoneOutlined, PrinterOutlined, UserOutlined } from '@ant-design/icons';
 
 export const landingLink = [
   {
@@ -16,6 +16,11 @@ export const landingLink = [
     label: 'Daftar Konseli',
     key: '/konseli_register',
     element: Landing.KonseliRegister
+  },
+  {
+    label: 'Artikel',
+    key: '/artikel',
+    element: Landing.Articles
   }
 ];
 
@@ -48,6 +53,12 @@ export const dashboardLink = [
     children: [{ path: '/konseli_dashboard', label: 'Dashboard', element: Dashboard.KonseliDashboard }]
   },
   {
+    label: 'Overview',
+    icon: DashboardOutlined,
+    roles: [Role.ADMIN],
+    children: [{ path: '/admin_dashboard', label: 'Dashboard', element: Dashboard.AdminDashboard }]
+  },
+  {
     label: 'Daftar Layanan',
     icon: PrinterOutlined,
     roles: [Role.KONSELI],
@@ -55,11 +66,13 @@ export const dashboardLink = [
     element: Dashboard.TicketForm
   },
   {
-    label: 'Overview',
-    icon: DashboardOutlined,
-    roles: [Role.ADMIN],
-    children: [{ path: '/admin_dashboard', label: 'Dashboard', element: Dashboard.AdminDashboard }]
+    label: 'Artikel',
+    icon: FilePdfOutlined,
+    roles: [Role.ADMIN, Role.KONSELOR],
+    path: '/articles',
+    element: Dashboard.Articles
   },
+
   {
     label: 'Aktor',
     icon: UserOutlined,

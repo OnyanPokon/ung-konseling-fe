@@ -8,5 +8,8 @@ export { default as JadwalKonselors } from './Layanans/JadwalKonselors';
 export { default as KonselisProfile } from './KonselisProfile';
 export { default as TicketForm } from './Tickets/TicketForm';
 export { default as Tickets } from './Tickets/Tickets';
+export { default as Articles } from './Articles/Articles';
+export { default as CreateArticle } from './Articles/Create';
+export { default as EditArticle } from './Articles/Edit';
 export { default as SesiKonselings } from './SesiKonselings/SesiKonselings';
 export { default as Chats } from './AI/Chats';

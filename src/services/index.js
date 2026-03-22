@@ -6,3 +6,4 @@ export { default as HariLayanansService } from './HariLayanansService';
 export { default as TiketsService } from './TiketsService';
 export { default as SesiKonselingsService } from './SesiKonselingsService';
 export { default as NotificationService } from './NotificationService';
+export { default as ArticlesService } from './ArticlesService';

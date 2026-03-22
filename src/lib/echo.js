@@ -13,7 +13,7 @@ export const createEcho = (token) => {
     disableStats: true,
     enabledTransports: ['ws', 'wss'],
 
-    authEndpoint: `${import.meta.env.VITE_BASE_URL}/broadcasting/auth`,
+    authEndpoint: `http://localhost:8000/broadcasting/auth`,
 
     auth: {
       headers: {

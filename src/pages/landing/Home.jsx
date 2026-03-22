@@ -1,9 +1,24 @@
 import { Reveal } from '@/components';
-import { Button, Space, Typography } from 'antd';
+import { useAuth } from '@/hooks';
+import useAbortableService from '@/hooks/useAbortableService';
+import { ArticlesService } from '@/services';
+import dateFormatterID from '@/utils/dateFormatterId';
+import { Button, Card, Skeleton, Space, Typography } from 'antd';
+import React from 'react';
+import parse from 'html-react-parser';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const navigate = useNavigate();
+  const { onUnauthorized } = useAuth();
+  const { execute: fetchNews, ...getAllNews } = useAbortableService(ArticlesService.getAllInLanding, { onUnauthorized });
+
+  React.useEffect(() => {
+    fetchNews({ page: 1, per_page: 4 });
+  }, [fetchNews]);
+
+  const news = getAllNews.data ?? [];
+
   return (
     <>
       <section className="mx-auto grid min-h-screen w-full max-w-screen-xl grid-cols-6 items-center gap-x-10 px-6 py-28">
@@ -61,6 +76,32 @@ const Home = () => {
                   </Button>
                 </div>
               </div> */}
+        </div>
+      </section>
+      <section className="bg-gray-50">
+        <div className="mx-auto w-full max-w-screen-xl px-6 py-32">
+          <div className="mt-12 flex w-full items-center justify-center">
+            <Typography.Title level={4}>Berita Terkini</Typography.Title>
+          </div>
+          <div className="flex flex-wrap items-start justify-center gap-4 pt-12">
+            {getAllNews.isLoading
+              ? Array.from({ length: 4 }, (_, i) => i).map((index) => (
+                  <Card className="w-full max-w-[280px]" key={index}>
+                    <Skeleton active />
+                  </Card>
+                ))
+              : news?.map((item) => (
+                  <Card onClick={() => navigate(window.location.pathname + 'artikel/read/' + item.slug)} key={item.id} hoverable className="w-full max-w-[280px]" cover={<img src={item.thumbnail} className="h-52 object-cover" />}>
+                    <div className="text-gray-500">
+                      <Typography.Title level={5}>
+                        <span className="news-text">{item.title}</span>
+                      </Typography.Title>
+                      <p className="news-text mb-4">{parse(item.content)}</p>
+                      <p className="text-xs">{dateFormatterID(item.created_at)}</p>
+                    </div>
+                  </Card>
+                ))}
+          </div>
         </div>
       </section>
     </>
