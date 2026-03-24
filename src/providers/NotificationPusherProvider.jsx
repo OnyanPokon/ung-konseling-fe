@@ -61,7 +61,6 @@ export default function NotificationPusherProvider({ children }) {
     console.log('📡 SUBSCRIBE:', channelName);
 
     echo.private(channelName).notification((notif) => {
-      console.log('📨 REALTIME NOTIF:', notif);
 
       notification.info({
         message: notif.title,
@@ -69,8 +68,7 @@ export default function NotificationPusherProvider({ children }) {
         placement: 'topRight'
       });
 
-      setNotifications((prev) => [notif, ...prev]);
-      setUnreadCount((prev) => prev + 1);
+      fetchNotificationHistory();
     });
 
     return () => {
@@ -84,7 +82,7 @@ export default function NotificationPusherProvider({ children }) {
 
       initializedRef.current = false;
     };
-  }, [user?.id, token, isAuthBootstrapping]);
+  }, [user.id, token, isAuthBootstrapping, fetchNotificationHistory]);
 
   const readNotification = React.useCallback(
     async (notificationId) => {
