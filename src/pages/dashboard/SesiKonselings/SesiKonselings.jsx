@@ -8,11 +8,12 @@ import { DataTableHeader } from '@/components';
 import { KonselisService, KonselorsService, SesiKonselingsService } from '@/services';
 import { Action, Role } from '@/constants';
 import { SesiKonselings as SesiKonselingModel } from '@/models';
-import { CalendarOutlined, CheckOutlined, CloseOutlined, InfoOutlined } from '@ant-design/icons';
+import { CalendarOutlined, CheckOutlined, CloseOutlined, EyeOutlined, InfoOutlined, PrinterOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { timeFormFields } from './FormFields';
+import { reportFormFields, timeFormFields } from './FormFields';
 import { Delete } from '@/components/dashboard/button';
 import DetailDrawer from './DetailDrawer';
+import { useNavigate } from 'react-router-dom';
 
 const { DELETE, UPDATE, READ } = Action;
 
@@ -20,12 +21,14 @@ const SesiKonselings = () => {
   const { token, onUnauthorized, user } = useAuth();
   const { success, error } = useNotification();
   const modal = useCrudModal();
+  const navigate = useNavigate();
   const { execute: fetchKonselor, ...getAllKonselor } = useAbortableService(KonselorsService.getByUserId, { onUnauthorized });
   const { execute: fetchKonseli, ...getAllKonseli } = useAbortableService(KonselisService.getByUserId, { onUnauthorized });
   const { execute, ...getAllSesiKonselings } = useAbortableService(SesiKonselingsService.getAll, { onUnauthorized });
 
   const updateSesiKonsling = useService(SesiKonselingsService.update);
   const deleteSesiKonseling = useService(SesiKonselingsService.delete);
+  const storeSesiKonselingReport = useService(SesiKonselingsService.storeReport);
 
   const pagination = usePagination({ totalData: getAllSesiKonselings.totalData });
   const [filterValues, setFilterValues] = React.useState({ search: '' });
@@ -145,7 +148,7 @@ const SesiKonselings = () => {
                       </Popconfirm>
                       <Popconfirm
                         title="Jadwalkan ulang?"
-                        disabled={item.status === 'dibatalkan'}
+                        disabled={item.status === 'dibatalkan' || item.status === 'selesai'}
                         description="Apakah anda yakin ingin menjadwalkan ulang sesi konseling?"
                         onConfirm={() => {
                           modal.edit({
@@ -181,8 +184,47 @@ const SesiKonselings = () => {
                         okText="Yes"
                         cancelText="No"
                       >
-                        <Button disabled={item.status === 'dibatalkan'} variant="outlined" shape="circle" icon={<CalendarOutlined />} color="yellow" />
+                        <Button disabled={item.status === 'dibatalkan' || item.status === 'selesai'} variant="outlined" shape="circle" icon={<CalendarOutlined />} color="yellow" />
                       </Popconfirm>
+                      {item.status === 'selesai' && item.report.status === null && (
+                        <Button
+                          icon={<PrinterOutlined />}
+                          variant="outlined"
+                          color="primary"
+                          shape="round"
+                          onClick={() => {
+                            modal.create({
+                              title: `Formulir Laporan`,
+                              formFields: reportFormFields,
+                              onSubmit: async (values) => {
+                                const { message, isSuccess } = await storeSesiKonselingReport.execute(item.id, values, token);
+                                if (isSuccess) {
+                                  success('Berhasil', message);
+                                  fetchSesiKonseling();
+                                } else {
+                                  error('Gagal', message);
+                                }
+                                return isSuccess;
+                              }
+                            });
+                          }}
+                        >
+                          Buat Laporan
+                        </Button>
+                      )}
+                      {item.report.status !== null && (
+                        <Button
+                          icon={<EyeOutlined />}
+                          variant="outlined"
+                          color="green"
+                          shape="round"
+                          onClick={() => {
+                            navigate(`/dashboard/sesi_konseling/${item.id}/report`);
+                          }}
+                        >
+                          Lihat Laporan
+                        </Button>
+                      )}
                     </Space>
                   </Descriptions.Item>
                 )}
@@ -209,6 +251,13 @@ const SesiKonselings = () => {
                         }}
                       />
                     </Space>
+                  </Descriptions.Item>
+                )}
+                {user && user.is(Role.KONSELI) && (
+                  <Descriptions.Item label="Aksi" span={3} onClick={(e) => e.stopPropagation()}>
+                    <Button shape="round" icon={<PrinterOutlined />} variant="outlined" color="primary" onClick={() => window.open(item.report.file_url, '_blank')}>
+                      Lihat Laporan
+                    </Button>
                   </Descriptions.Item>
                 )}
               </Descriptions>

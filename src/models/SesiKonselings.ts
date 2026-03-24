@@ -41,6 +41,11 @@ export interface IncomingApiData {
   tempat: string;
   catatan_konselor: string;
   status: 'dijadwalkan' | 'selesai' | 'dijadwalkan_ulang' | 'dibatalkan';
+  laporan: {
+    id: number | null;
+    status: 'draft' | 'final' | null;
+    file_url: string | null;
+  };
   created_at: string;
   updated_at: string;
 }
@@ -113,6 +118,11 @@ export default class SesiKonselings extends Model {
     public place: string,
     public note: string,
     public status: 'dijadwalkan' | 'selesai' | 'dijadwalkan_ulang' | 'dibatalkan',
+    public report: {
+      id: number | null;
+      status: 'draft' | 'final' | null;
+      file_url: string | null;
+    },
     public created_at: string,
     public updated_at: string
   ) {
@@ -162,6 +172,11 @@ export default class SesiKonselings extends Model {
       apiData.tempat,
       apiData.catatan_konselor,
       apiData.status,
+      {
+        id: apiData.laporan.id,
+        status: apiData.laporan.status,
+        file_url: apiData.laporan.file_url
+      },
       apiData.created_at,
       apiData.updated_at
     ) as ReturnType<T, IncomingApiData, SesiKonselings>;

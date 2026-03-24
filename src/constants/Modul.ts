@@ -5,7 +5,12 @@ enum Modul {
   JADWAL_KONSELOR = 'Jadwal Konselor',
   TICKETS = 'Tiket',
   SESI_KONSELINGS = 'Sesi Konseling',
-  ARTICLES = 'Artikel'
+  ARTICLES = 'Artikel',
+  PERIOD = 'Periode',
+  ASSESSMENT = 'Assessment',
+  QUESTION = 'Pertanyaan',
+  RESPON_MATRIX = 'Matriks Responden',
+  REPORT = 'Laporan Sesi Konseling'
 }
 
 export default Modul;

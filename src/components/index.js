@@ -9,6 +9,7 @@ export { default as ConselingTicket } from './dashboard/ConselingTicket';
 
 export { default as Navbar } from './landing/Navbar';
 export { default as Footer } from './landing/Footer';
+export { default as CustomRadioScale } from './landing/CustomRadioScale';
 
 export { default as DataLoader } from './DataLoader';
 export { default as Reveal } from './landing/Reveal';

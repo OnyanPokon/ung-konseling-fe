@@ -4,7 +4,7 @@ import * as Dashboard from '@/pages/dashboard';
 import * as Landing from '@/pages/landing';
 import * as Model from '@/models';
 
-import { CalendarOutlined, DashboardOutlined, FilePdfOutlined, MessageOutlined, PaperClipOutlined, PhoneOutlined, PrinterOutlined, UserOutlined } from '@ant-design/icons';
+import { CalendarOutlined, CheckSquareOutlined, DashboardOutlined, FilePdfOutlined, MessageOutlined, PaperClipOutlined, PhoneOutlined, PrinterOutlined, UserOutlined } from '@ant-design/icons';
 
 export const landingLink = [
   {
@@ -72,7 +72,15 @@ export const dashboardLink = [
     path: '/articles',
     element: Dashboard.Articles
   },
-
+  {
+    label: 'Assessment',
+    icon: CheckSquareOutlined,
+    roles: [Role.ADMIN],
+    children: [
+      { path: '/dashboard/assessment_periods', label: 'Periode', element: Dashboard.Periods, permissions: [[Action.CREATE, Model.Periods]] },
+      { path: '/dashboard/assessments', label: 'Assessment', element: Dashboard.Assessments, permissions: [[Action.CREATE, Model.Assessments]] }
+    ]
+  },
   {
     label: 'Aktor',
     icon: UserOutlined,

@@ -21,7 +21,7 @@ export const formFields = () => [
     rules: [
       {
         required: true,
-        message: `Nama ${Modul.KONSELIS} harus diisi`
+        message: `Email ${Modul.KONSELIS} harus diisi`
       },
       {
         type: 'email',

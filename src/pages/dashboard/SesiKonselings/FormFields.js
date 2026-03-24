@@ -61,3 +61,79 @@ export const timeFormFields = () => [
     ]
   }
 ];
+
+export const reportFormFields = () => [
+  {
+    label: `Jenis Layanan`,
+    name: 'jenis_layanan',
+    type: InputType.SELECT,
+    rules: [
+      {
+        required: true,
+        message: `Jenis layanan harus diisi`
+      }
+    ],
+    options: [
+      {
+        label: 'Dasar',
+        value: 'dasar'
+      },
+      {
+        label: 'Responsif',
+        value: 'responsif'
+      },
+      {
+        label: 'Perencanaan Individual',
+        value: 'perencanaan_individual'
+      },
+      {
+        label: 'Dukungan Sistem',
+        value: 'dukungan_sistem'
+      }
+    ]
+  },
+  {
+    label: `Tujuan Kegiatan`,
+    name: 'tujuan_kegiatan',
+    type: InputType.TEXT,
+    rules: [
+      {
+        required: true,
+        message: `Tujuan kegiatan harus diisi`
+      }
+    ]
+  },
+  {
+    label: `Uraian Kegiatan`,
+    name: 'uraian_kegiatan',
+    type: InputType.LONGTEXT,
+    rules: [
+      {
+        required: true,
+        message: `Uraian kegiatan harus diisi`
+      }
+    ]
+  },
+  {
+    label: `Hasil dan Dampak`,
+    name: 'hasil_dampak',
+    type: InputType.LONGTEXT,
+    rules: [
+      {
+        required: true,
+        message: `Hasil dan dampak harus diisi`
+      }
+    ]
+  },
+  {
+    label: `Rekomendasi`,
+    name: 'rekomendasi',
+    type: InputType.LONGTEXT,
+    rules: [
+      {
+        required: true,
+        message: `Rekomendasi harus diisi`
+      }
+    ]
+  }
+];

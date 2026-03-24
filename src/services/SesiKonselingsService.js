@@ -85,4 +85,73 @@ export default class SesiKonselingsService {
   static async deleteBatch(ids, token) {
     return await api.delete(`/sesi_konseling/multi-delete/?id=${ids.join(',')}`, { token });
   }
+
+  /**
+   * @param {SesiKonselings} data
+   * @param {string} token
+   * @returns {Promise<{
+   *  code: HTTPStatusCode;
+   *  status: boolean;
+   *  message: string;
+   *  errors?: { [key: string]: string[] };
+   * }}
+   */
+  static async storeReport(id, data, token) {
+    return await api.post(`/sesi_konseling/${id}/laporan`, { body: data, token });
+  }
+
+  /**
+   * @param {SesiKonselings} data
+   * @param {string} token
+   * @returns {Promise<{
+   *  code: HTTPStatusCode;
+   *  status: boolean;
+   *  message: string;
+   *  errors?: { [key: string]: string[] };
+   * }}
+   */
+  static async uploadAndFinal(id, token, file) {
+    return await api.post(`/sesi_konseling/${id}/laporan/upload-final`, { token, file: { file: file } });
+  }
+
+  /**
+   * @param {number} id
+   * @param {SesiKonselings} data
+   * @param {string} token
+   * @returns {Promise<{
+   *  code: HTTPStatusCode;
+   *  status: boolean;
+   *  message: string;
+   *  errors?: { [key: string]: string[] };
+   * }>}
+   */
+  static async updateReportValue(id, data, token) {
+    return await api.put(`/sesi_konseling/${id}/laporan`, { body: data, token });
+  }
+
+  /**
+   * @param {string} token
+   * @returns {Promise<{
+   *  code: HTTPStatusCode;
+   *  status: boolean;
+   *  message: string;
+   *  data?: SesiKonselings[];
+   * }>}
+   * */
+  static getReport({ token, sesi_konseling_id }) {
+    const abortController = new AbortController();
+    const response = api.get(`/sesi_konseling/${sesi_konseling_id}/laporan`, {
+      token,
+      signal: abortController.signal
+    });
+
+    return {
+      abortController,
+      response,
+      parser: (apiData) => {
+        const sesiKonseling = apiData?.sesiKonseling ?? apiData?.data ?? apiData ?? [];
+        return sesiKonseling;
+      }
+    };
+  }
 }

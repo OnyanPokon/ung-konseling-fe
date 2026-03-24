@@ -9,3 +9,6 @@ export { default as Tikets } from './Tikets';
 export { default as SesiKonselings } from './SesiKonselings';
 export { default as Notification } from './Notification';
 export { default as Articles } from './Articles';
+export { default as Periods } from './Periods';
+export { default as Assessments } from './Assessments';
+export { default as Questions } from './Questions';

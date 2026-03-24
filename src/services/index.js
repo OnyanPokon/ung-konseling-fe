@@ -7,3 +7,6 @@ export { default as TiketsService } from './TiketsService';
 export { default as SesiKonselingsService } from './SesiKonselingsService';
 export { default as NotificationService } from './NotificationService';
 export { default as ArticlesService } from './ArticlesService';
+export { default as PeriodsService } from './PeriodsService';
+export { default as AssessmentsService } from './AssessmentsService';
+export { default as QuestionsService } from './QuestionsService';
