@@ -9,8 +9,8 @@ import { useMemo } from 'react';
 import './index.css';
 import SuccessRegisterKonseli from './pages/result/SuccessRegisterKonseli';
 import FailedRegisterKonseli from './pages/result/FailedRegisterKonseli';
-import { CreateArticle, EditArticle, KonselisProfile, Matrix, Questions, Report } from './pages/dashboard';
-import { Assessment, ReadArticle } from './pages/landing';
+import { AssessmentMatrix, AssessmentQuestion, CreateArticle, EditArticle, KonselisProfile, KonselorProfile, ScreeningMatrix, ScreeningQuestions } from './pages/dashboard';
+import { Assessment, ReadArticle, Screening } from './pages/landing';
 import { SuccessAssessment, FailedAssessment } from './pages/result';
 
 function App() {
@@ -30,7 +30,8 @@ function App() {
           { path: '/success_assessment', element: <SuccessAssessment /> },
           { path: '/failed_assessment', element: <FailedAssessment /> },
           { path: '/artikel/read/:slug', element: <ReadArticle /> },
-          { path: '/assessment/:slug', element: <Assessment /> },
+          { path: '/assessments/:slug', element: <Assessment /> },
+          { path: '/screenings/:slug', element: <Screening /> },
           { path: '*', element: <Notfound /> }
         ]
       },
@@ -70,9 +71,12 @@ function App() {
           },
           { path: '/articles/create', element: <CreateArticle /> },
           { path: '/articles/edit/:slug', element: <EditArticle /> },
-          { path: '/dashboard/assessments/:assessmentId/questions', element: <Questions /> },
-          { path: '/dashboard/assessments/:assessmentId/matrix', element: <Matrix /> },
-          { path: '/dashboard/sesi_konseling/:sesi_konseling_id/report', element: <Report /> }
+          { path: '/dashboard/assessments/:assessmentId/questions', element: <AssessmentQuestion /> },
+          { path: '/dashboard/assessments/:assessmentId/matrix', element: <AssessmentMatrix /> },
+          { path: '/dashboard/screenings/:screeningId/questions', element: <ScreeningQuestions /> },
+          { path: '/dashboard/screenings/:screeningId/matrix', element: <ScreeningMatrix /> },
+          { path: '/dashboard/profile_konselor', element: <KonselorProfile /> },
+          { path: '/dashboard/profile_konseli', element: <KonselisProfile /> }
         ]
       },
 

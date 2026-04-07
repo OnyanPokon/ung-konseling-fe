@@ -89,8 +89,8 @@ export default class ArticlesService {
    *  errors?: { [key: string]: string[] };
    * }>}
    */
-  static async update(id, data, token) {
-    return await api.put(`/artikel/${id}`, { body: Articles.toApiData(data), token });
+  static async update(id, data, token, file) {
+    return await api.post(`/artikel/${id}`, { body: Articles.toApiData(data), token, file: { thumbnail: file } });
   }
 
   /**

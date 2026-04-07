@@ -1,26 +1,26 @@
 import { CustomRadioScale } from '@/components';
-import { Button, Form, Input, Typography, Skeleton, Empty } from 'antd';
+import { Button, Form, Input, Typography, Skeleton, Empty, Select, InputNumber } from 'antd';
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { AssessmentsService } from '@/services';
 import useAbortableService from '@/hooks/useAbortableService';
 import { useAuth, useService } from '@/hooks';
+import { ScreeningsService } from '@/services';
 
-const Assessment = () => {
+const Screening = () => {
   const [form] = Form.useForm();
   const values = Form.useWatch([], form);
   const navigate = useNavigate();
 
   const { slug } = useParams();
   const { onUnauthorized } = useAuth();
-  const { execute: fetchAssessment, ...assessmentService } = useAbortableService(AssessmentsService.getBySlug, { onUnauthorized });
-  const storeResponse = useService(AssessmentsService.storeResponse);
+  const { execute: fetchScreening, ...screeningService } = useAbortableService(ScreeningsService.getBySlug, { onUnauthorized });
+  const storeResponse = useService(ScreeningsService.storeResponse);
 
   useEffect(() => {
     if (slug) {
-      fetchAssessment({ slug });
+      fetchScreening({ slug });
     }
-  }, [slug, fetchAssessment]);
+  }, [slug, fetchScreening]);
 
   const handleClearForm = () => {
     if (window.confirm('Apakah Anda yakin ingin mengosongkan formulir? Semua jawaban akan dihapus.')) {
@@ -29,7 +29,7 @@ const Assessment = () => {
   };
 
   const onFinish = async (formValues) => {
-    const { name, email, nim, major, institution, ...rest } = formValues;
+    const { name, email, institution, age, parent_job, domisili, gender, job, ...rest } = formValues;
 
     const answers = Object.entries(rest)
       .filter(([key]) => !isNaN(key))
@@ -39,12 +39,15 @@ const Assessment = () => {
       }));
 
     const payload = {
-      screening_id: assessmentData.id,
-      email,
+      assessment_id: screeningData.id,
       name,
-      nim,
+      email,
       institution,
-      major,
+      age,
+      parent_job,
+      domisili,
+      gender,
+      job,
       answers
     };
 
@@ -57,8 +60,8 @@ const Assessment = () => {
     }
   };
 
-  const isLoading = assessmentService.isLoading;
-  const assessmentData = assessmentService.data;
+  const isLoading = screeningService.isLoading;
+  const screeningData = screeningService.data;
 
   if (isLoading) {
     return (
@@ -81,7 +84,7 @@ const Assessment = () => {
     );
   }
 
-  if (!assessmentData) {
+  if (!screeningData) {
     return (
       <section className="flex min-h-screen items-center justify-center bg-[#F0F2F5] px-4 py-8 font-sans sm:px-6 lg:px-8">
         <Empty description="Assessment tidak ditemukan atau tidak tersedia" />
@@ -96,15 +99,88 @@ const Assessment = () => {
           <div className="absolute left-0 top-0 h-2.5 w-full bg-blue-600"></div>
           <div className="p-6 pt-10 sm:p-8">
             <div className="mb-4">
-              <span className="mb-4 inline-block rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-700">{assessmentData.period?.name || 'Assessment'}</span>
-              <h1 className="mb-3 text-3xl font-bold text-gray-900">{assessmentData.title}</h1>
-              <p className="text-[15px] leading-relaxed text-gray-600">{assessmentData.description}</p>
+              <span className="mb-4 inline-block rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-700">{screeningData.period?.name || 'Assessment'}</span>
+              <h1 className="mb-3 text-3xl font-bold text-gray-900">{screeningData.title}</h1>
+              <p className="text-[15px] leading-relaxed text-gray-600">{screeningData.description}</p>
             </div>
             <div className="mt-6 flex items-center border-t border-gray-100 pt-4 text-sm font-medium text-red-500">* Wajib diisi</div>
           </div>
         </div>
 
         <Form form={form} onFinish={onFinish} className="space-y-5" layout="vertical">
+          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
+            <div className="mb-4">
+              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
+                <span>Nama Lengkap</span>
+              </Typography.Text>
+            </div>
+            <Form.Item name="name" rules={[{ required: true, message: 'Nama wajib di isi' }]} className="mb-0">
+              <Input size="large" name="name" placeholder="Masukan Nama" />
+            </Form.Item>
+          </div>
+          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
+            <div className="mb-4">
+              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
+                <span>Umur</span>
+              </Typography.Text>
+            </div>
+            <Form.Item name="age" rules={[{ required: true, message: 'Nama wajib di isi' }]} className="mb-0">
+              <InputNumber className="w-full" max={100} min={1} size="large" name="age" placeholder="Masukan Umur" />
+            </Form.Item>
+          </div>
+          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
+            <div className="mb-4">
+              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
+                <span>Pekerjaan Orang Tua</span>
+              </Typography.Text>
+            </div>
+            <Form.Item name="parent_job" rules={[{ required: true, message: 'Pekerjaan Orang Tua wajib di isi' }]} className="mb-0">
+              <Input size="large" name="parent_job" placeholder="Masukan Pekerjaan Orang Tua" />
+            </Form.Item>
+          </div>
+          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
+            <div className="mb-4">
+              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
+                <span>Domisili</span>
+              </Typography.Text>
+            </div>
+            <Form.Item name="domisili" rules={[{ required: true, message: 'Domisili wajib di isi' }]} className="mb-0">
+              <Input size="large" name="domisili" placeholder="Masukan Domisili" />
+            </Form.Item>
+          </div>
+          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
+            <div className="mb-4">
+              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
+                <span>Jenis Kelamin</span>
+              </Typography.Text>
+            </div>
+            <Form.Item name="gender" rules={[{ required: true, message: 'Jenis Kelamin wajib di isi' }]} className="mb-0">
+              <Select size="large" name="gender">
+                <Select.Option value="Laki-laki">Laki-laki</Select.Option>
+                <Select.Option value="Perempuan">Perempuan</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
+          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
+            <div className="mb-4">
+              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
+                <span>Pekerjaan</span>
+              </Typography.Text>
+            </div>
+            <Form.Item name="job" rules={[{ required: true, message: 'Pekerjaan wajib di isi' }]} className="mb-0">
+              <Input size="large" name="job" placeholder="Masukan Pekerjaan" />
+            </Form.Item>
+          </div>
+          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
+            <div className="mb-4">
+              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
+                <span>Institusi</span>
+              </Typography.Text>
+            </div>
+            <Form.Item name="institution" rules={[{ required: true, message: 'Institusi wajib di isi' }]} className="mb-0">
+              <Input size="large" name="institution" placeholder="Masukan Institusi" />
+            </Form.Item>
+          </div>
           <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
             <div className="mb-4">
               <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
@@ -122,48 +198,8 @@ const Assessment = () => {
               <Input size="large" name="email" placeholder="Masukan Email" />
             </Form.Item>
           </div>
-          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
-            <div className="mb-4">
-              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
-                <span>Nama Lengkap</span>
-              </Typography.Text>
-            </div>
-            <Form.Item name="name" rules={[{ required: true, message: 'Nama wajib di isi' }]} className="mb-0">
-              <Input size="large" name="name" placeholder="Masukan Nama" />
-            </Form.Item>
-          </div>
-          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
-            <div className="mb-4">
-              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
-                <span>NIM</span>
-              </Typography.Text>
-            </div>
-            <Form.Item name="nim" rules={[{ required: true, message: 'NIM wajib di isi' }]} className="mb-0">
-              <Input size="large" name="nim" placeholder="Masukan NIM" />
-            </Form.Item>
-          </div>
-          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
-            <div className="mb-4">
-              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
-                <span>Fakultas</span>
-              </Typography.Text>
-            </div>
-            <Form.Item name="institution" rules={[{ required: true, message: 'Fakultas wajib di isi' }]} className="mb-0">
-              <Input size="large" name="institution" placeholder="Masukan Fakultas" />
-            </Form.Item>
-          </div>
-          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
-            <div className="mb-4">
-              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
-                <span>Jurusan</span>
-              </Typography.Text>
-            </div>
-            <Form.Item name="major" rules={[{ required: true, message: 'Jurusan wajib di isi' }]} className="mb-0">
-              <Input size="large" name="major" placeholder="Masukan Jurusan" />
-            </Form.Item>
-          </div>
 
-          {assessmentData.questions?.map((q, index) => {
+          {screeningData.questions?.map((q, index) => {
             const isAnswered = values && values[q.id] !== undefined;
 
             return (
@@ -198,4 +234,4 @@ const Assessment = () => {
   );
 };
 
-export default Assessment;
+export default Screening;

@@ -2,7 +2,7 @@ import { Delete, Edit } from '@/components/dashboard/button';
 import Modul from '@/constants/Modul';
 import { useAuth, useCrudModal, useNotification, usePagination, useService } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
-import { Badge, Card, Skeleton, Space } from 'antd';
+import { Badge, Card, Image, Skeleton, Space } from 'antd';
 import { Konselors as KonselorModel } from '@/models';
 import React from 'react';
 import { Action } from '@/constants';
@@ -45,9 +45,33 @@ const Konselors = () => {
 
   const column = [
     {
+      title: 'Profil',
+      dataIndex: ['profile_picture'],
+      sorter: (a, b) => a.profile_picture.length - b.profile_picture.length,
+      searchable: true,
+      render: (record) => (
+        <div className="w-fit rounded-md bg-white p-2 shadow-md">
+          <Image className="m-0" src={record} width={40} height={40} />
+        </div>
+      )
+    },
+    {
+      title: 'NIP',
+      dataIndex: ['nip'],
+      sorter: (a, b) => a.nip.length - b.nip.length,
+      searchable: true
+    },
+    {
       title: 'Nama',
       dataIndex: ['user', 'name'],
       sorter: (a, b) => a.user.name.length - b.user.name.length,
+      searchable: true
+    },
+
+    {
+      title: 'Email',
+      dataIndex: ['user', 'email'],
+      sorter: (a, b) => a.user.email.length - b.user.email.length,
       searchable: true
     },
     {
@@ -88,10 +112,11 @@ const Konselors = () => {
             onClick={() => {
               modal.edit({
                 title: `Edit ${modulName}`,
-                data: { ...record, name: record.user.name, email: record.user.email },
+                data: { ...record, name: record.user.name, email: record.user.email, password: record.user.password },
                 formFields: formFields(),
                 onSubmit: async (values) => {
-                  const { message, isSuccess } = await updateKonselors.execute(record.id, values, token);
+                  console.log(values);
+                  const { message, isSuccess } = await updateKonselors.execute(record.id, { ...values, _method: 'PUT' }, token, values.profile_picture.file);
                   if (isSuccess) {
                     success('Berhasil', message);
                     fetchKonselors({ token: token, page: pagination.page, per_page: pagination.per_page });
@@ -132,7 +157,7 @@ const Konselors = () => {
       title: `Tambah ${modulName}`,
       formFields: formFields,
       onSubmit: async (values) => {
-        const { message, isSuccess } = await storeKonselors.execute({ ...values, password: 'password' }, token);
+        const { message, isSuccess } = await storeKonselors.execute({ ...values, password: 'password' }, token, values.profile_picture.file);
         if (isSuccess) {
           success('Berhasil', message);
           fetchKonselors({ token: token, page: pagination.page, per_page: pagination.per_page });

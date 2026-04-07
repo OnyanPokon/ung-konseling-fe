@@ -8,7 +8,7 @@ const SuccessAssessment = () => {
       <div className="w-full max-w-2xl rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
         <Result
           status="success"
-          title="Berhasil Mengirim Assessment!"
+          title="Berhasil Mengirim!"
           subTitle="Terima kasih, respons Anda telah berhasil kami simpan. Masukan Anda sangat berarti bagi proses evaluasi kami."
           extra={[
             <Button type="primary" size="large" key="home" onClick={() => navigate('/')}>

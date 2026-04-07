@@ -11,7 +11,7 @@ const FailedAssessment = () => {
       <div className="w-full max-w-2xl rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
         <Result
           status="error"
-          title="Gagal Mengirim Assessment!"
+          title="Gagal Mengirim!"
           subTitle={errorMessage}
           extra={[
             <Button type="primary" size="large" key="back" onClick={() => navigate(-1)}>

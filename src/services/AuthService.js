@@ -54,4 +54,58 @@ export default class AuthService {
   static async regisKonseli(data, token) {
     return await api.post('/register/konseli', { body: Konselis.toApiData(data), token });
   }
+
+  /**
+   * @param {number} id
+   * @param {string} token
+   * @returns {Promise<{
+   *  code: HTTPStatusCode;
+   *  status: boolean;
+   *  message: string;
+   *  errors?: { [key: string]: string[] };
+   * }>}
+   */
+  static async updateProfile(data, token) {
+    return await api.post(`/auth/update-profile`, { body: data, token });
+  }
+
+  /**
+   * @param {number} id
+   * @param {string} token
+   * @returns {Promise<{
+   *  code: HTTPStatusCode;
+   *  status: boolean;
+   *  message: string;
+   *  errors?: { [key: string]: string[] };
+   * }>}
+   */
+  static async changePassword(data, token) {
+    return await api.post(`/auth/change-password`, { body: data, token });
+  }
+
+  /**
+   * @param {string} token
+   * @returns {Promise<Promise<{
+   *   code: HTTPStatusCode,
+   *   status: boolean,
+   *   message: string,
+   *   data?: User
+   * }>}
+   */
+  static adminOverview({ token }) {
+    const abortController = new AbortController();
+    const response = api.get(`/auth/overview`, {
+      token,
+      signal: abortController.signal
+    });
+
+    return {
+      abortController,
+      response,
+      parser: (apiData) => {
+        const konselor = apiData?.konselor ?? apiData?.data ?? apiData ?? {};
+        return konselor;
+      }
+    };
+  }
 }

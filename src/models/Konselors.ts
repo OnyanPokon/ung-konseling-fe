@@ -1,5 +1,6 @@
 import api from '@/utils/api';
 import Model from './Model';
+import asset from '@/utils/asset';
 
 export interface IncomingApiData {
   id: number;
@@ -8,23 +9,37 @@ export interface IncomingApiData {
     nama: string;
     email: string;
   };
+  nip: string;
+  phone: string;
+  jenis_kelamin: 'L' | 'P';
+  foto_profil: string;
   is_active: boolean;
   created_at: string;
   updated_at: string;
 }
 
 export interface OutgoingApiData {
-  nama: string;
-  email: string;
-  password: string;
-  is_active: boolean;
+  _method?: 'PUT';
+  nama?: string;
+  email?: string;
+  password?: string;
+  nip?: string;
+  phone?: string;
+  jenis_kelamin?: 'L' | 'P';
+  foto_profil?: string;
+  is_active?: boolean;
 }
 
 interface FormValue {
-  name: string;
-  email: string;
-  password: string;
-  is_active: boolean;
+  _method?: 'PUT';
+  name?: string;
+  email?: string;
+  password?: string;
+  nip?: string;
+  phone?: string;
+  gender?: 'L' | 'P';
+  profile_picture?: string;
+  is_active?: boolean;
 }
 
 type ReturnType<S, From, To> = S extends From[] ? To[] : To;
@@ -37,6 +52,10 @@ export default class Konselors extends Model {
       name: string;
       email: string;
     },
+    public nip: string,
+    public phone: string,
+    public gender: 'L' | 'P',
+    public profile_picture: string,
     public is_active: boolean,
     public created_at: string,
     public updated_at: string
@@ -46,16 +65,31 @@ export default class Konselors extends Model {
 
   public static fromApiData<T extends IncomingApiData | IncomingApiData[]>(apiData: T): ReturnType<T, IncomingApiData, Konselors> {
     if (Array.isArray(apiData)) return apiData.map((object) => this.fromApiData(object)) as ReturnType<T, IncomingApiData, Konselors>;
-    return new Konselors(apiData.id, { id: apiData.user.id, name: apiData.user.nama, email: apiData.user.email }, apiData.is_active, apiData.created_at, apiData.updated_at) as ReturnType<T, IncomingApiData, Konselors>;
+    return new Konselors(
+      apiData.id,
+      { id: apiData.user.id, name: apiData.user.nama, email: apiData.user.email },
+      apiData.nip,
+      apiData.phone,
+      apiData.jenis_kelamin,
+      asset(apiData.foto_profil),
+      apiData.is_active,
+      apiData.created_at,
+      apiData.updated_at
+    ) as ReturnType<T, IncomingApiData, Konselors>;
   }
 
   public static toApiData<T extends FormValue | FormValue[]>(konselors: T): ReturnType<T, FormValue, OutgoingApiData> {
     if (Array.isArray(konselors)) return konselors.map((object) => this.toApiData(object)) as ReturnType<T, FormValue, OutgoingApiData>;
     const apiData: OutgoingApiData = {
-      nama: konselors.name,
-      email: konselors.email,
-      password: konselors.password,
-      is_active: konselors.is_active
+      ...(konselors._method ? { _method: konselors._method } : {}),
+      ...(konselors.name ? { nama: konselors.name } : {}),
+      ...(konselors.email ? { email: konselors.email } : {}),
+      ...(konselors.password ? { password: konselors.password } : {}),
+      ...(konselors.nip ? { nip: konselors.nip } : {}),
+      ...(konselors.phone ? { phone: konselors.phone } : {}),
+      ...(konselors.gender ? { jenis_kelamin: konselors.gender } : {}),
+      ...(konselors.profile_picture ? { foto_profil: konselors.profile_picture } : {}),
+      ...(konselors.is_active ? { is_active: konselors.is_active } : {})
     };
 
     return apiData as ReturnType<T, FormValue, OutgoingApiData>;

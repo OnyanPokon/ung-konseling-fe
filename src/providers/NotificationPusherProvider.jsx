@@ -61,7 +61,6 @@ export default function NotificationPusherProvider({ children }) {
     console.log('📡 SUBSCRIBE:', channelName);
 
     echo.private(channelName).notification((notif) => {
-
       notification.info({
         message: notif.title,
         description: notif.message,
@@ -82,7 +81,7 @@ export default function NotificationPusherProvider({ children }) {
 
       initializedRef.current = false;
     };
-  }, [user.id, token, isAuthBootstrapping, fetchNotificationHistory]);
+  }, [user?.id, token, isAuthBootstrapping, fetchNotificationHistory]);
 
   const readNotification = React.useCallback(
     async (notificationId) => {

@@ -6,5 +6,15 @@ export const QuestionFormFields = () => [
     name: 'question_text',
     type: InputType.LONGTEXT,
     rules: [{ required: true, message: 'Pertanyaan wajib diisi' }]
+  },
+  {
+    label: `Skala`,
+    name: 'scale',
+    type: InputType.NUMBER,
+    extra: {
+      min: 1,
+      max: 10
+    },
+    rules: [{ required: true, message: 'Skala wajib diisi' }]
   }
 ];

@@ -3,37 +3,37 @@ import Modul from '@/constants/Modul';
 import { useAuth, useCrudModal, useNotification, usePagination, useService } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
 import { Card, Skeleton, Space, Button, Popconfirm } from 'antd';
-import { Assessments as AssessmentModel } from '@/models';
+import { Screenings as ScreeningsModel } from '@/models';
 import React from 'react';
 import { Action } from '@/constants';
 import { DataTable, DataTableHeader } from '@/components';
+import { ScreeningFormFields } from './FormFields';
+import { ScreeningsService } from '@/services';
 import { useNavigate } from 'react-router-dom';
 import { CopyOutlined, DatabaseOutlined, LinkOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import { AssessmentFormFields } from './FormFields';
-import { AssessmentsService } from '@/services';
 
 const { DELETE, UPDATE, READ } = Action;
-const modulName = Modul.ASSESSMENT;
+const modulName = Modul.SCREENING;
 
-const Assessments = () => {
+const Screenings = () => {
   const modal = useCrudModal();
   const navigate = useNavigate();
   const { success, error } = useNotification();
   const { token, user, onUnauthorized } = useAuth();
 
-  const { execute: fetchAssessment, ...getAllAssessments } = useAbortableService(AssessmentsService.getAll, { onUnauthorized });
+  const { execute: fetchScreenings, ...getAllScreenings } = useAbortableService(ScreeningsService.getAll, { onUnauthorized });
 
-  const pagination = usePagination({ totalData: getAllAssessments.totalData });
+  const pagination = usePagination({ totalData: getAllScreenings.totalData });
   const [filterValues, setFilterValues] = React.useState({ search: '' });
 
   const fetchAllData = React.useCallback(() => {
-    fetchAssessment({
+    fetchScreenings({
       token: token,
       page: pagination.page,
       per_page: pagination.perPage,
       search: filterValues.search
     });
-  }, [fetchAssessment, filterValues.search, pagination.page, pagination.perPage, token]);
+  }, [fetchScreenings, filterValues.search, pagination.page, pagination.perPage, token]);
 
   React.useEffect(() => {
     fetchAllData();
@@ -41,11 +41,11 @@ const Assessments = () => {
 
   const [selectedData, setSelectedData] = React.useState([]);
 
-  const assessments = React.useMemo(() => getAllAssessments.data ?? [], [getAllAssessments.data]);
+  const screenings = React.useMemo(() => getAllScreenings.data ?? [], [getAllScreenings.data]);
 
-  const storeAssessments = useService(AssessmentsService.store, onUnauthorized);
-  const updateAssessments = useService(AssessmentsService.update, onUnauthorized);
-  const deleteAssessments = useService(AssessmentsService.delete, onUnauthorized);
+  const storeScreenings = useService(ScreeningsService.store, onUnauthorized);
+  const updateScreenings = useService(ScreeningsService.update, onUnauthorized);
+  const deleteScreenings = useService(ScreeningsService.delete, onUnauthorized);
 
   const column = [
     {
@@ -62,21 +62,21 @@ const Assessments = () => {
     }
   ];
 
-  if (user && user.eitherCan([UPDATE, AssessmentModel], [DELETE, AssessmentModel], [READ, AssessmentModel])) {
+  if (user && user.eitherCan([UPDATE, ScreeningsModel], [DELETE, ScreeningsModel], [READ, ScreeningsModel])) {
     column.push({
       title: 'Aksi',
       render: (_, record) => (
         <Space size="small">
           <Edit
             title={`Edit ${modulName}`}
-            model={AssessmentModel}
+            model={ScreeningsModel}
             onClick={() => {
               modal.edit({
                 title: `Edit ${modulName}`,
                 data: { ...record },
-                formFields: AssessmentFormFields(),
+                formFields: ScreeningFormFields(),
                 onSubmit: async (values) => {
-                  const { message, isSuccess } = await updateAssessments.execute(record.id, values, token);
+                  const { message, isSuccess } = await updateScreenings.execute(record.id, values, token);
                   if (isSuccess) {
                     success('Berhasil', message);
                     fetchAllData();
@@ -90,12 +90,12 @@ const Assessments = () => {
           />
           <Delete
             title={`Delete ${modulName}`}
-            model={AssessmentModel}
+            model={ScreeningsModel}
             onClick={() => {
               modal.delete.default({
-                title: `Delete ${modulName}`,
+                title: `Delete ${Modul.SCREENING}`,
                 onSubmit: async () => {
-                  const { isSuccess, message } = await deleteAssessments.execute(record.id, token);
+                  const { isSuccess, message } = await deleteScreenings.execute(record.id, token);
                   if (isSuccess) {
                     success('Berhasil', message);
                     fetchAllData();
@@ -107,17 +107,17 @@ const Assessments = () => {
               });
             }}
           />
-          <Button variant="outlined" color="primary" shape="circle" icon={<UnorderedListOutlined />} onClick={() => navigate(`/dashboard/assessments/${record.id}/questions`)} />
-          <Button variant="outlined" color="primary" shape="circle" icon={<DatabaseOutlined />} onClick={() => navigate(`/dashboard/assessments/${record.id}/matrix`)} />
+          <Button variant="outlined" color="primary" shape="circle" icon={<UnorderedListOutlined />} onClick={() => navigate(`/dashboard/screenings/${record.id}/questions`)} />
+          <Button variant="outlined" color="primary" shape="circle" icon={<DatabaseOutlined />} onClick={() => navigate(`/dashboard/screenings/${record.id}/matrix`)} />
           <Popconfirm
             title="Bagikan Tautan"
             description={
-              <a href={`${window.location.origin}/assessments/${record.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-500">
-                {window.location.origin + '/assessments/' + record.slug}
+              <a href={`${window.location.origin}/screenings/${record.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+                {window.location.origin + '/screenings/' + record.slug}
               </a>
             }
             onConfirm={() => {
-              const url = `${window.location.origin}/assessments/${record.slug}`;
+              const url = `${window.location.origin}/screenings/${record.slug}`;
               navigator.clipboard
                 .writeText(url)
                 .then(() => success('Berhasil', 'Tautan berhasil disalin'))
@@ -137,9 +137,9 @@ const Assessments = () => {
   const onCreate = () => {
     modal.create({
       title: `Tambah ${modulName}`,
-      formFields: AssessmentFormFields(),
+      formFields: ScreeningFormFields(),
       onSubmit: async (values) => {
-        const { message, isSuccess } = await storeAssessments.execute(values, token);
+        const { message, isSuccess } = await storeScreenings.execute(values, token);
         if (isSuccess) {
           success('Berhasil', message);
           fetchAllData();
@@ -152,21 +152,14 @@ const Assessments = () => {
   };
 
   return (
-    <Card title={<DataTableHeader model={AssessmentModel} modul={Modul.ASSESSMENT} onStore={onCreate} selectedData={selectedData} onSearch={(values) => setFilterValues({ ...filterValues, search: values })} />}>
-      <Skeleton loading={getAllAssessments.isLoading} active>
+    <Card title={<DataTableHeader model={ScreeningsModel} modul={Modul.SCREENING} onStore={onCreate} selectedData={selectedData} onSearch={(values) => setFilterValues({ ...filterValues, search: values })} />}>
+      <Skeleton loading={getAllScreenings.isLoading} active>
         <div className="w-full max-w-full overflow-x-auto">
-          <DataTable
-            data={assessments}
-            columns={column}
-            loading={getAllAssessments.isLoading}
-            map={(screening) => ({ key: screening.id, ...screening })}
-            handleSelectedData={(_, selectedRows) => setSelectedData(selectedRows)}
-            pagination={pagination}
-          />
+          <DataTable data={screenings} columns={column} loading={getAllScreenings.isLoading} map={(screening) => ({ key: screening.id, ...screening })} handleSelectedData={(_, selectedRows) => setSelectedData(selectedRows)} pagination={pagination} />
         </div>
       </Skeleton>
     </Card>
   );
 };
 
-export default Assessments;
+export default Screenings;

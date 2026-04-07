@@ -1,4 +1,4 @@
-type ModelKeys = 'konseli' | 'konselor' | 'jadwal_konselor' | 'tiket' | 'hari_layanan' | 'user' | 'sesi_konseling' | 'artikel' | 'periode' | 'assessment' | 'question';
+type ModelKeys = 'konseli' | 'konselor' | 'jadwal_konselor' | 'tiket' | 'hari_layanan' | 'user' | 'sesi_konseling' | 'artikel' | 'periode' | 'assessment' | 'question' | 'screening' | 'screening_question';
 
 export default abstract class Model {
   static children: { [key in ModelKeys]?: ModelChildren | ModelChildren[] } = {
@@ -12,7 +12,9 @@ export default abstract class Model {
     artikel: undefined,
     periode: undefined,
     assessment: undefined,
-    question: undefined
+    question: undefined,
+    screening: undefined,
+    screening_question: undefined
   };
 }
 

@@ -1,12 +1,12 @@
 import { InputType } from '@/constants';
 
-export const AssessmentFormFields = () => [
+export const ScreeningFormFields = () => [
   {
-    label: `Judul Assessment`,
+    label: `Judul Screening`,
     name: 'title',
     type: InputType.TEXT,
     rules: [
-      { required: true, message: 'Judul Assessment wajib diisi' },
+      { required: true, message: 'Judul Screening wajib diisi' },
       { max: 255, message: 'Judul maksimal 255 karakter' }
     ]
   },

@@ -22,27 +22,8 @@ const Dashboard = () => {
 
   // const breadcrumbItems = generateBreadcrumb(dashboardLink, pathname);
 
-  const items = useMemo(
-    () => [
-      {
-        key: '1',
-        label: (
-          <button
-            onClick={() => {
-              if (!user) return;
-              if (user?.role === Role.KONSELI) {
-                navigate('/profile_konseli');
-              } else if (user?.role === Role.KONSELOR) {
-                navigate('/profile_konselor');
-              }
-            }}
-            className="flex min-w-32 items-center gap-x-2"
-          >
-            <UserOutlined />
-            Pengaturan Profil
-          </button>
-        )
-      },
+  const items = useMemo(() => {
+    const baseItems = [
       {
         key: '2',
         label: (
@@ -52,9 +33,35 @@ const Dashboard = () => {
           </button>
         )
       }
-    ],
-    [logout, navigate, user]
-  );
+    ];
+
+    if (user?.role !== Role.ADMIN) {
+      return [
+        {
+          key: '1',
+          label: (
+            <button
+              onClick={() => {
+                if (!user) return;
+                if (user.role === Role.KONSELI) {
+                  navigate('/dashboard/profile_konseli');
+                } else if (user.role === Role.KONSELOR) {
+                  navigate('/dashboard/profile_konselor');
+                }
+              }}
+              className="flex min-w-32 items-center gap-x-2"
+            >
+              <UserOutlined />
+              Pengaturan Profil
+            </button>
+          )
+        },
+        ...baseItems
+      ];
+    }
+
+    return baseItems;
+  }, [logout, user, navigate]);
 
   const {
     token: { colorBgContainer }

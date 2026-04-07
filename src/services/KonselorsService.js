@@ -50,6 +50,23 @@ export default class KonselorsService {
     };
   }
 
+  static getOverview({ token, ...filters }) {
+    const abortController = new AbortController();
+    const response = api.get(`/konselor/overview`, {
+      token,
+      signal: abortController.signal
+    });
+
+    return {
+      abortController,
+      response,
+      parser: (apiData) => {
+        const konselor = apiData?.konselor ?? apiData?.data ?? apiData ?? {};
+        return konselor;
+      }
+    };
+  }
+
   /**
    * @param {Konselors} data
    * @param {string} token
@@ -60,8 +77,8 @@ export default class KonselorsService {
    *  errors?: { [key: string]: string[] };
    * }}
    */
-  static async store(data, token) {
-    return await api.post('/konselor', { body: Konselors.toApiData(data), token });
+  static async store(data, token, file) {
+    return await api.post('/konselor', { body: Konselors.toApiData(data), token, file: { foto_profil: file } });
   }
 
   /**
@@ -75,7 +92,22 @@ export default class KonselorsService {
    *  errors?: { [key: string]: string[] };
    * }>}
    */
-  static async update(id, data, token) {
+  static async update(id, data, token, file) {
+    return await api.post(`/konselor/${id}`, { body: Konselors.toApiData(data), token, file: { foto_profil: file } });
+  }
+
+  /**
+   * @param {number} id
+   * @param {Konselors} data
+   * @param {string} token
+   * @returns {Promise<{
+   *  code: HTTPStatusCode;
+   *  status: boolean;
+   *  message: string;
+   *  errors?: { [key: string]: string[] };
+   * }>}
+   */
+  static async updateProfile(id, data, token) {
     return await api.put(`/konselor/${id}`, { body: Konselors.toApiData(data), token });
   }
 

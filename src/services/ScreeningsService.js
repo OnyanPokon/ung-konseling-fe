@@ -1,21 +1,21 @@
 /* eslint-disable no-unused-vars */
-import { Screenings } from '@/models';
+import { Assessments } from '@/models';
 import api from '@/utils/api';
 
-export default class AssessmentsService {
+export default class ScreeningsService {
   /**
    * @param {string} token
    * @returns {Promise<{
    *  code: HTTPStatusCode;
    *  status: boolean;
    *  message: string;
-   *  data?: Assessments[];
+   *  data?: Screenings[];
    * }>}
    * */
   static getAll({ token, ...filters }) {
     const params = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''));
     const abortController = new AbortController();
-    const response = api.get('/screening', {
+    const response = api.get('/assessment', {
       token,
       signal: abortController.signal,
       params
@@ -26,7 +26,7 @@ export default class AssessmentsService {
       response,
       parser: (apiData) => {
         const assessment = apiData?.assessment ?? apiData?.data ?? apiData ?? [];
-        return Screenings.fromApiData(assessment);
+        return Assessments.fromApiData(assessment);
       }
     };
   }
@@ -42,7 +42,7 @@ export default class AssessmentsService {
    * */
   static getBySlug({ slug }) {
     const abortController = new AbortController();
-    const response = api.get(`/landing/screening/${slug}`, {
+    const response = api.get(`/landing/assessment/${slug}`, {
       signal: abortController.signal
     });
 
@@ -59,7 +59,7 @@ export default class AssessmentsService {
   static getById({ token, id, ...filters }) {
     const params = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''));
     const abortController = new AbortController();
-    const response = api.get(`/screening/${id}`, {
+    const response = api.get(`/assessment/${id}`, {
       token,
       signal: abortController.signal,
       params
@@ -70,7 +70,7 @@ export default class AssessmentsService {
       response,
       parser: (apiData) => {
         const assessment = apiData?.assessment ?? apiData?.data ?? apiData ?? {};
-        return Screenings.fromApiData(assessment);
+        return Assessments.fromApiData(assessment);
       }
     };
   }
@@ -78,7 +78,7 @@ export default class AssessmentsService {
   static getMatrix({ token, id, ...filters }) {
     const params = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''));
     const abortController = new AbortController();
-    const response = api.get(`/screening/${id}/matrix`, {
+    const response = api.get(`/assessment/${id}/matrix`, {
       token,
       signal: abortController.signal,
       params
@@ -105,7 +105,7 @@ export default class AssessmentsService {
    * }}
    */
   static async store(data, token) {
-    return await api.post('/screening', { body: Screenings.toApiData(data), token });
+    return await api.post('/assessment', { body: Assessments.toApiData(data), token });
   }
 
   /**
@@ -119,7 +119,7 @@ export default class AssessmentsService {
    * }}
    */
   static async storeResponse(data) {
-    return await api.post('/landing/screening/response', { body: data });
+    return await api.post('/landing/assessment/response', { body: data });
   }
 
   /**
@@ -134,7 +134,7 @@ export default class AssessmentsService {
    * }>}
    */
   static async update(id, data, token) {
-    return await api.put(`/screening/${id}`, { body: Screenings.toApiData(data), token });
+    return await api.put(`/assessment/${id}`, { body: Assessments.toApiData(data), token });
   }
 
   /**
@@ -147,7 +147,7 @@ export default class AssessmentsService {
    * }>}
    */
   static async delete(id, token) {
-    return await api.delete(`/screening/${id}`, { token });
+    return await api.delete(`/assessment/${id}`, { token });
   }
 
   /**
@@ -160,6 +160,6 @@ export default class AssessmentsService {
    * }>}
    */
   static async deleteBatch(ids, token) {
-    return await api.delete(`/screening/multi-delete/?id=${ids.join(',')}`, { token });
+    return await api.delete(`/assessment/multi-delete/?id=${ids.join(',')}`, { token });
   }
 }

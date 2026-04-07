@@ -5,16 +5,16 @@ import { Card, Skeleton, Button, Popover } from 'antd';
 import { AssessmentQuestion as QuestionsModel } from '@/models';
 import React from 'react';
 import { DataTable, DataTableHeader } from '@/components';
-import { AssessmentsService } from '@/services';
+import { ScreeningsService } from '@/services';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 
 const Matrix = () => {
   const navigate = useNavigate();
-  const { assessmentId } = useParams();
+  const { screeningId } = useParams();
   const { token, onUnauthorized } = useAuth();
 
-  const { execute, ...getAllMatrixes } = useAbortableService(AssessmentsService.getMatrix, { onUnauthorized });
+  const { execute, ...getAllMatrixes } = useAbortableService(ScreeningsService.getMatrix, { onUnauthorized });
   const pagination = usePagination({ totalData: getAllMatrixes.totalData });
   const [filterValues, setFilterValues] = React.useState({ search: '' });
 
@@ -24,7 +24,7 @@ const Matrix = () => {
   const fetchMatrixes = React.useCallback(async () => {
     const res = await execute({
       token: token,
-      id: assessmentId,
+      id: screeningId,
       page: pagination.page,
       per_page: pagination.perPage,
       search: filterValues.search
@@ -39,13 +39,13 @@ const Matrix = () => {
 
     setColumns(generateColumns(questions));
     setRows(respondents);
-  }, [execute, assessmentId, filterValues.search, pagination.page, pagination.perPage, token]);
+  }, [execute, screeningId, filterValues.search, pagination.page, pagination.perPage, token]);
 
   React.useEffect(() => {
-    if (assessmentId) {
+    if (screeningId) {
       fetchMatrixes();
     }
-  }, [fetchMatrixes, assessmentId, token]);
+  }, [fetchMatrixes, screeningId, token]);
 
   const generateColumns = (questions) => {
     return [

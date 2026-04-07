@@ -73,11 +73,11 @@ export const dashboardLink = [
     element: Dashboard.Articles
   },
   {
-    label: 'Assessment',
+    label: 'Instrumen',
     icon: CheckSquareOutlined,
     roles: [Role.ADMIN],
     children: [
-      { path: '/dashboard/assessment_periods', label: 'Periode', element: Dashboard.Periods, permissions: [[Action.CREATE, Model.Periods]] },
+      { path: '/dashboard/screenings', label: 'Screening', element: Dashboard.Screenings, permissions: [[Action.CREATE, Model.Screenings]] },
       { path: '/dashboard/assessments', label: 'Assessment', element: Dashboard.Assessments, permissions: [[Action.CREATE, Model.Assessments]] }
     ]
   },

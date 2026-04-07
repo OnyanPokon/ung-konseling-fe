@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
-import { Questions } from '@/models';
+import { AssessmentQuestion } from '@/models';
 import api from '@/utils/api';
 
-export default class QuestionsService {
+export default class ScreeningQuestionsService {
   /**
    * @param {string} token
    * @returns {Promise<{
    *  code: HTTPStatusCode;
    *  status: boolean;
    *  message: string;
-   *  data?: Questions[];
+   *  data?: AssessmentQuestion[];
    * }>}
    * */
   static getAll({ token, ...filters }) {
@@ -26,7 +26,7 @@ export default class QuestionsService {
       response,
       parser: (apiData) => {
         const question = apiData?.question ?? apiData?.data ?? apiData ?? [];
-        return Questions.fromApiData(question);
+        return AssessmentQuestion.fromApiData(question);
       }
     };
   }
@@ -45,26 +45,26 @@ export default class QuestionsService {
       response,
       parser: (apiData) => {
         const question = apiData?.question ?? apiData?.data ?? apiData ?? {};
-        return Questions.fromApiData(question);
+        return AssessmentQuestion.fromApiData(question);
       }
     };
   }
 
   /**
-   * @param {Questions} data
+   * @param {AssessmentQuestion} data
    * @param {string} token
    */
   static async store(data, token) {
-    return await api.post('/question', { body: Questions.toApiData(data), token });
+    return await api.post('/question', { body: AssessmentQuestion.toApiData(data), token });
   }
 
   /**
    * @param {number} id
-   * @param {Questions} data
+   * @param {AssessmentQuestion} data
    * @param {string} token
    */
   static async update(id, data, token) {
-    return await api.put(`/question/${id}`, { body: Questions.toApiData(data), token });
+    return await api.put(`/question/${id}`, { body: AssessmentQuestion.toApiData(data), token });
   }
 
   /**

@@ -7,6 +7,7 @@ enum Modul {
   SESI_KONSELINGS = 'Sesi Konseling',
   ARTICLES = 'Artikel',
   PERIOD = 'Periode',
+  SCREENING = 'Screening',
   ASSESSMENT = 'Assessment',
   QUESTION = 'Pertanyaan',
   RESPON_MATRIX = 'Matriks Responden',
