@@ -1,7 +1,7 @@
 import { landingLink } from '@/data/link';
 import { findItemByKey } from '@/utils/landingLink';
 import { MenuOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Drawer, Grid, Image, Menu, Skeleton } from 'antd';
+import { Button, Drawer, Grid, Menu, Skeleton } from 'antd';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -42,9 +42,8 @@ const Navbar = () => {
               </div>
             ) : (
               <>
-                <Image width={40} preview={false} src={''} />
                 <b>
-                  <span className="text-blue-500">App Name</span>{' '}
+                  <span className="text-blue-500">SINLA-BK</span>{' '}
                 </b>
               </>
             )}

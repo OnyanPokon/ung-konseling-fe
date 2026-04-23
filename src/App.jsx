@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 import './index.css';
 import SuccessRegisterKonseli from './pages/result/SuccessRegisterKonseli';
 import FailedRegisterKonseli from './pages/result/FailedRegisterKonseli';
-import { AssessmentMatrix, AssessmentQuestion, CreateArticle, EditArticle, KonselisProfile, KonselorProfile, ScreeningMatrix, ScreeningQuestions } from './pages/dashboard';
+import { AssessmentMatrix, AssessmentQuestion, CreateArticle, EditArticle, KonselisProfile, KonselorProfile, Report, ScreeningMatrix, ScreeningQuestions } from './pages/dashboard';
 import { Assessment, ReadArticle, Screening } from './pages/landing';
 import { SuccessAssessment, FailedAssessment } from './pages/result';
 
@@ -76,6 +76,7 @@ function App() {
           { path: '/dashboard/screenings/:screeningId/questions', element: <ScreeningQuestions /> },
           { path: '/dashboard/screenings/:screeningId/matrix', element: <ScreeningMatrix /> },
           { path: '/dashboard/profile_konselor', element: <KonselorProfile /> },
+          { path: '/dashboard/sesi_konseling/:sesi_konseling_id/report', element: <Report /> },
           { path: '/dashboard/profile_konseli', element: <KonselisProfile /> }
         ]
       },

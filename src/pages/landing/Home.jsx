@@ -41,7 +41,7 @@ const Home = () => {
               </Typography.Title>
             </div>
             <Typography.Paragraph className="text-white">
-              <Reveal>Akses layanan Bimbingan dan Konseling kampus secara mudah, aman, dan terpercaya. Mulai sekarang dan dapatkan dukungan psikologis sesuai kebutuhanmu untuk menunyong kesuksesan akademik, pribadi, dan karir</Reveal>
+              <Reveal>Akses layanan Bimbingan dan Konseling kampus secara mudah, aman, dan terpercaya. Mulai sekarang dan dapatkan dukungan psikologis sesuai kebutuhanmu untuk mununjang kesuksesan akademik, pribadi, dan karir</Reveal>
             </Typography.Paragraph>
             <Space size="small">
               <Button variant="solid" size="large" color="primary" onClick={() => navigate('/auth/login')}>
@@ -53,7 +53,10 @@ const Home = () => {
             </Space>
             <div>
               <span className="m-0 block text-xs text-white">
-                Butuh info lebih lanjut <a className="text-color-primary-500 hover:text-color-primary-200 font-bold underline">kunjungi website resmi kami</a>
+                Butuh info lebih lanjut{' '}
+                <a href="https://up-bimbingankonseling.ung.ac.id/" className="text-color-primary-500 hover:text-color-primary-200 font-bold underline">
+                  kunjungi website resmi kami
+                </a>
               </span>
             </div>
           </div>
