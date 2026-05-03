@@ -57,7 +57,7 @@ const Articles = () => {
                 <>
                   {!articles.length && <Empty styles={{ image: { height: 60 } }} description={<Typography.Text>Belum ada artikel yang tersedia</Typography.Text>}></Empty>}
                   {articles?.map((item) => (
-                    <Card onClick={() => navigte(window.location.pathname + 'news/' + item.slug)} key={item.id} hoverable className="w-full max-w-[280px]" cover={<img src={item.thumbnail} className="h-52 object-cover" />}>
+                    <Card onClick={() => navigte(window.location.pathname + '/read/' + item.slug)} key={item.id} hoverable className="w-full max-w-[280px]" cover={<img src={item.thumbnail} className="h-52 object-cover" />}>
                       <div className="text-gray-500">
                         <Typography.Title level={5}>
                           <span className="news-text">{item.title}</span>
