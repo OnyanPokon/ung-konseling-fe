@@ -36,7 +36,7 @@ const Articles = () => {
             <Typography.Title level={2} className="uppercase" style={{ color: '#fff' }}>
               Artikel
             </Typography.Title>
-            <Typography.Text style={{ color: '#fff' }}>Berita dan artikel terkini</Typography.Text>
+            <Typography.Text style={{ color: '#fff' }}> Artikel terkini</Typography.Text>
           </div>
         </div>
       </section>

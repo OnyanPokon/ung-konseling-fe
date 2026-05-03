@@ -94,7 +94,7 @@ const Home = () => {
       <section className="bg-gray-50">
         <div className="mx-auto w-full max-w-screen-xl px-6 py-32">
           <div className="mt-12 flex w-full items-center justify-center">
-            <Typography.Title level={4}>Berita Terkini</Typography.Title>
+            <Typography.Title level={4}>Artikel Terkini</Typography.Title>
           </div>
           <div className="flex flex-wrap items-start justify-center gap-4 pt-12">
             {getAllNews.isLoading
