@@ -69,7 +69,7 @@ const Matrix = () => {
               </div>
             }
           >
-            <div className="news-text">Q {index + 1}</div>
+            <div className="news-text text-">{index + 1}</div>
           </Popover>
         ),
         dataIndex: `q_${q.id}`,
@@ -84,7 +84,7 @@ const Matrix = () => {
     <Card
       title={
         <div className="flex items-center gap-x-4">
-          <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/dashboard/assessments')} type="text" />
+          <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/dashboard/screenings')} type="text" />
           <DataTableHeader model={QuestionsModel} modul={Modul.RESPON_MATRIX} onSearch={(values) => setFilterValues({ ...filterValues, search: values })} />
         </div>
       }

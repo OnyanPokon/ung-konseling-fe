@@ -136,7 +136,7 @@ const ScreeningQuestions = () => {
     <Card
       title={
         <div className="flex items-center gap-x-4">
-          <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/dashboard/assessments')} type="text" />
+          <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/dashboard/screenings')} type="text" />
           <DataTableHeader model={QuestionsModel} modul={Modul.QUESTION} onStore={onCreate} selectedData={selectedData} onSearch={(values) => setFilterValues({ ...filterValues, search: values })} />
         </div>
       }
