@@ -1,3 +1,4 @@
+import asset from '@/utils/asset';
 import Model from './Model';
 
 export interface IncomingApiData {
@@ -5,6 +6,10 @@ export interface IncomingApiData {
   konselor: {
     id: number;
     is_active: boolean;
+    foto_profil: string;
+    nip: string;
+    phone: string;
+    jenis_kelamin: string;
     user: {
       id: number;
       nama: string;
@@ -37,6 +42,10 @@ export default class JadwalKonselors extends Model {
     public konselor: {
       id: number;
       is_active: boolean;
+      profile_picture: string;
+      nip: string;
+      phone: string;
+      gender: string;
       user: {
         id: number;
         name: string;
@@ -60,6 +69,10 @@ export default class JadwalKonselors extends Model {
       {
         id: apiData.konselor.id,
         is_active: apiData.konselor.is_active,
+        profile_picture: asset(apiData.konselor.foto_profil),
+        nip: apiData.konselor.nip,
+        phone: apiData.konselor.phone,
+        gender: apiData.konselor.jenis_kelamin,
         user: {
           id: apiData.konselor.user.id,
           name: apiData.konselor.user.nama,

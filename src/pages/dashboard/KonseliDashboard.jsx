@@ -1,5 +1,5 @@
 import CounselingTicket from '@/components/dashboard/ConselingTicket';
-import { useAuth } from '@/hooks';
+import { useAuth, useCrudModal } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
 import { JadwalKonselorsService, KonselisService, TiketsService } from '@/services';
 import { Avatar, Badge, Calendar, Card, Descriptions, Empty, Skeleton, Spin, Tabs, Typography } from 'antd';
@@ -20,6 +20,7 @@ const KonseliDashboard = () => {
   const { execute: fetchKonseli, ...getAllKonseli } = useAbortableService(KonselisService.getByUserId, { onUnauthorized });
   const { execute, ...getAllJadwalKonselors } = useAbortableService(JadwalKonselorsService.getAll, { onUnauthorized });
   const { execute: fetchTickets, ...getAllTickets } = useAbortableService(TiketsService.getAll, { onUnauthorized });
+  const modal = useCrudModal();
 
   const fetchJadwalKonselors = React.useCallback(() => {
     execute({
@@ -66,7 +67,11 @@ const KonseliDashboard = () => {
       acc[day].push({
         id: item.id,
         is_active: item.konselor.is_active,
-        user: item.konselor.user
+        user: item.konselor.user,
+        profile_picture: item.konselor.profile_picture,
+        nip: item.konselor.nip,
+        phone: item.konselor.phone,
+        gender: item.konselor.gender
       });
 
       return acc;
@@ -103,10 +108,8 @@ const KonseliDashboard = () => {
       </div>
 
       <hr className="col-span-12 my-2" />
-      <Card className="col-span-4 h-fit" title={'Kalender'}>
-        <Calendar fullscreen={false} />
-      </Card>
-      <Card className="col-span-8" title={'Tiket'}>
+
+      <Card className="col-span-12" title={'Tiket'}>
         {getAllTickets.isLoading && <Skeleton active />}
 
         {!getAllTickets.isLoading && tickets.length === 0 && <Empty description="Belum ada tiket" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
@@ -141,10 +144,57 @@ const KonseliDashboard = () => {
                       <div className="flex flex-col gap-y-2">
                         {groupedData[day].map((konselor) => (
                           <Card
+                            hoverable
+                            onClick={() => {
+                              modal.show.description({
+                                title: konselor.user.name,
+                                data: [
+                                  {
+                                    key: 'konselor.user.name',
+                                    label: `Nama Konselor`,
+                                    children: konselor.user.name
+                                  },
+                                  {
+                                    key: 'konselor.user.email',
+                                    label: `Email Konselor`,
+                                    children: konselor.user.email
+                                  },
+                                  {
+                                    key: 'konselor.nip',
+                                    label: `NIP`,
+                                    children: konselor.nip
+                                  },
+                                  {
+                                    key: 'konselor.phone',
+                                    label: `Telepon`,
+                                    children: konselor.phone
+                                  },
+                                  {
+                                    key: 'konselor.gender',
+                                    label: `Jenis Kelamin`,
+                                    children: <>{konselor.gender === 'L' ? 'Laki-laki' : konselor.gender === 'P' ? 'Perempuan' : 'Lainnya'}</>
+                                  },
+                                  {
+                                    key: 'konselor.status',
+                                    label: `Status`,
+                                    children: <>{konselor.is_active ? <Badge status="processing" text="Aktif" /> : <Badge status="error" text="Non Aktif" />}</>
+                                  },
+                                  {
+                                    key: 'konselor.profile_picture',
+                                    label: `Foto Profil`,
+                                    children: (
+                                      <>
+                                        <Avatar shape="square" size={64} src={konselor.profile_picture} />
+                                      </>
+                                    )
+                                  }
+                                ]
+                              });
+                            }}
                             key={konselor.id}
                             title={
                               <div className="my-2 inline-flex items-center gap-x-2">
-                                <Avatar size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                                <Avatar size="large" src={konselor.profile_picture} />
                                 <div className="flex flex-col">
                                   <small>{konselor.user.name}</small>
                                   <span className="text-xs font-normal">{konselor.user.email}</span>
@@ -217,7 +267,7 @@ const KonseliDashboard = () => {
                       <Card
                         title={
                           <div className="my-4 inline-flex items-center gap-x-2">
-                            <Avatar size="large" style={{ backgroundColor: '#a5a5a5' }} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                            <Avatar size="large" style={{ backgroundColor: '#a5a5a5' }} src={konselor.profile_picture} />
                             <div className="flex flex-col">
                               {konselor.user.name}
                               <small className="font-normal">{konselor.user.email}</small>
@@ -227,7 +277,9 @@ const KonseliDashboard = () => {
                         key={konselor.id}
                       >
                         <Descriptions column={1} size="small">
-                          <Descriptions.Item label="Status"></Descriptions.Item>
+                          <Descriptions.Item label="NIP">{konselor.nip}</Descriptions.Item>
+                          <Descriptions.Item label="Telepon">{konselor.phone}</Descriptions.Item>
+                          <Descriptions.Item label="Jenis Kelamin">{konselor.gender === 'L' ? 'Laki-laki' : konselor.gender === 'P' ? 'Perempuan' : 'Lainnya'}</Descriptions.Item>
                           <Descriptions.Item label="Deskripsi Singkat">
                             {(() => {
                               let status;

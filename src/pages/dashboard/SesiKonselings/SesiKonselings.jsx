@@ -1,14 +1,14 @@
 import Modul from '@/constants/Modul';
 import { useAuth, useCrudModal, useNotification, usePagination, useService } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
-import { Button, Card, Descriptions, Pagination, Popconfirm, Skeleton, Space, Tag } from 'antd';
+import { Button, Card, Descriptions, Empty, Pagination, Popconfirm, Skeleton, Space, Tag, Tooltip } from 'antd';
 import { Konselors as KonselorModel } from '@/models';
 import React from 'react';
 import { DataTableHeader } from '@/components';
 import { KonselisService, KonselorsService, SesiKonselingsService } from '@/services';
 import { Action, Role } from '@/constants';
 import { SesiKonselings as SesiKonselingModel } from '@/models';
-import { CalendarOutlined, CheckOutlined, CloseOutlined, EyeOutlined, InfoOutlined, PrinterOutlined } from '@ant-design/icons';
+import { CalendarOutlined, CheckOutlined, CheckSquareOutlined, CloseOutlined, EyeOutlined, InfoOutlined, PrinterOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { reportFormFields, timeFormFields } from './FormFields';
 import { Delete } from '@/components/dashboard/button';
@@ -81,6 +81,7 @@ const SesiKonselings = () => {
             <Card extra={<Button type="text" onClick={() => setDrawer({ open: true, data: item })} size="middle" icon={<InfoOutlined />} />} title={<span className="text-sm">{item.tiket.ticket_number}</span>} className="w-full" key={item.id}>
               <Descriptions className="w-full" size="small" bordered column={3}>
                 <Descriptions.Item label="No Tiket">{item.tiket.ticket_number}</Descriptions.Item>
+                <Descriptions.Item label="Jenis Layanan">{item.tiket.service_type}</Descriptions.Item>
                 {user?.is(Role.KONSELOR) && <Descriptions.Item label="Konseli">{item.tiket.konseli.user.name}</Descriptions.Item>}
                 {user?.is(Role.KONSELI) && <Descriptions.Item label="Konseli">{item.konselor.user.name}</Descriptions.Item>}
                 <Descriptions.Item label="Hari">{item.hari_layanan.day_name}</Descriptions.Item>
@@ -212,6 +213,11 @@ const SesiKonselings = () => {
                           Buat Laporan
                         </Button>
                       )}
+                      {item.status === 'selesai' && item.laiseg !== null && (
+                        <Tooltip title="Hasil Laiseg">
+                          <Button shape="circle" icon={<CheckSquareOutlined />} variant="outlined" color="primary" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg/show`)} />
+                        </Tooltip>
+                      )}
                       {item.report.status !== null && (
                         <Button
                           icon={<EyeOutlined />}
@@ -254,15 +260,29 @@ const SesiKonselings = () => {
                   </Descriptions.Item>
                 )}
                 {user && user.is(Role.KONSELI) && (
-                  <Descriptions.Item label="Aksi" span={3} onClick={(e) => e.stopPropagation()}>
-                    <Button shape="round" icon={<PrinterOutlined />} variant="outlined" color="primary" onClick={() => window.open(item.report.file_url, '_blank')}>
-                      Lihat Laporan
-                    </Button>
-                  </Descriptions.Item>
+                  <>
+                    <Descriptions.Item label="Aksi" span={3} onClick={(e) => e.stopPropagation()}>
+                      <div className="inline-flex items-center gap-x-2">
+                        <Button shape="round" icon={<PrinterOutlined />} variant="outlined" color="primary" onClick={() => window.open(item.report.file_url, '_blank')}>
+                          Lihat Laporan
+                        </Button>
+                        {item.status === 'selesai' && (
+                          <Tooltip title="Formulir Laiseg">
+                            <Button disabled={item.laiseg !== null} shape="circle" icon={<CheckSquareOutlined />} variant="outlined" color="primary" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg`)} />
+                          </Tooltip>
+                        )}
+                      </div>
+                    </Descriptions.Item>
+                  </>
                 )}
               </Descriptions>
             </Card>
           ))}
+          {!sesiKonselings.length && (
+            <>
+              <Empty title="Tidak ada sesi konseling" description="Sesi konseling akan muncul disini ketika sudah dijadwalkan" icon={<InfoOutlined />} />
+            </>
+          )}
         </div>
       </Skeleton>
       <Pagination className="mt-4" pageSize={pagination.perPage} current={pagination.page} onChange={pagination.onChange} />

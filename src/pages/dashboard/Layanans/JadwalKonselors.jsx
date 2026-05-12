@@ -56,7 +56,11 @@ const JadwalKonselors = () => {
         jadwal_konselor_id: item.id,
         konselor_id: item.konselor.id,
         is_active: item.konselor.is_active,
-        user: item.konselor.user
+        user: item.konselor.user,
+        profile_picture: item.konselor.profile_picture,
+        nip: item.konselor.nip,
+        phone: item.konselor.phone,
+        gender: item.konselor.gender
       });
 
       return acc;
@@ -101,6 +105,7 @@ const JadwalKonselors = () => {
             {hariLayanans.map((day, index) => {
               const colorClass = colorVariants[index % colorVariants.length];
               const konselorsPerDay = groupedData[day.id] || [];
+              console.log(konselorsPerDay);
 
               return (
                 <div key={day.id} className="flex flex-col gap-y-4">
@@ -112,11 +117,58 @@ const JadwalKonselors = () => {
                     ) : (
                       konselorsPerDay.map((konselor) => (
                         <Card
+                          hoverable
+                          onClick={() => {
+                            modal.show.description({
+                              title: konselor.user.name,
+                              data: [
+                                {
+                                  key: 'konselor.user.name',
+                                  label: `Nama Konselor`,
+                                  children: konselor.user.name
+                                },
+                                {
+                                  key: 'konselor.user.email',
+                                  label: `Email Konselor`,
+                                  children: konselor.user.email
+                                },
+                                {
+                                  key: 'konselor.nip',
+                                  label: `NIP`,
+                                  children: konselor.nip
+                                },
+                                {
+                                  key: 'konselor.phone',
+                                  label: `Telepon`,
+                                  children: konselor.phone
+                                },
+                                {
+                                  key: 'konselor.gender',
+                                  label: `Jenis Kelamin`,
+                                  children: <>{konselor.gender === 'L' ? 'Laki-laki' : konselor.gender === 'P' ? 'Perempuan' : 'Lainnya'}</>
+                                },
+                                {
+                                  key: 'konselor.status',
+                                  label: `Status`,
+                                  children: <>{konselor.is_active ? <Badge status="processing" text="Aktif" /> : <Badge status="error" text="Non Aktif" />}</>
+                                },
+                                {
+                                  key: 'konselor.profile_picture',
+                                  label: `Foto Profil`,
+                                  children: (
+                                    <>
+                                      <Avatar shape="square" size={64} src={konselor.profile_picture} />
+                                    </>
+                                  )
+                                }
+                              ]
+                            });
+                          }}
                           key={konselor.id}
                           title={
                             <div className="inline-flex w-full items-center justify-between">
                               <div className="my-2 inline-flex items-center gap-x-2">
-                                <Avatar size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                                <Avatar size="large" src={konselor.profile_picture} />
                                 <div className="flex flex-col">
                                   <small>{konselor.user.name}</small>
                                   <span className="text-xs font-normal">{konselor.user.email}</span>

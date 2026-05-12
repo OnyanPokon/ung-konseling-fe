@@ -11,3 +11,4 @@ export { default as AssessmentsService } from './AssessmentsService';
 export { default as AssessmentQuestionsService } from './AssessmentQuestionsService';
 export { default as ScreeningQuestionsService } from './ScreeningQuestionsService';
 export { default as ScreeningsService } from './ScreeningsService';
+export { default as LaisegService } from './LaisegService';

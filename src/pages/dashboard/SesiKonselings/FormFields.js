@@ -12,17 +12,6 @@ export const formFields = () => [
         message: `Jam berakhir ${Modul.SESI_KONSELINGS} harus diisi`
       }
     ]
-  },
-  {
-    label: `Catatan konselor ${Modul.SESI_KONSELINGS}`,
-    name: 'note',
-    type: InputType.LONGTEXT,
-    rules: [
-      {
-        required: true,
-        message: `Catatan konselor ${Modul.SESI_KONSELINGS} harus diisi`
-      }
-    ]
   }
 ];
 

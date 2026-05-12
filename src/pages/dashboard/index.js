@@ -21,3 +21,5 @@ export { default as AssessmentQuestion } from './AssessmentQuestion/AssessmentQu
 export { default as ScreeningMatrix } from './Screenings/Matrix';
 export { default as AssessmentMatrix } from './Assessments/Matrix';
 export { default as KonselorProfile } from './KonselorsProfile';
+export { default as CreateLaiseg } from './Laisegs/Create';
+export { default as ShowLaiseg } from './Laisegs/Show';

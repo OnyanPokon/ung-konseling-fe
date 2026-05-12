@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import CounselingTicket from '@/components/dashboard/ConselingTicket';
 import { Role } from '@/constants';
-import { Avatar, Badge, Descriptions, Drawer, Tabs } from 'antd';
+import { Badge, Descriptions, Drawer, Tabs } from 'antd';
 
 const DetailDrawer = ({ drawer, setDrawer, user }) => {
   return (
@@ -20,7 +20,6 @@ const DetailDrawer = ({ drawer, setDrawer, user }) => {
         </Tabs.TabPane>
         {(user.is(Role.KONSELOR) || user.is(Role.ADMIN)) && (
           <Tabs.TabPane tab="Detail Konseli" key="konseli">
-            <Avatar size={64} className="mb-4" style={{ backgroundColor: '#a5a5a5' }} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
             <Descriptions column={1} bordered size="small">
               <Descriptions.Item label="Nama Konseli">{drawer?.data?.tiket?.konseli?.user.name}</Descriptions.Item>
               <Descriptions.Item label="Email Kosneli">{drawer?.data?.tiket?.konseli?.user.email}</Descriptions.Item>
@@ -36,7 +35,6 @@ const DetailDrawer = ({ drawer, setDrawer, user }) => {
         )}
         {(user.is(Role.KONSELI) || user.is(Role.ADMIN)) && (
           <Tabs.TabPane tab="Detail Konselor" key="konselor">
-            <Avatar size={64} className="mb-4" style={{ backgroundColor: '#a5a5a5' }} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
             <Descriptions column={1} bordered size="small">
               <Descriptions.Item label="Nama Konselor">{drawer?.data?.konselor?.user.name}</Descriptions.Item>
               <Descriptions.Item label="Email ">{drawer?.data?.konselor?.user.email}</Descriptions.Item>

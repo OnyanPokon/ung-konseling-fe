@@ -4,7 +4,7 @@ enum Modul {
   HARI_LAYANAN = 'Hari Layanan',
   JADWAL_KONSELOR = 'Jadwal Konselor',
   TICKETS = 'Tiket',
-  SESI_KONSELINGS = 'Sesi Konseling',
+  SESI_KONSELINGS = 'Sesi Layanan',
   ARTICLES = 'Artikel',
   PERIOD = 'Periode',
   SCREENING = 'Screening',

@@ -138,14 +138,14 @@ const Tickets = () => {
       render: (_, record) => (
         <Space size="small">
           <Button
-            disabled={record.status === 'approved'}
+            disabled={record.status === 'approved' || record.status === 'rejected'}
             variant="outlined"
             shape="circle"
             icon={<CheckOutlined />}
             color="primary"
             onClick={() => {
               modal.create({
-                title: `Tambah ${modulName}`,
+                title: `Approve Tiket`,
                 formFields: [...timeFormFields(), ...formFields()],
                 onSubmit: async (values) => {
                   const sesiResponse = await storeSesiKonseling.execute(

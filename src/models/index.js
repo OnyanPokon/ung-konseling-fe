@@ -13,3 +13,4 @@ export { default as Screenings } from './Screenings';
 export { default as Assessments } from './Assessments';
 export { default as AssessmentQuestion } from './AssessmentQuestions';
 export { default as ScreeningQuestions } from './ScreeningQuestions';
+export { default as Laiseg } from './Laiseg';

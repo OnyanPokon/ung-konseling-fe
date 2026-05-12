@@ -39,12 +39,22 @@ export interface IncomingApiData {
   jam_selesai: string;
   tanggal_konseling: string;
   tempat: string;
-  catatan_konselor: string;
   status: 'dijadwalkan' | 'selesai' | 'dijadwalkan_ulang' | 'dibatalkan';
   laporan: {
     id: number | null;
     status: 'draft' | 'final' | null;
     file_url: string | null;
+  };
+  laiseg: {
+    id: number;
+    topik_pembahasan: string;
+    pemahaman_baru: string;
+    perasaan_setelah_layanan: string;
+    rencana_setelah_layanan: string;
+    apakah_terkait_masalah: boolean;
+    keuntungan_jika_ya: string;
+    keuntungan_jika_tidak: string;
+    saran_pesan: string;
   };
   created_at: string;
   updated_at: string;
@@ -58,7 +68,6 @@ export interface OutgoingApiData {
   jam_selesai: string;
   tanggal_konseling: string;
   tempat: string;
-  catatan_konselor: string;
   status: 'dijadwalkan' | 'selesai' | 'dijadwalkan_ulang' | 'dibatalkan';
 }
 
@@ -70,7 +79,6 @@ interface FormValue {
   end_time: string;
   counseling_date: string;
   place: string;
-  note: string;
   status: 'dijadwalkan' | 'selesai' | 'dijadwalkan_ulang' | 'dibatalkan';
 }
 
@@ -116,12 +124,22 @@ export default class SesiKonselings extends Model {
     public end_time: string,
     public counseling_date: string,
     public place: string,
-    public note: string,
     public status: 'dijadwalkan' | 'selesai' | 'dijadwalkan_ulang' | 'dibatalkan',
     public report: {
       id: number | null;
       status: 'draft' | 'final' | null;
       file_url: string | null;
+    },
+    public laiseg: {
+      id: number;
+      discussion_topic: string;
+      new_understanding: string;
+      feelings_after_service: string;
+      plan_after_service: string;
+      related_to_problem: string;
+      benefits_if_yes: string;
+      benefits_if_no: string;
+      suggestions_and_messages: string;
     },
     public created_at: string,
     public updated_at: string
@@ -170,12 +188,22 @@ export default class SesiKonselings extends Model {
       apiData.jam_selesai,
       apiData.tanggal_konseling,
       apiData.tempat,
-      apiData.catatan_konselor,
       apiData.status,
       {
         id: apiData.laporan.id,
         status: apiData.laporan.status,
         file_url: apiData.laporan.file_url
+      },
+      {
+        id: apiData.laiseg.id,
+        discussion_topic: apiData.laiseg.topik_pembahasan,
+        new_understanding: apiData.laiseg.pemahaman_baru,
+        feelings_after_service: apiData.laiseg.perasaan_setelah_layanan,
+        plan_after_service: apiData.laiseg.rencana_setelah_layanan,
+        related_to_problem: apiData.laiseg.apakah_terkait_masalah ? 'Ya' : 'Tidak',
+        benefits_if_yes: apiData.laiseg.keuntungan_jika_ya,
+        benefits_if_no: apiData.laiseg.keuntungan_jika_tidak,
+        suggestions_and_messages: apiData.laiseg.saran_pesan
       },
       apiData.created_at,
       apiData.updated_at
@@ -192,7 +220,6 @@ export default class SesiKonselings extends Model {
       jam_selesai: sesiKonselings.end_time,
       tanggal_konseling: sesiKonselings.counseling_date,
       tempat: sesiKonselings.place,
-      catatan_konselor: sesiKonselings.note,
       status: sesiKonselings.status
     };
 

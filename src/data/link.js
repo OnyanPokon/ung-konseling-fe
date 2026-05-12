@@ -113,9 +113,9 @@ export const dashboardLink = [
     element: Dashboard.Chats
   },
   {
-    label: 'Sesi Konseling',
+    label: 'Sesi Layanan',
     icon: PhoneOutlined,
-    path: '/sesi_konseling',
+    path: '/sesi_layanan',
     element: Dashboard.SesiKonselings
   }
 ].map((item) => ({

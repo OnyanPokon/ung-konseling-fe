@@ -32,6 +32,34 @@ export default class SesiKonselingsService {
   }
 
   /**
+   * @param {string} token
+   * @returns {Promise<{
+   *  code: HTTPStatusCode;
+   *  status: boolean;
+   *  message: string;
+   *  data?: SesiKonselings[];
+   * }>}
+   * */
+  static getById({ token, id, ...filters }) {
+    const params = Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== null && v !== undefined && v !== ''));
+    const abortController = new AbortController();
+    const response = api.get(`/sesi_konseling/${id}`, {
+      token,
+      signal: abortController.signal,
+      params
+    });
+
+    return {
+      abortController,
+      response,
+      parser: (apiData) => {
+        const sesiKonseling = apiData?.sesiKonseling ?? apiData?.data ?? apiData ?? [];
+        return SesiKonselings.fromApiData(sesiKonseling);
+      }
+    };
+  }
+
+  /**
    * @param {SesiKonselings} data
    * @param {string} token
    * @returns {Promise<{
