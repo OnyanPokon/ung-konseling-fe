@@ -42,8 +42,6 @@ export default class LaisegService {
    * }}
    */
   static async store(data, token) {
-    console.log(data);
-
     return await api.post('/laiseg', { body: Laiseg.toApiData(data), token });
   }
 

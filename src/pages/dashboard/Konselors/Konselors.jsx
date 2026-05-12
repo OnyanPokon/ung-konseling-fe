@@ -115,7 +115,6 @@ const Konselors = () => {
                 data: { ...record, name: record.user.name, email: record.user.email, password: record.user.password },
                 formFields: formFields(),
                 onSubmit: async (values) => {
-                  console.log(values);
                   const { message, isSuccess } = await updateKonselors.execute(record.id, { ...values, _method: 'PUT' }, token, values.profile_picture.file);
                   if (isSuccess) {
                     success('Berhasil', message);

@@ -213,9 +213,9 @@ const SesiKonselings = () => {
                           Buat Laporan
                         </Button>
                       )}
-                      {item.status === 'selesai' && item.laiseg !== null && (
+                      {item.status === 'selesai' && item.laiseg.id !== null && (
                         <Tooltip title="Hasil Laiseg">
-                          <Button shape="circle" icon={<CheckSquareOutlined />} variant="outlined" color="primary" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg/show`)} />
+                          <Button disabled={item.laiseg.id === null} shape="circle" icon={<CheckSquareOutlined />} variant="outlined" color="primary" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg/show`)} />
                         </Tooltip>
                       )}
                       {item.report.status !== null && (
@@ -268,7 +268,7 @@ const SesiKonselings = () => {
                         </Button>
                         {item.status === 'selesai' && (
                           <Tooltip title="Formulir Laiseg">
-                            <Button disabled={item.laiseg !== null} shape="circle" icon={<CheckSquareOutlined />} variant="outlined" color="primary" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg`)} />
+                            <Button disabled={item.laiseg.id !== null} shape="circle" icon={<CheckSquareOutlined />} variant="outlined" color="primary" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg`)} />
                           </Tooltip>
                         )}
                       </div>

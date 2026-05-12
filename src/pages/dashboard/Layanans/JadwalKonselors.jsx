@@ -105,8 +105,6 @@ const JadwalKonselors = () => {
             {hariLayanans.map((day, index) => {
               const colorClass = colorVariants[index % colorVariants.length];
               const konselorsPerDay = groupedData[day.id] || [];
-              console.log(konselorsPerDay);
-
               return (
                 <div key={day.id} className="flex flex-col gap-y-4">
                   <div className={`rounded-md p-2 px-4 font-bold capitalize ${colorClass}`}>{day.day_name}</div>

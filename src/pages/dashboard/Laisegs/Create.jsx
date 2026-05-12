@@ -27,8 +27,6 @@ const Create = () => {
     fetchSesiKonseling();
   }, [fetchSesiKonseling]);
 
-  console.log(sesiKonseling);
-
   const handleSubmit = async (values) => {
     const { message, isSuccess } = await storeLaiseg.execute(
       {
