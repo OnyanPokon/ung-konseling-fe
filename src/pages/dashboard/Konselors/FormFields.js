@@ -93,7 +93,6 @@ export const formFields = () => [
       }
     ]
   },
-
   {
     label: `Status ${Modul.KONSELOR}`,
     name: 'is_active',

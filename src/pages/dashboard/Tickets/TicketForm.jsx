@@ -24,7 +24,8 @@ const RegistrationForm = () => {
     fetchKonselors({
       token: token,
       page: 1,
-      per_page: 9999
+      per_page: 9999,
+      status: true
     });
 
     fetchKonseli({
@@ -52,8 +53,7 @@ const RegistrationForm = () => {
       {
         ...values,
         konseli_id: konseli.id,
-        status: 'pending',
-        urgent: 'cukup_mendesak'
+        status: 'pending'
       },
       token
     );

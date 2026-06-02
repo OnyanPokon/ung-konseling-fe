@@ -1,16 +1,13 @@
 import { DataLoader } from '@/components';
-import { InputType } from '@/constants';
-import Modul from '@/constants/Modul';
-import { useAuth, useCrudModal, useNotification, useService } from '@/hooks';
+import { useAuth, useNotification, useService } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
 import { AuthService, KonselisService } from '@/services';
-import { EditOutlined, IdcardOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
+import { IdcardOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Form, Input, InputNumber, Menu, Select, Typography } from 'antd';
 import React from 'react';
 
 const ProfileSettings = () => {
   const { token, user, logout, onUnauthorized } = useAuth();
-  const modal = useCrudModal();
   const [activeMenu, setActiveMenu] = React.useState('profil');
   const { success, error } = useNotification();
   const [formProfile] = Form.useForm();
@@ -71,7 +68,7 @@ const ProfileSettings = () => {
     }
   };
 
-  const onSubmitUpdateKonselorBiodata = async (values) => {
+  const onSubmitUpdateKonseliBiodata = async (values) => {
     const { message, isSuccess } = await updateKonseli.execute(konseli.id, { ...values, _method: 'PUT' }, token);
     if (isSuccess) {
       success('Berhasil', message);
@@ -93,56 +90,6 @@ const ProfileSettings = () => {
                 <div className="group absolute -top-16">
                   <div className="relative">
                     <Avatar shape="square" size={90} icon={<UserOutlined />} style={{ backgroundColor: '#fff', padding: '12px', color: 'black' }} className="shadow-md" />
-
-                    {/* Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center rounded-md bg-black/50 opacity-0 transition group-hover:opacity-100">
-                      <Button
-                        onClick={() => {
-                          modal.edit({
-                            title: `Edit Foto Profil`,
-                            data: { ...konseli },
-                            formFields: [
-                              {
-                                label: `Foto Profil ${Modul.KONSELOR}`,
-                                name: 'profile_picture',
-                                type: InputType.UPLOAD,
-                                max: 1,
-                                beforeUpload: () => {
-                                  return false;
-                                },
-                                getFileList: (data) => {
-                                  return [
-                                    {
-                                      url: data?.profile_picture,
-                                      name: data?.name
-                                    }
-                                  ];
-                                },
-                                accept: ['.jpg', '.jpeg', '.png', '.webp'],
-                                rules: [
-                                  {
-                                    required: true,
-                                    message: `Foto Profil ${Modul.KONSELOR} harus diisi`
-                                  }
-                                ]
-                              }
-                            ],
-                            onSubmit: async (values) => {
-                              const { message, isSuccess } = await updateKonseli.execute(konseli.id, { ...values, _method: 'PUT' }, token, values.profile_picture.file);
-                              if (isSuccess) {
-                                success('Berhasil', message);
-                                fetchKonseli({ token: token, id: user.id });
-                              } else {
-                                error('Gagal', message);
-                              }
-                              return isSuccess;
-                            }
-                          });
-                        }}
-                        icon={<EditOutlined />}
-                        variant="text"
-                      />
-                    </div>
                   </div>
                 </div>
               </div>
@@ -167,10 +114,10 @@ const ProfileSettings = () => {
           </div>
           <div className="col-span-12 lg:col-span-8">
             {activeMenu === 'profil' ? (
-              <Card className="w-full" title="Profile Konselor">
+              <Card className="w-full" title="Profile Konseli">
                 <Form key="profil" layout="vertical" form={formProfile} onFinish={onSubmitUpdateUserProfile}>
                   <Form.Item label="Nama Lengkap" name="name" rules={[{ required: true, message: 'Field Nama harus diisi' }]}>
-                    <Input placeholder="Masukan Nama Konselor" size="large" />
+                    <Input placeholder="Masukan Nama Konseli" size="large" />
                   </Form.Item>
                   <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Field Email harus diisi' }]}>
                     <Input placeholder="Masukan Email" size="large" />
@@ -203,10 +150,10 @@ const ProfileSettings = () => {
                 </Form>
               </Card>
             ) : activeMenu === 'biodata' ? (
-              <Card className="w-full" title="Profile Konselor">
-                <Form key="biodata" layout="vertical" form={formBiodata} onFinish={onSubmitUpdateKonselorBiodata}>
+              <Card className="w-full" title="Profile Konseli">
+                <Form key="biodata" layout="vertical" form={formBiodata} onFinish={onSubmitUpdateKonseliBiodata}>
                   <Form.Item label="NIM" name="nim" rules={[{ required: true, message: 'Field NIM harus diisi' }]}>
-                    <Input placeholder="Masukan NIM Konselor" size="large" />
+                    <Input placeholder="Masukan NIM Konseli" size="large" />
                   </Form.Item>
                   <Form.Item
                     label="Telepon"
@@ -220,7 +167,7 @@ const ProfileSettings = () => {
                       }
                     ]}
                   >
-                    <Input placeholder="Masukan Nomor Telepon Konselor" size="large" />
+                    <Input placeholder="Masukan Nomor Telepon Konseli" size="large" />
                   </Form.Item>
                   <Form.Item label="Jenis Kelamin" name="gender" rules={[{ required: true, message: 'Field Jenis Kelamin harus diisi' }]}>
                     <Select placeholder="Pilih Jenis Kelamin" size="large">

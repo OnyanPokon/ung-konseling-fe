@@ -69,12 +69,13 @@ const Matrix = () => {
               </div>
             }
           >
-            <div className="news-text">Q {index + 1}</div>
+            <div className="news-text">Q-{index + 1}</div>
           </Popover>
         ),
         dataIndex: `q_${q.id}`,
         key: `q_${q.id}`,
         align: 'center',
+        width: 80,
         render: (value) => <span style={{ color: value < 6 ? 'red' : 'inherit' }}>{value ?? '-'}</span>
       }))
     ];

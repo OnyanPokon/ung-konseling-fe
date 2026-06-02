@@ -4,13 +4,13 @@ import { HeartOutlined, CalendarOutlined, ClockCircleOutlined } from '@ant-desig
 
 const { Text, Title } = Typography;
 
-const statusColor = {
+export const statusColor = {
   pending: 'orange',
   approved: 'blue',
   rejected: 'red'
 };
 
-const statusTheme = {
+export const statusTheme = {
   pending: {
     gradient: 'linear-gradient(135deg, #f59e0b, #fbbf24)',
     border: '#fde68a',
@@ -157,7 +157,6 @@ export default function CounselingTicket({ type, ticket_number, day_name, status
         }}
       >
         <HeartOutlined style={{ color: theme.accentText, fontSize: 13 }} />
-        <Text style={{ fontSize: 11, color: theme.accentText, fontStyle: 'italic' }}>Kami siap mendengarkan dan mendampingimu 🌿</Text>
       </div>
     </div>
   );

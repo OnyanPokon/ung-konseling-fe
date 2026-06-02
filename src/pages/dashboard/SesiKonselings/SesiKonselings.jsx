@@ -220,6 +220,7 @@ const SesiKonselings = () => {
                       )}
                       {item.report.status !== null && (
                         <Button
+                          disabled={item.report.id === null}
                           icon={<EyeOutlined />}
                           variant="outlined"
                           color="green"
@@ -263,12 +264,19 @@ const SesiKonselings = () => {
                   <>
                     <Descriptions.Item label="Aksi" span={3} onClick={(e) => e.stopPropagation()}>
                       <div className="inline-flex items-center gap-x-2">
-                        <Button shape="round" icon={<PrinterOutlined />} variant="outlined" color="primary" onClick={() => window.open(item.report.file_url, '_blank')}>
-                          Lihat Laporan
-                        </Button>
+                        {item.report.status !== null && (
+                          <Button shape="round" icon={<PrinterOutlined />} variant="outlined" color="primary" onClick={() => window.open(item.report.file_url, '_blank')}>
+                            Lihat Laporan
+                          </Button>
+                        )}
                         {item.status === 'selesai' && (
                           <Tooltip title="Formulir Laiseg">
                             <Button disabled={item.laiseg.id !== null} shape="circle" icon={<CheckSquareOutlined />} variant="outlined" color="primary" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg`)} />
+                          </Tooltip>
+                        )}
+                        {item.laiseg.id !== null && (
+                          <Tooltip title="Lihat Hasil Laiseg">
+                            <Button disabled={item.laiseg.id === null} shape="circle" icon={<EyeOutlined />} variant="outlined" color="green" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg/show`)} />
                           </Tooltip>
                         )}
                       </div>

@@ -1,8 +1,8 @@
-import CounselingTicket from '@/components/dashboard/ConselingTicket';
+import CounselingTicket, { statusColor } from '@/components/dashboard/ConselingTicket';
 import { useAuth, useCrudModal } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
 import { JadwalKonselorsService, KonselisService, TiketsService } from '@/services';
-import { Avatar, Badge, Calendar, Card, Descriptions, Empty, Skeleton, Spin, Tabs, Typography } from 'antd';
+import { Avatar, Badge, Calendar, Card, Descriptions, Empty, Skeleton, Spin, Tabs, Tag, Typography } from 'antd';
 import React from 'react';
 
 const dayMap = {
@@ -98,6 +98,8 @@ const KonseliDashboard = () => {
 
   const colorVariants = ['bg-yellow-50 text-yellow-500', 'bg-green-50 text-green-500', 'bg-blue-50 text-blue-500', 'bg-purple-50 text-purple-500', 'bg-pink-50 text-pink-500'];
 
+  const lastTicket = tickets[tickets.length - 1];
+
   return (
     <div className="grid w-full grid-cols-12 gap-4">
       <div className="col-span-12 mb-4 flex flex-col gap-y-2 px-2">
@@ -111,16 +113,52 @@ const KonseliDashboard = () => {
 
       <Card className="col-span-12" title={'Tiket'}>
         {getAllTickets.isLoading && <Skeleton active />}
-
         {!getAllTickets.isLoading && tickets.length === 0 && <Empty description="Belum ada tiket" image={Empty.PRESENTED_IMAGE_SIMPLE} />}
         <div className="grid w-full grid-cols-4 gap-4">
-          {!getAllTickets.isLoading &&
-            tickets.length > 0 &&
-            tickets.map((item) => (
-              <div key={item.id} className="col-span-4">
-                <CounselingTicket key={item.id} status={item.status} type={item.type} ticket_number={item.ticket_number} day_name={item.hari_layanan.day_name} desc={item.desc} created_at={item.created_at} service_type={item.service_type} />
+          {!getAllTickets.isLoading && lastTicket && (
+            <div className="col-span-4 grid grid-cols-12 gap-4">
+              {/* LEFT CONTENT */}
+              <div className="col-span-12 lg:col-span-8">
+                <Card size="small" title="Tiket Terbaru" className="shadow-sm">
+                  <CounselingTicket
+                    key={lastTicket.id}
+                    status={lastTicket.status}
+                    type={lastTicket.type}
+                    ticket_number={lastTicket.ticket_number}
+                    day_name={lastTicket.hari_layanan.day_name}
+                    desc={lastTicket.desc}
+                    created_at={lastTicket.created_at}
+                    service_type={lastTicket.service_type}
+                  />
+                </Card>
               </div>
-            ))}
+
+              {/* RIGHT SIDEBAR */}
+              <div className="col-span-12 lg:col-span-4">
+                <Card size="small" title="Riwayat Tiket" className="shadow-sm lg:sticky lg:top-4">
+                  <div className="flex max-h-[430px] flex-col gap-3 overflow-y-auto pr-1">
+                    {tickets.map((item) => (
+                      <div key={item.id} className="rounded-xl border p-3 transition hover:bg-gray-50">
+                        <div className="mb-1 flex items-center justify-between">
+                          <Typography.Text strong>{item.ticket_number}</Typography.Text>
+
+                          <Tag color={statusColor[item.status]}>{item.status}</Tag>
+                        </div>
+
+                        <Typography.Text type="secondary" className="text-xs">
+                          {item.created_at}
+                        </Typography.Text>
+
+                        <div className="mt-2">
+                          <Typography.Text className="text-sm">{item.desc.length > 80 ? item.desc.slice(0, 80) + '...' : item.desc}</Typography.Text>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </div>
+            </div>
+          )}
         </div>
       </Card>
 
@@ -245,7 +283,7 @@ const KonseliDashboard = () => {
                               }}
                             >
                               {konselors.map((konselor) => (
-                                <Avatar size={'small'} key={konselor.id} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                                <Avatar size={'small'} key={konselor.id} src={konselor.profile_picture} />
                               ))}
                             </Avatar.Group>
                           </div>
@@ -280,7 +318,7 @@ const KonseliDashboard = () => {
                           <Descriptions.Item label="NIP">{konselor.nip}</Descriptions.Item>
                           <Descriptions.Item label="Telepon">{konselor.phone}</Descriptions.Item>
                           <Descriptions.Item label="Jenis Kelamin">{konselor.gender === 'L' ? 'Laki-laki' : konselor.gender === 'P' ? 'Perempuan' : 'Lainnya'}</Descriptions.Item>
-                          <Descriptions.Item label="Deskripsi Singkat">
+                          <Descriptions.Item label="Status Konselor">
                             {(() => {
                               let status;
                               switch (konselor.is_active) {

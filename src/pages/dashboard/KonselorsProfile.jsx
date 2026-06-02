@@ -130,7 +130,7 @@ const ProfileSettings = () => {
                               }
                             ],
                             onSubmit: async (values) => {
-                              const { message, isSuccess } = await updateKonselors.execute(konselor.id, { ...values, _method: 'PUT' }, token, values.profile_picture.file);
+                              const { message, isSuccess } = await updateKonselors.execute(konselor.id, { ...values, _method: 'PUT', is_active: values.is_active ? 1 : 0 }, token, values.profile_picture.file);
                               if (isSuccess) {
                                 success('Berhasil', message);
                                 fetchKonselor({ token: token, id: user.id });

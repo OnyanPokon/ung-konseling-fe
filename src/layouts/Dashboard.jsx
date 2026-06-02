@@ -88,32 +88,34 @@ const Dashboard = () => {
               ) : (
                 <>
                   <span>Hai, {user.name}</span>
-                  <Popover
-                    content={
-                      <>
-                        <div className="flex max-h-96 w-full max-w-lg flex-col gap-y-2 overflow-auto">
-                          {notifications.map((notif) => (
-                            <div key={notif.id} className={`flex items-center gap-x-2 rounded-lg p-3 ${notif.read_at === null ? 'bg-gray-100' : 'bg-white'}`}>
-                              <Avatar className="bg-color-primary-100 text-color-primary-500 font-semibold">
-                                <InboxOutlined color="#1675ff" />
-                              </Avatar>
-                              <div className="flex flex-col">
-                                <span className="text-xs font-semibold">{notif?.data?.title}</span>
-                                <span className="text-xs">{notif?.data?.message}</span>
-                                <button onClick={() => readNotification(notif.id)} size="small" className="mt-1 w-fit text-xs text-blue-500 hover:text-blue-400" type="link">
-                                  Tandai sudah dibaca
-                                </button>
+                  {!user.is(Role.ADMIN) && (
+                    <Popover
+                      content={
+                        <>
+                          <div className="flex max-h-96 w-full max-w-lg flex-col gap-y-2 overflow-auto">
+                            {notifications.map((notif) => (
+                              <div key={notif.id} className={`flex items-center gap-x-2 rounded-lg p-3 ${notif.read_at === null ? 'bg-gray-100' : 'bg-white'}`}>
+                                <Avatar className="bg-color-primary-100 text-color-primary-500 font-semibold">
+                                  <InboxOutlined color="#1675ff" />
+                                </Avatar>
+                                <div className="flex flex-col">
+                                  <span className="text-xs font-semibold">{notif?.data?.title}</span>
+                                  <span className="text-xs">{notif?.data?.message}</span>
+                                  <button onClick={() => readNotification(notif.id)} size="small" className="mt-1 w-fit text-xs text-blue-500 hover:text-blue-400" type="link">
+                                    Tandai sudah dibaca
+                                  </button>
+                                </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      </>
-                    }
-                  >
-                    <Badge count={unreadCount} size="small">
-                      <BellOutlined style={{ fontSize: 20 }} />
-                    </Badge>
-                  </Popover>
+                            ))}
+                          </div>
+                        </>
+                      }
+                    >
+                      <Badge count={unreadCount} size="small">
+                        <BellOutlined style={{ fontSize: 20 }} />
+                      </Badge>
+                    </Popover>
+                  )}
 
                   <Dropdown menu={{ items }}>
                     <a onClick={(e) => e.preventDefault()}>

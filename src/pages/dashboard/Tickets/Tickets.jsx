@@ -5,7 +5,7 @@ import useAbortableService from '@/hooks/useAbortableService';
 import { KonselisService, KonselorsService, SesiKonselingsService, TiketsService } from '@/services';
 import { Tikets as TicketModel } from '@/models';
 import React from 'react';
-import { Avatar, Button, Card, Descriptions, Drawer, Popconfirm, Skeleton, Space, Tabs, Tag, Tooltip } from 'antd';
+import { Button, Card, Descriptions, Drawer, Popconfirm, Skeleton, Space, Tabs, Tag, Tooltip } from 'antd';
 import { Action, Role } from '@/constants';
 import { CheckOutlined, CloseOutlined, InfoOutlined } from '@ant-design/icons';
 import { formFields, timeFormFields } from '../SesiKonselings/FormFields';
@@ -263,12 +263,10 @@ const Tickets = () => {
               <Descriptions.Item label="Deskripsi Keluhan">{drawer?.data?.desc}</Descriptions.Item>
               <Descriptions.Item label="Status Tiket">{drawer?.data?.status}</Descriptions.Item>
               <Descriptions.Item label="Tipe Layanan">{drawer?.data?.type}</Descriptions.Item>
-              <Descriptions.Item label="Mendesak">{drawer?.data?.urgent}</Descriptions.Item>
               <Descriptions.Item label="Tanggal Pengajuan Tiket">{drawer?.data?.created_at}</Descriptions.Item>
             </Descriptions>
           </Tabs.TabPane>
           <Tabs.TabPane tab="Detail Konseli" key="konseli">
-            <Avatar size={64} className="mb-4" style={{ backgroundColor: '#a5a5a5' }} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
             <Descriptions column={1} bordered size="smal">
               <Descriptions.Item label="Nama Konseli">{drawer?.data?.konseli?.user.name}</Descriptions.Item>
               <Descriptions.Item label="Email Kosneli">{drawer?.data?.konseli?.user.email}</Descriptions.Item>

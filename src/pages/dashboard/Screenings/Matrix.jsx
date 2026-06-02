@@ -50,7 +50,7 @@ const Matrix = () => {
   const generateColumns = (questions) => {
     return [
       {
-        title: 'Nama',
+        title: 'Nama Responden',
         dataIndex: 'name',
         key: 'name',
         width: 200, // 👉 fix kecil
@@ -69,12 +69,13 @@ const Matrix = () => {
               </div>
             }
           >
-            <div className="news-text text-">{index + 1}</div>
+            <div className="news-text text-">Q - {index + 1}</div>
           </Popover>
         ),
         dataIndex: `q_${q.id}`,
         key: `q_${q.id}`,
         align: 'center',
+        width: 80,
         render: (value) => <span style={{ color: value < 6 ? 'red' : 'inherit' }}>{value ?? '-'}</span>
       }))
     ];

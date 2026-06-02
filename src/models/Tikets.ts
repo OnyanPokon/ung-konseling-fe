@@ -34,7 +34,6 @@ export interface IncomingApiData {
   status: 'pending' | 'approved' | 'rejected';
   jenis_layanan: 'bimbingan' | 'konseling';
   jenis_keluhan: 'sosial' | 'pribadi' | 'akademik' | 'karir';
-  urgensi: 'mendesak' | 'cukup_mendesak' | 'tidak_mendesak';
   created_at: string;
   updated_at: string;
 }
@@ -47,7 +46,6 @@ export interface OutgoingApiData {
   status: 'pending' | 'approved' | 'rejected';
   jenis_layanan: 'bimbingan' | 'konseling';
   jenis_keluhan: 'sosial' | 'pribadi' | 'akademik' | 'karir';
-  urgensi: 'mendesak' | 'cukup_mendesak' | 'tidak_mendesak';
 }
 
 interface FormValue {
@@ -58,7 +56,6 @@ interface FormValue {
   status: 'pending' | 'approved' | 'rejected';
   service_type: 'bimbingan' | 'konseling';
   type: 'sosial' | 'pribadi' | 'akademik' | 'karir';
-  urgent: 'mendesak' | 'cukup_mendesak' | 'tidak_mendesak';
 }
 
 type ReturnType<S, From, To> = S extends From[] ? To[] : To;
@@ -98,7 +95,6 @@ export default class Tikets extends Model {
     public status: 'pending' | 'approved' | 'rejected',
     public service_type: 'bimbingan' | 'konseling',
     public type: 'sosial' | 'pribadi' | 'akademik' | 'karir',
-    public urgent: 'mendesak' | 'cukup_mendesak' | 'tidak_mendesak',
     public created_at: string,
     public updated_at: string
   ) {
@@ -141,7 +137,6 @@ export default class Tikets extends Model {
       apiData.status,
       apiData.jenis_layanan,
       apiData.jenis_keluhan,
-      apiData.urgensi,
       apiData.created_at,
       apiData.updated_at
     ) as ReturnType<T, IncomingApiData, Tikets>;
@@ -156,8 +151,7 @@ export default class Tikets extends Model {
       deskripsi_keluhan: tikets.desc,
       status: tikets.status,
       jenis_layanan: tikets.service_type,
-      jenis_keluhan: tikets.type,
-      urgensi: tikets.urgent
+      jenis_keluhan: tikets.type
     };
 
     return apiData as ReturnType<T, FormValue, OutgoingApiData>;

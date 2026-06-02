@@ -115,7 +115,8 @@ const Konselors = () => {
                 data: { ...record, name: record.user.name, email: record.user.email, password: record.user.password },
                 formFields: formFields(),
                 onSubmit: async (values) => {
-                  const { message, isSuccess } = await updateKonselors.execute(record.id, { ...values, _method: 'PUT' }, token, values.profile_picture.file);
+                  console.log({ ...values, _method: 'PUT', is_active: values.is_active ? 1 : 0 });
+                  const { message, isSuccess } = await updateKonselors.execute(record.id, { ...values, _method: 'PUT', is_active: values.is_active ? 1 : 0 }, token, values.profile_picture.file);
                   if (isSuccess) {
                     success('Berhasil', message);
                     fetchKonselors({ token: token, page: pagination.page, per_page: pagination.per_page });

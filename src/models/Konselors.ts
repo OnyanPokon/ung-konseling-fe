@@ -89,7 +89,7 @@ export default class Konselors extends Model {
       ...(konselors.phone ? { phone: konselors.phone } : {}),
       ...(konselors.gender ? { jenis_kelamin: konselors.gender } : {}),
       ...(konselors.profile_picture ? { foto_profil: konselors.profile_picture } : {}),
-      ...(konselors.is_active ? { is_active: konselors.is_active } : {})
+      ...(konselors.is_active !== undefined ? { is_active: konselors.is_active } : {})
     };
 
     return apiData as ReturnType<T, FormValue, OutgoingApiData>;
