@@ -29,7 +29,7 @@ const Screening = () => {
   };
 
   const onFinish = async (formValues) => {
-    const { name, email, institution, age, parent_job, domisili, gender, job, ...rest } = formValues;
+    const { name, institution, age, parent_job, domisili, gender, job, ...rest } = formValues;
 
     const answers = Object.entries(rest)
       .filter(([key]) => !isNaN(key))
@@ -41,7 +41,6 @@ const Screening = () => {
     const payload = {
       assessment_id: screeningData.id,
       name,
-      email,
       institution,
       age,
       parent_job,
@@ -179,23 +178,6 @@ const Screening = () => {
             </div>
             <Form.Item name="institution" rules={[{ required: true, message: 'Institusi wajib di isi' }]} className="mb-0">
               <Input size="large" name="institution" placeholder="Masukan Institusi" />
-            </Form.Item>
-          </div>
-          <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
-            <div className="mb-4">
-              <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
-                <span>Email</span>
-              </Typography.Text>
-            </div>
-            <Form.Item
-              name="email"
-              rules={[
-                { required: true, message: 'Email wajib di isi' },
-                { type: 'email', message: 'Email tidak valid' }
-              ]}
-              className="mb-0"
-            >
-              <Input size="large" name="email" placeholder="Masukan Email" />
             </Form.Item>
           </div>
 

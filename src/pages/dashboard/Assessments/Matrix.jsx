@@ -1,13 +1,14 @@
 import Modul from '@/constants/Modul';
 import { useAuth, usePagination } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
-import { Card, Skeleton, Button, Popover } from 'antd';
+import { Card, Skeleton, Button, Popover, Descriptions, Typography } from 'antd';
 import { AssessmentQuestion as QuestionsModel } from '@/models';
 import React from 'react';
 import { DataTable, DataTableHeader } from '@/components';
 import { AssessmentsService } from '@/services';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
+import { assessmentMatrixFilterFields } from './FormFields';
 
 const Matrix = () => {
   const navigate = useNavigate();
@@ -16,7 +17,10 @@ const Matrix = () => {
 
   const { execute, ...getAllMatrixes } = useAbortableService(AssessmentsService.getMatrix, { onUnauthorized });
   const pagination = usePagination({ totalData: getAllMatrixes.totalData });
-  const [filterValues, setFilterValues] = React.useState({ search: '' });
+  const [filterValues, setFilterValues] = React.useState({
+    search: '',
+    year: String(new Date().getFullYear())
+  });
 
   const [columns, setColumns] = React.useState([]);
   const [rows, setRows] = React.useState([]);
@@ -27,7 +31,8 @@ const Matrix = () => {
       id: assessmentId,
       page: pagination.page,
       per_page: pagination.perPage,
-      search: filterValues.search
+      search: filterValues.search,
+      year: filterValues.year
     });
 
     const data = res?.data;
@@ -39,7 +44,7 @@ const Matrix = () => {
 
     setColumns(generateColumns(questions));
     setRows(respondents);
-  }, [execute, assessmentId, filterValues.search, pagination.page, pagination.perPage, token]);
+  }, [execute, token, assessmentId, pagination.page, pagination.perPage, filterValues.search, filterValues.year]);
 
   React.useEffect(() => {
     if (assessmentId) {
@@ -53,9 +58,16 @@ const Matrix = () => {
         title: 'Nama',
         dataIndex: 'name',
         key: 'name',
-        width: 200, // 👉 fix kecil
         fixed: 'left',
         ellipsis: true
+      },
+      {
+        title: 'Tahun',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+        fixed: 'left',
+        ellipsis: true,
+        render: (value) => new Date(value).getFullYear()
       },
 
       ...questions.map((q, index) => ({
@@ -81,12 +93,25 @@ const Matrix = () => {
     ];
   };
 
+  const filter = {
+    formFields: assessmentMatrixFilterFields(),
+    initialData: {
+      year: filterValues.year
+    },
+    isLoading: getAllMatrixes.isLoading,
+    onSubmit: (values) => {
+      setFilterValues({
+        year: values.year
+      });
+    }
+  };
+
   return (
     <Card
       title={
         <div className="flex items-center gap-x-4">
           <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/dashboard/assessments')} type="text" />
-          <DataTableHeader model={QuestionsModel} modul={Modul.RESPON_MATRIX} onSearch={(values) => setFilterValues({ ...filterValues, search: values })} />
+          <DataTableHeader filter={filter} model={QuestionsModel} modul={Modul.RESPON_MATRIX} onSearch={(values) => setFilterValues({ ...filterValues, search: values })} />
         </div>
       }
     >
@@ -101,6 +126,17 @@ const Matrix = () => {
               ...row
             })}
             pagination={pagination}
+            expandable={{
+              expandedRowRender: (record) => (
+                <Descriptions bordered size="small" column={1} title={<Typography.Title level={4}>Detail Responden</Typography.Title>}>
+                  <Descriptions.Item label="Nama">{record.name}</Descriptions.Item>
+                  <Descriptions.Item label="Email">{record.email}</Descriptions.Item>
+                  <Descriptions.Item label="Institusi/Fakultas">{record.institution}</Descriptions.Item>
+                  <Descriptions.Item label="Jurusan">{record.major}</Descriptions.Item>
+                </Descriptions>
+              ),
+              rowExpandable: (record) => record.name !== 'Not Expandable'
+            }}
           />
         </div>
       </Skeleton>
