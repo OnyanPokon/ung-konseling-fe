@@ -1,7 +1,7 @@
 import { useAuth } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
 import { SesiKonselingsService } from '@/services';
-import { Card, Descriptions, Skeleton, Steps, Typography } from 'antd';
+import { Card, Descriptions, Image, Skeleton, Steps, Typography } from 'antd';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -29,6 +29,10 @@ const Show = () => {
         <Card
           title={
             <div className="flex w-full flex-col items-center justify-center gap-y-2 py-6">
+              <div className="mb-4 flex w-full items-center justify-center gap-2">
+                <Image width={38} preview={false} src={'/image_asset/ung.png'} />
+                <Image width={40} preview={false} src={'/image_asset/brand_logo.jpeg'} />
+              </div>
               <Typography.Title level={5} className="text-center">
                 PENILAIAN HASIL
                 <br />

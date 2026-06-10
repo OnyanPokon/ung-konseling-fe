@@ -1,7 +1,7 @@
 import { useAuth, useNotification, useService } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
 import { LaisegService, SesiKonselingsService } from '@/services';
-import { Alert, Button, Card, Descriptions, Form, Radio, Skeleton, Typography } from 'antd';
+import { Alert, Button, Card, Descriptions, Form, Image, Radio, Skeleton, Typography } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -27,21 +27,32 @@ const Create = () => {
     fetchSesiKonseling();
   }, [fetchSesiKonseling]);
 
+  const [form] = Form.useForm();
+
+  const relatedToProblem = Form.useWatch('related_to_problem', form);
+
+  console.log(relatedToProblem);
+
   const handleSubmit = async (values) => {
-    const { message, isSuccess } = await storeLaiseg.execute(
-      {
-        ...values,
-        sesi_konseling_id: sesi_konseling_id,
-        related_to_problem: values.related_to_problem === true || values.related_to_problem === 'true'
-      },
-      token
-    );
+    const payload = {
+      ...values,
+      sesi_konseling_id: sesi_konseling_id,
+      related_to_problem: values.related_to_problem === true || values.related_to_problem === 'true',
+
+      benefits_if_yes: values.related_to_problem ? values.benefits_if_yes : '-',
+
+      benefits_if_no: values.related_to_problem ? '-' : values.benefits_if_no
+    };
+
+    const { message, isSuccess } = await storeLaiseg.execute(payload, token);
+
     if (isSuccess) {
       success('Berhasil', message);
       navigate(-1);
     } else {
       error('Gagal', message);
     }
+
     return isSuccess;
   };
 
@@ -50,6 +61,10 @@ const Create = () => {
       <Card
         title={
           <div className="flex w-full flex-col items-center justify-center gap-y-2 py-6">
+            <div className="mb-4 flex w-full items-center justify-center gap-2">
+              <Image width={38} preview={false} src={'/image_asset/ung.png'} />
+              <Image width={40} preview={false} src={'/image_asset/brand_logo.jpeg'} />
+            </div>
             <Typography.Title level={5} className="text-center">
               PENILAIAN HASIL
               <br />
@@ -72,7 +87,7 @@ const Create = () => {
               <Descriptions.Item label="Pendaftar Layanan">{sesiKonseling.tiket.konseli.user.name}</Descriptions.Item>
             </Descriptions>
 
-            <Form onFinish={handleSubmit}>
+            <Form onFinish={handleSubmit} form={form}>
               <Form.Item name="discussion_topic" className="m-0 mb-2" rules={[{ required: true, message: 'Topik bahasan wajib diisi' }]}>
                 <Card title={<div className="p-2">1. Topik - topik apa yang dibahas melalui layanan tersebut?</div>} size="small">
                   <TextArea placeholder="Masukan Jawaban" />
@@ -93,34 +108,72 @@ const Create = () => {
                   <TextArea placeholder="Masukan Jawaban" />
                 </Card>
               </Form.Item>
-              <Form.Item name="related_to_problem" className="m-0 mb-2" rules={[{ required: true, message: 'Pilihan wajib diisi' }]}>
-                <Card title={<div className="p-2">4. Apakah layanan yang anda ikuti berkaitan dengan masalah yang sedang anda hadapi?</div>} size="small">
+              <Form.Item
+                name="related_to_problem"
+                className="m-0 mb-2"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Pilihan wajib diisi'
+                  }
+                ]}
+              >
+                <Card title={<div className="p-2">5. Apakah layanan yang anda ikuti berkaitan dengan masalah yang sedang anda hadapi?</div>} size="small">
                   <Radio.Group
                     options={[
                       { value: true, label: 'Ya' },
                       { value: false, label: 'Tidak' }
                     ]}
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        form.setFieldValue('benefits_if_no', undefined);
+                      } else {
+                        form.setFieldValue('benefits_if_yes', undefined);
+                      }
+                    }}
                   />
                 </Card>
               </Form.Item>
-              <Form.Item name="benefits_if_yes" className="m-0 mb-2" rules={[{ required: true, message: 'Keuntungan wajib diisi' }]}>
-                <Card title={<div className="p-2">5. Jika jawaban anda &apos;Ya&apos;, apa keuntungan yang anda rasakan setelah mengikuti layanan tersebut?</div>} size="small">
-                  <TextArea placeholder="Masukan Jawaban" />
-                </Card>
-              </Form.Item>
-              <Form.Item name="benefits_if_no" className="m-0 mb-2" rules={[{ required: true, message: 'Keuntungan wajib diisi' }]}>
-                <Card title={<div className="p-2">6. Jika jawaban anda &apos;Tidak&apos;, apa keuntungan yang anda rasakan setelah mengikuti layanan tersebut?</div>} size="small">
-                  <TextArea placeholder="Masukan Jawaban" />
-                </Card>
-              </Form.Item>
+              {String(relatedToProblem) === 'true' && (
+                <Form.Item
+                  name="benefits_if_yes"
+                  className="m-0 mb-2"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Keuntungan wajib diisi'
+                    }
+                  ]}
+                >
+                  <Card title={<div className="p-2">Jika jawaban anda &apos;Ya&apos;, apa keuntungan yang anda rasakan setelah mengikuti layanan tersebut?</div>} size="small">
+                    <TextArea placeholder="Masukan Jawaban" />
+                  </Card>
+                </Form.Item>
+              )}
+              {String(relatedToProblem) === 'false' && (
+                <Form.Item
+                  name="benefits_if_no"
+                  className="m-0 mb-2"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Keuntungan wajib diisi'
+                    }
+                  ]}
+                >
+                  <Card title={<div className="p-2">Jika jawaban anda &apos;Tidak&apos;, apa keuntungan yang anda rasakan setelah mengikuti layanan tersebut?</div>} size="small">
+                    <TextArea placeholder="Masukan Jawaban" />
+                  </Card>
+                </Form.Item>
+              )}
               <Form.Item name="suggestion_and_messages" className="m-0 mb-2" rules={[{ required: true, message: 'Saran dan pesan wajib diisi' }]}>
-                <Card title={<div className="p-2">7. Tanggapan, saran, dan pesan apa yang ingin anda sampaikan kepada konselor terkait layanan yang anda ikuti tersebut?</div>} size="small">
+                <Card title={<div className="p-2">6. Tanggapan, saran, dan pesan apa yang ingin anda sampaikan kepada konselor terkait layanan yang anda ikuti tersebut?</div>} size="small">
                   <TextArea placeholder="Masukan Jawaban" />
                 </Card>
               </Form.Item>
               <Form.Item>
                 <div className="flex w-full items-center justify-center gap-x-2">
-                  <Button htmlType="submit" className="w-full" type="primary" size="large">
+                  <Button loading={storeLaiseg.isLoading} htmlType="submit" className="w-full" type="primary" size="large">
                     Kirim
                   </Button>
                   <Button htmlType="reset" className="w-full" size="large">

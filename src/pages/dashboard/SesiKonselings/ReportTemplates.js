@@ -1,4 +1,16 @@
 export const SESI_KONSELING_REPORT_TEMPLATE = `
+<div style="text-align:center; margin-bottom: 10px;">
+    <img
+        src="/image_asset/ung.png"
+        alt="Logo UNG"
+        style="width:60px; margin-right:10px;"
+    />
+    <img
+        src="/image_asset/brand_logo.jpeg"
+        alt="Logo BK"
+        style="width:60px;"
+    />
+</div>
 <p style="text-align: center;"><strong><span style="font-family: 'times new roman', times, serif;">LAPORAN HASIL SESI LAYANAN</span></strong></p>
 <p>&nbsp;</p>
 
