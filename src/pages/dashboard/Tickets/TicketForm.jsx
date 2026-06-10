@@ -74,9 +74,17 @@ const RegistrationForm = () => {
 
   return (
     <div>
-      <Card className="w-full" title="Mendaftar Layanan Konseling">
+      <Card className="w-full" title="Mendaftar Layanan">
         <Form form={form} onFinish={onCreate}>
           <Descriptions column={4} layout="vertical" size="small" className="mb-4">
+            <Descriptions.Item label="Jenis Layanan">
+              <Form.Item className="m-0 w-full" name="service_type" rules={[{ required: true, message: 'Jenis Layanan harus diisi' }]}>
+                <Select placeholder="Jenis Layanan" size="large" className="w-full">
+                  <Select.Option value="bimbingan">Bimbingan</Select.Option>
+                  <Select.Option value="konseling">Konseling</Select.Option>
+                </Select>
+              </Form.Item>
+            </Descriptions.Item>
             <Descriptions.Item label="Jenis Masalah">
               <Form.Item className="m-0 w-full" name="type" rules={[{ required: true, message: 'Jenis Masalah harus diisi' }]}>
                 <Select placeholder="Jenis Masalah" size="large" className="w-full">
@@ -84,14 +92,6 @@ const RegistrationForm = () => {
                   <Select.Option value="sosial">Sosial</Select.Option>
                   <Select.Option value="akademik">Akademik</Select.Option>
                   <Select.Option value="karir">Karir</Select.Option>
-                </Select>
-              </Form.Item>
-            </Descriptions.Item>
-            <Descriptions.Item label="Jenis Layanan">
-              <Form.Item className="m-0 w-full" name="service_type" rules={[{ required: true, message: 'Jenis Layanan harus diisi' }]}>
-                <Select placeholder="Jenis Layanan" size="large" className="w-full">
-                  <Select.Option value="bimbingan">Bimbingan</Select.Option>
-                  <Select.Option value="konseling">Konseling</Select.Option>
                 </Select>
               </Form.Item>
             </Descriptions.Item>

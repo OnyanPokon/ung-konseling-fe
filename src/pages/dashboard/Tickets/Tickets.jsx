@@ -92,7 +92,7 @@ const Tickets = () => {
           let status;
           switch (record) {
             case 'pending':
-              status = <Tag color="yellow">Pending</Tag>;
+              status = <Tag color="yellow">Menunggu Persetujuan</Tag>;
               break;
             case 'approved':
               status = <Tag color="blue">Disetujui</Tag>;
@@ -135,12 +135,13 @@ const Tickets = () => {
   if (user && user.eitherCan([UPDATE, TicketModel])) {
     column.push({
       title: 'Aksi',
+      width: 100,
       render: (_, record) => (
         <Space size="small">
           <Button
             disabled={record.status === 'approved' || record.status === 'rejected'}
             variant="outlined"
-            shape="circle"
+            shape="round"
             icon={<CheckOutlined />}
             color="primary"
             onClick={() => {
@@ -182,7 +183,9 @@ const Tickets = () => {
                 }
               });
             }}
-          />
+          >
+            Approve Tiket
+          </Button>
           <Popconfirm
             disabled={record.status === 'rejected' || record.status === 'approved'}
             title="Tolak Tiket"
@@ -200,7 +203,9 @@ const Tickets = () => {
             okText="Yes"
             cancelText="No"
           >
-            <Button disabled={record.status === 'rejected' || record.status === 'approved'} variant="outlined" shape="circle" icon={<CloseOutlined />} color="danger" />
+            <Button disabled={record.status === 'rejected' || record.status === 'approved'} variant="outlined" shape="round" icon={<CloseOutlined />} color="danger">
+              Tolak Tiket
+            </Button>
           </Popconfirm>
           <Tooltip title="Detail Tiket">
             <Button
@@ -211,8 +216,10 @@ const Tickets = () => {
               }}
               size="middle"
               icon={<InfoOutlined />}
-              shape="circle"
-            />
+              shape="round"
+            >
+              Detail
+            </Button>
           </Tooltip>
         </Space>
       )

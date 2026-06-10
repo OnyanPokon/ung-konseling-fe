@@ -75,23 +75,6 @@ export const additionalDataFormFields = () => [
     ],
     size: 'large'
   },
-
-  {
-    label: `Jurusan/Unit Kerja ${Modul.KONSELIS}`,
-    name: 'major',
-    type: InputType.TEXT,
-    rules: [
-      { required: true, message: `Jurusan ${Modul.KONSELIS} harus diisi` },
-      { min: 2, message: 'Minimal 2 karakter' },
-      { max: 100, message: 'Maksimal 100 karakter' },
-      {
-        pattern: /^[A-Za-z\s.,-]+$/,
-        message: 'Jurusan hanya boleh huruf dan spasi'
-      }
-    ],
-    size: 'large'
-  },
-
   {
     label: `Umur ${Modul.KONSELIS}`,
     name: 'age',

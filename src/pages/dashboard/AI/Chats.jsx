@@ -73,9 +73,7 @@ const Chats = () => {
         </Form>
         <div className="flex max-h-96 min-h-64 flex-col gap-y-2 overflow-y-auto">
           <div className="flex w-full items-end justify-end">
-            <div className="rounded-md bg-blue-50 p-4">
-              Saya siap membantu kamu menemukan solusi untuk masalah kamu. Silakan berbagi cerita atau masalah yang kamu hadapi, dan saya akan melakukan yang terbaik untuk memahami situasi kamu dan memberikan saran yang relevan.
-            </div>
+            <div className="rounded-md bg-blue-50 p-4">Halo! Silakan tuliskan keluhan atau permasalahan yang Anda alami secara lengkap sebelum mengirimkan pesan.</div>
           </div>
           <hr className="mb-2" />
           {messages.role === 'assistant' && (
@@ -115,9 +113,7 @@ const Chats = () => {
           </div>
         </Card>
         <Card className="mt-4">
-          <Typography.Text>
-            Fitur AI ini hanya bersifat membantu memberikan solusi dan bukan merupakan acuan utama dalam penyelesaian masalah konseling. Untuk penanganan profesional, Anda diharapkan dapat mendaftar pada layanan konseling yang tersedia.
-          </Typography.Text>
+          <Typography.Text>Fitur AI ini membantu mengidentifikasi kategori jenis masalah yang dialami pengguna. Hasil identifikasi hanya digunakan sebagai acuan awal sebelum mengikuti layanan bimbingan dan konseling.</Typography.Text>
         </Card>
       </div>
     </div>
