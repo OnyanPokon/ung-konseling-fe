@@ -20,6 +20,10 @@ export interface IncomingApiData {
         nama: string;
         email: string;
       };
+      domisili: string;
+      jurusan: string;
+      umur: number;
+      jenis_kelamin: 'L' | 'P';
     };
   };
   konselor: {
@@ -105,6 +109,10 @@ export default class SesiKonselings extends Model {
           name: string;
           email: string;
         };
+        domicile: string;
+        major: string;
+        age: number;
+        gender: 'L' | 'P';
       };
     },
     public konselor: {
@@ -168,7 +176,11 @@ export default class SesiKonselings extends Model {
             id: apiData.tiket.konseli.user.id,
             name: apiData.tiket.konseli.user.nama,
             email: apiData.tiket.konseli.user.email
-          }
+          },
+          domicile: apiData.tiket.konseli.domisili,
+          major: apiData.tiket.konseli.jurusan,
+          age: apiData.tiket.konseli.umur,
+          gender: apiData.tiket.konseli.jenis_kelamin
         }
       },
       {

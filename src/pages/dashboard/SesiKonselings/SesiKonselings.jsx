@@ -79,7 +79,7 @@ const SesiKonselings = () => {
         <div className="flex w-full max-w-full flex-col gap-y-4 overflow-x-auto p-2">
           {sesiKonselings.map((item) => (
             <Card extra={<Button type="text" onClick={() => setDrawer({ open: true, data: item })} size="middle" icon={<InfoOutlined />} />} title={<span className="text-sm">{item.tiket.ticket_number}</span>} className="w-full" key={item.id}>
-              <Descriptions className="w-full" size="small" bordered column={3}>
+              <Descriptions className="w-full" size="small" bordered column={1}>
                 <Descriptions.Item label="No Tiket">{item.tiket.ticket_number}</Descriptions.Item>
                 <Descriptions.Item label="Jenis Layanan">{item.tiket.service_type}</Descriptions.Item>
                 {user?.is(Role.KONSELOR) && <Descriptions.Item label="Konseli">{item.tiket.konseli.user.name}</Descriptions.Item>}
@@ -126,7 +126,9 @@ const SesiKonselings = () => {
                         okText="Yes"
                         cancelText="No"
                       >
-                        <Button disabled={item.status === 'dibatalkan' || item.status === 'selesai'} variant="outlined" shape="circle" icon={<CheckOutlined />} color="blue" />
+                        <Button disabled={item.status === 'dibatalkan' || item.status === 'selesai'} variant="outlined" shape="round" icon={<CheckOutlined />} color="blue">
+                          Tandai Selesai
+                        </Button>
                       </Popconfirm>
                       <Popconfirm
                         title="Batalkan?"
@@ -145,7 +147,9 @@ const SesiKonselings = () => {
                         okText="Yes"
                         cancelText="No"
                       >
-                        <Button disabled={item.status === 'selesai' || item.status === 'dibatalkan'} variant="outlined" shape="circle" icon={<CloseOutlined />} color="danger" />
+                        <Button disabled={item.status === 'selesai' || item.status === 'dibatalkan'} variant="outlined" shape="round" icon={<CloseOutlined />} color="danger">
+                          Batalkan
+                        </Button>
                       </Popconfirm>
                       <Popconfirm
                         title="Jadwalkan ulang?"
@@ -185,7 +189,9 @@ const SesiKonselings = () => {
                         okText="Yes"
                         cancelText="No"
                       >
-                        <Button disabled={item.status === 'dibatalkan' || item.status === 'selesai'} variant="outlined" shape="circle" icon={<CalendarOutlined />} color="yellow" />
+                        <Button disabled={item.status === 'dibatalkan' || item.status === 'selesai'} variant="outlined" shape="round" icon={<CalendarOutlined />} color="yellow">
+                          Jadwalkan Ulang
+                        </Button>
                       </Popconfirm>
                       {item.status === 'selesai' && item.report.status === null && (
                         <Button
@@ -195,7 +201,7 @@ const SesiKonselings = () => {
                           shape="round"
                           onClick={() => {
                             modal.create({
-                              title: `Formulir Laporan`,
+                              title: `Formulir Laporan Hasil Sesi Layanan`,
                               formFields: reportFormFields,
                               onSubmit: async (values) => {
                                 const { message, isSuccess } = await storeSesiKonselingReport.execute(item.id, values, token);
@@ -215,7 +221,9 @@ const SesiKonselings = () => {
                       )}
                       {item.status === 'selesai' && item.laiseg.id !== null && (
                         <Tooltip title="Hasil Laiseg">
-                          <Button disabled={item.laiseg.id === null} shape="circle" icon={<CheckSquareOutlined />} variant="outlined" color="primary" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg/show`)} />
+                          <Button disabled={item.laiseg.id === null} shape="round" icon={<CheckSquareOutlined />} variant="outlined" color="primary" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg/show`)}>
+                            Lihat Hasil Laiseg
+                          </Button>
                         </Tooltip>
                       )}
                       {item.report.status !== null && (
@@ -256,7 +264,9 @@ const SesiKonselings = () => {
                             }
                           });
                         }}
-                      />
+                      >
+                        Hapus Sesi
+                      </Delete>
                     </Space>
                   </Descriptions.Item>
                 )}
@@ -271,12 +281,16 @@ const SesiKonselings = () => {
                         )}
                         {item.status === 'selesai' && (
                           <Tooltip title="Formulir Laiseg">
-                            <Button disabled={item.laiseg.id !== null} shape="circle" icon={<CheckSquareOutlined />} variant="outlined" color="primary" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg`)} />
+                            <Button disabled={item.laiseg.id !== null} shape="round" icon={<CheckSquareOutlined />} variant="outlined" color="primary" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg`)}>
+                              Formulir Laiseg
+                            </Button>
                           </Tooltip>
                         )}
                         {item.laiseg.id !== null && (
                           <Tooltip title="Lihat Hasil Laiseg">
-                            <Button disabled={item.laiseg.id === null} shape="circle" icon={<EyeOutlined />} variant="outlined" color="green" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg/show`)} />
+                            <Button disabled={item.laiseg.id === null} shape="round" icon={<EyeOutlined />} variant="outlined" color="green" onClick={() => navigate(`/dashboard/sesi_konseling/${item.id}/laiseg/show`)}>
+                              Lihat Hasil Laiseg
+                            </Button>
                           </Tooltip>
                         )}
                       </div>

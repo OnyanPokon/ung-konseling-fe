@@ -44,7 +44,7 @@ const Matrix = () => {
 
     setColumns(generateColumns(questions));
     setRows(respondents);
-  }, [execute, screeningId, filterValues.search, pagination.page, pagination.perPage, token]);
+  }, [execute, token, screeningId, pagination.page, pagination.perPage, filterValues.search, filterValues.year]);
 
   React.useEffect(() => {
     if (screeningId) {

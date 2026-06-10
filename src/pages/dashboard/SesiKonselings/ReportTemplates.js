@@ -1,5 +1,5 @@
 export const SESI_KONSELING_REPORT_TEMPLATE = `
-<p style="text-align: center;"><strong><span style="font-family: 'times new roman', times, serif;">LAPORAN HASIL SESI KONSELING</span></strong></p>
+<p style="text-align: center;"><strong><span style="font-family: 'times new roman', times, serif;">LAPORAN HASIL SESI LAYANAN</span></strong></p>
 <p>&nbsp;</p>
 
 <table style="border-collapse: collapse; width: 100%; height: 327.2px;" border="1"><colgroup><col style="width: 33.3227%;"><col style="width: 3.70487%;"><col style="width: 62.9405%;"></colgroup>

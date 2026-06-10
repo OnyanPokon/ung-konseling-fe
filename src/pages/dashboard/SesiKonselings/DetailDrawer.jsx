@@ -4,6 +4,7 @@ import { Role } from '@/constants';
 import { Badge, Descriptions, Drawer, Tabs } from 'antd';
 
 const DetailDrawer = ({ drawer, setDrawer, user }) => {
+  console.log(drawer);
   return (
     <Drawer placement="right" width={500} open={drawer.open} onClose={() => setDrawer({ open: false, data: null })} title="Detail Tiket">
       <Tabs>
@@ -62,7 +63,6 @@ const DetailDrawer = ({ drawer, setDrawer, user }) => {
             <Descriptions.Item label="Jam Mulai">{drawer?.data?.start_time}</Descriptions.Item>
             <Descriptions.Item label="Jam Selesai">{drawer?.data?.end_time}</Descriptions.Item>
             <Descriptions.Item label="Tempat">{drawer?.data?.place}</Descriptions.Item>
-            <Descriptions.Item label="Catatan Konselor">{drawer?.data?.note}</Descriptions.Item>
             <Descriptions.Item label="status">{drawer?.data?.status}</Descriptions.Item>
           </Descriptions>
         </Tabs.TabPane>

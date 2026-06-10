@@ -11,7 +11,7 @@ enum Modul {
   ASSESSMENT = 'Assessment',
   QUESTION = 'Pertanyaan',
   RESPON_MATRIX = 'Matriks Responden',
-  REPORT = 'Laporan Sesi Konseling'
+  REPORT = 'Laporan Sesi Layanan'
 }
 
 export default Modul;

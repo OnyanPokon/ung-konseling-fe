@@ -63,7 +63,7 @@ const HariLayanans = () => {
             onClick={() => {
               modal.edit({
                 title: `Edit ${modulName}`,
-                data: { ...record, name: record.user.name, email: record.user.email },
+                data: { ...record },
                 formFields: HariLayananFormFields(),
                 onSubmit: async (values) => {
                   const { message, isSuccess } = await updateHariLayanans.execute(record.id, values, token);

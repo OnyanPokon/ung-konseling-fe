@@ -72,6 +72,9 @@ const KonseliRegister = () => {
                   <Form.Item className="col-span-6 m-0" label="NIM/NIP" name="nim" rules={[{ required: true, message: 'Field NIM/NIP harus diisi' }]}>
                     <Input placeholder="Masukan NIM/NIP" size="large" />
                   </Form.Item>
+                  <Form.Item className="col-span-6 m-0" label="Jurusan/Instansi" name="major" rules={[{ required: true, message: 'Field Jurusan/Instansi harus diisi' }]}>
+                    <Input placeholder="Masukan Jurusan/Instansi" size="large" />
+                  </Form.Item>
                   <Form.Item className="col-span-6 m-0" label="Alamat Domisili Saat ini" name="domicile" rules={[{ required: true, message: 'Field Domisili harus diisi' }]}>
                     <TextArea placeholder="Masukan Alamat Domisili" size="large" />
                   </Form.Item>

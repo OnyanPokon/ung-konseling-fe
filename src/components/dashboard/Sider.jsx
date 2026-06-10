@@ -82,8 +82,9 @@ const DashboardSider = ({ collapsed, onCloseMenu }) => {
   return isDesktop ? (
     <Sider theme="light" className="p-4" width={230} collapsed={collapsed}>
       <Link to="/">
-        <div className="mb-4 flex w-full items-center justify-center">
-          <Image width={40} preview={false} src={''} />
+        <div className="mb-4 flex w-full items-center justify-center gap-2">
+          <Image width={38} preview={false} src={'/image_asset/ung.png'} />
+          <Image width={40} preview={false} src={'/image_asset/brand_logo.jpeg'} />
         </div>
       </Link>
       <Menu className="w-full !border-none font-semibold" theme="light" mode="inline" defaultSelectedKeys={[pathname]} items={menuItems} />

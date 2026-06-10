@@ -108,7 +108,6 @@ const JadwalKonselors = () => {
               return (
                 <div key={day.id} className="flex flex-col gap-y-4">
                   <div className={`rounded-md p-2 px-4 font-bold capitalize ${colorClass}`}>{day.day_name}</div>
-
                   <div className="flex flex-col gap-y-2">
                     {konselorsPerDay.length === 0 ? (
                       <div className="text-xs italic text-gray-400">Belum ada jadwal</div>
@@ -177,17 +176,25 @@ const JadwalKonselors = () => {
                                 color="danger"
                                 size="small"
                                 icon={<DeleteOutlined />}
-                                onClick={() => {
+                                onClick={(e) => {
+                                  e.stopPropagation();
+
                                   modal.delete.default({
                                     title: `Delete ${Modul.JADWAL_KONSELOR}`,
                                     onSubmit: async () => {
                                       const { isSuccess, message } = await deleteJadwalKonselors.execute(konselor.jadwal_konselor_id, token);
+
                                       if (isSuccess) {
                                         success('Berhasil', message);
-                                        fetchJadwalKonselors({ token: token, page: pagination.page, per_page: pagination.per_page });
+                                        fetchJadwalKonselors({
+                                          token,
+                                          page: pagination.page,
+                                          per_page: pagination.per_page
+                                        });
                                       } else {
                                         error('Gagal', message);
                                       }
+
                                       return isSuccess;
                                     }
                                   });
