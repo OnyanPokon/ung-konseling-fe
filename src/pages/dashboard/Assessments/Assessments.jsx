@@ -2,7 +2,7 @@ import { Delete, Edit } from '@/components/dashboard/button';
 import Modul from '@/constants/Modul';
 import { useAuth, useCrudModal, useNotification, usePagination, useService } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
-import { Card, Skeleton, Space, Button, Popconfirm } from 'antd';
+import { Card, Skeleton, Space, Button, Popconfirm, Tooltip } from 'antd';
 import { Assessments as AssessmentModel } from '@/models';
 import React from 'react';
 import { Action } from '@/constants';
@@ -107,28 +107,34 @@ const Assessments = () => {
               });
             }}
           />
-          <Button variant="outlined" color="primary" shape="circle" icon={<UnorderedListOutlined />} onClick={() => navigate(`/dashboard/assessments/${record.id}/questions`)} />
-          <Button variant="outlined" color="primary" shape="circle" icon={<DatabaseOutlined />} onClick={() => navigate(`/dashboard/assessments/${record.id}/matrix`)} />
-          <Popconfirm
-            title="Bagikan Tautan"
-            description={
-              <a href={`${window.location.origin}/assessments/${record.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-500">
-                {window.location.origin + '/assessments/' + record.slug}
-              </a>
-            }
-            onConfirm={() => {
-              const url = `${window.location.origin}/assessments/${record.slug}`;
-              navigator.clipboard
-                .writeText(url)
-                .then(() => success('Berhasil', 'Tautan berhasil disalin'))
-                .catch(() => error('Gagal', 'Tautan gagal disalin'));
-            }}
-            okText="Salin"
-            cancelText="Batal"
-            icon={<CopyOutlined className="text-blue-500" />}
-          >
-            <Button variant="outlined" color="primary" shape="circle" icon={<LinkOutlined />} />
-          </Popconfirm>
+          <Tooltip title="Lihat Pertanyaan">
+            <Button variant="outlined" color="primary" shape="circle" icon={<UnorderedListOutlined />} onClick={() => navigate(`/dashboard/assessments/${record.id}/questions`)} />
+          </Tooltip>
+          <Tooltip title="Lihat Matriks">
+            <Button variant="outlined" color="primary" shape="circle" icon={<DatabaseOutlined />} onClick={() => navigate(`/dashboard/assessments/${record.id}/matrix`)} />
+          </Tooltip>
+          <Tooltip title="Bagikan Tautan">
+            <Popconfirm
+              title="Bagikan Tautan"
+              description={
+                <a href={`${window.location.origin}/assessments/${record.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+                  {window.location.origin + '/assessments/' + record.slug}
+                </a>
+              }
+              onConfirm={() => {
+                const url = `${window.location.origin}/assessments/${record.slug}`;
+                navigator.clipboard
+                  .writeText(url)
+                  .then(() => success('Berhasil', 'Tautan berhasil disalin'))
+                  .catch(() => error('Gagal', 'Tautan gagal disalin'));
+              }}
+              okText="Salin"
+              cancelText="Batal"
+              icon={<CopyOutlined className="text-blue-500" />}
+            >
+              <Button variant="outlined" color="primary" shape="circle" icon={<LinkOutlined />} />
+            </Popconfirm>
+          </Tooltip>
         </Space>
       )
     });

@@ -78,7 +78,13 @@ const Dashboard = () => {
           }}
         >
           <div className="flex h-full w-full items-center justify-between px-4">
-            <Button type="text" icon={<MenuOutlined />} onClick={() => setCollapsed(!collapsed)} color="default"></Button>
+            <div>
+              <Button type="text" icon={<MenuOutlined />} onClick={() => setCollapsed(!collapsed)} color="default"></Button>
+              <b>
+                <span className="text-blue-500">SINLA-BK</span>{' '}
+              </b>
+            </div>
+
             <div className="flex items-center gap-x-2">
               {!user ? (
                 <>

@@ -101,7 +101,7 @@ export const additionalDataFormFields = () => [
       {
         type: 'number',
         min: 19,
-        max: 50,
+        max: 100,
         message: 'Umur harus antara 19 - 50 tahun'
       }
     ],

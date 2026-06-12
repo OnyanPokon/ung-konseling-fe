@@ -23,7 +23,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="grid w-full grid-cols-12 gap-4">
-      <Card className="col-span-3">
+      <Card className="col-span-12 md:col-span-6 lg:col-span-3">
         <div className="inline-flex w-full justify-between">
           <div className="flex-col gap-y-1">
             <span>Total Konselor</span>
@@ -36,7 +36,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </Card>
-      <Card className="col-span-3">
+      <Card className="col-span-12 md:col-span-6 lg:col-span-3">
         <div className="inline-flex w-full justify-between">
           <div className="flex-col gap-y-1">
             <span>Total Konseli</span>
@@ -49,7 +49,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </Card>
-      <Card className="col-span-3">
+      <Card className="col-span-12 md:col-span-6 lg:col-span-3">
         <div className="inline-flex w-full justify-between">
           <div className="flex-col gap-y-1">
             <span>Total Tiket</span>
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
           </div>
         </div>
       </Card>
-      <Card className="col-span-3">
+      <Card className="col-span-12 md:col-span-6 lg:col-span-3">
         <div className="inline-flex w-full justify-between">
           <div className="flex-col gap-y-1">
             <span>Total Sesi Konseling</span>

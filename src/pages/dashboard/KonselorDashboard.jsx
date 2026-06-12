@@ -23,7 +23,7 @@ const KonselorDashboard = () => {
 
   return (
     <div className="grid w-full grid-cols-12 gap-4">
-      <Card className="col-span-4">
+      <Card className="col-span-12 lg:col-span-4">
         <div className="inline-flex w-full justify-between">
           <div className="flex-col gap-y-1">
             <span>Jadwal Hari Ini</span>
@@ -36,10 +36,10 @@ const KonselorDashboard = () => {
           </div>
         </div>
       </Card>
-      <Card className="col-span-4">
+      <Card className="col-span-12 lg:col-span-4">
         <div className="inline-flex w-full justify-between">
           <div className="flex-col gap-y-1">
-            <span>Menunggu Verifikasi</span>
+            <span>Menunggu Persetujuan</span>
             <Typography.Title level={3} style={{ margin: 0 }}>
               {overview.total_tiket_menunggu_verifikasi ?? 0}
             </Typography.Title>
@@ -49,7 +49,7 @@ const KonselorDashboard = () => {
           </div>
         </div>
       </Card>
-      <Card className="col-span-4">
+      <Card className="col-span-12 lg:col-span-4">
         <div className="inline-flex w-full justify-between">
           <div className="flex-col gap-y-1">
             <span>Layanan Aktif</span>

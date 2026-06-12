@@ -99,7 +99,7 @@ const JadwalKonselors = () => {
           <div
             className="col-span-12 grid gap-4"
             style={{
-              gridTemplateColumns: `repeat(${hariLayanans.length}, minmax(0, 1fr))`
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))'
             }}
           >
             {hariLayanans.map((day, index) => {
