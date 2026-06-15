@@ -96,15 +96,7 @@ export const additionalDataFormFields = () => [
     label: `Umur ${Modul.KONSELIS}`,
     name: 'age',
     type: InputType.NUMBER,
-    rules: [
-      { required: true, message: `Umur ${Modul.KONSELIS} harus diisi` },
-      {
-        type: 'number',
-        min: 19,
-        max: 100,
-        message: 'Umur harus antara 19 - 50 tahun'
-      }
-    ],
+    rules: [{ required: true, message: `Umur ${Modul.KONSELIS} harus diisi` }],
     size: 'large',
     extra: {
       className: 'w-full'
