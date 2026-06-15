@@ -11,9 +11,7 @@ export const HariLayananFormFields = () => [
       { label: 'Selasa', value: 'selasa' },
       { label: 'Rabu', value: 'rabu' },
       { label: 'Kamis', value: 'kamis' },
-      { label: 'Jumat', value: 'jumat' },
-      { label: 'Sabtu', value: 'sabtu' },
-      { label: 'Minggu', value: 'minggu' }
+      { label: 'Jumat', value: 'jumat' }
     ],
     rules: [{ required: true, message: 'Nama hari wajib dipilih' }]
   }

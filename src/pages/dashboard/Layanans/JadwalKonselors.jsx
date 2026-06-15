@@ -114,6 +114,7 @@ const JadwalKonselors = () => {
                     ) : (
                       konselorsPerDay.map((konselor) => (
                         <Card
+                          size="small"
                           hoverable
                           onClick={() => {
                             modal.show.description({
@@ -163,15 +164,18 @@ const JadwalKonselors = () => {
                           }}
                           key={konselor.id}
                           title={
-                            <div className="inline-flex w-full items-center justify-between">
-                              <div className="my-2 inline-flex items-center gap-x-2">
-                                <Avatar size="large" src={konselor.profile_picture} />
-                                <div className="flex flex-col">
-                                  <small>{konselor.user.name}</small>
-                                  <span className="text-xs font-normal">{konselor.user.email}</span>
+                            <div className="flex w-full items-center justify-between gap-2">
+                              <div className="my-2 flex min-w-0 flex-1 items-center gap-x-2">
+                                <Avatar size={32} src={konselor.profile_picture} className="flex-shrink-0" />
+                                <div className="flex min-w-0 flex-col">
+                                  <small className="truncate font-medium">{konselor.user.name}</small>
+
+                                  <span className="truncate text-xs font-normal">{konselor.user.email}</span>
                                 </div>
                               </div>
+
                               <Button
+                                className="flex-shrink-0"
                                 variant="outlined"
                                 color="danger"
                                 size="small"
@@ -204,6 +208,9 @@ const JadwalKonselors = () => {
                           }
                         >
                           <Descriptions column={1} size="small">
+                            {console.log(konselor)}
+                            <Descriptions.Item label="Nomor Telp">{konselor.phone}</Descriptions.Item>
+                            <Descriptions.Item label="Jenis Kelamin">{konselor.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</Descriptions.Item>
                             <Descriptions.Item label="Status">{konselor.is_active ? <Badge status="processing" text="Aktif" /> : <Badge status="error" text="Non Aktif" />}</Descriptions.Item>
                           </Descriptions>
                         </Card>
