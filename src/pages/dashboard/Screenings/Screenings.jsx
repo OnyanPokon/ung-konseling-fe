@@ -58,7 +58,12 @@ const Screenings = () => {
       title: 'Deskripsi',
       dataIndex: 'description',
       sorter: (a, b) => (a.description || '').localeCompare(b.description || ''),
-      searchable: true
+      searchable: true,
+      render: (record) => (
+        <span className="news-text" style={{ whiteSpace: 'pre-wrap' }}>
+          {record}
+        </span>
+      )
     }
   ];
 

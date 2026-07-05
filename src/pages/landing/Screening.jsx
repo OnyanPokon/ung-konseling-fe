@@ -100,7 +100,9 @@ const Screening = () => {
             <div className="mb-4">
               <span className="mb-4 inline-block rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-700">{screeningData.period?.name || 'Assessment'}</span>
               <h1 className="mb-3 text-3xl font-bold text-gray-900">{screeningData.title}</h1>
-              <p className="text-[15px] leading-relaxed text-gray-600">{screeningData.description}</p>
+              <p className="text-[15px] leading-relaxed text-gray-600" style={{ whiteSpace: 'pre-wrap' }}>
+                {screeningData.description}
+              </p>
             </div>
             <div className="mt-6 flex items-center border-t border-gray-100 pt-4 text-sm font-medium text-red-500">* Wajib diisi</div>
           </div>
@@ -173,7 +175,7 @@ const Screening = () => {
           <div className="relative rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 sm:p-8">
             <div className="mb-4">
               <Typography.Text className="flex items-start text-[16px] font-medium leading-snug text-gray-800 hover:text-gray-900 sm:text-lg">
-                <span>Institusi</span>
+                <span>Fakultas</span>
               </Typography.Text>
             </div>
             <Form.Item name="institution" rules={[{ required: true, message: 'Institusi wajib di isi' }]} className="mb-0">

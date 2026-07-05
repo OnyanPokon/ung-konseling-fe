@@ -98,7 +98,9 @@ const Assessment = () => {
             <div className="mb-4">
               <span className="mb-4 inline-block rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-700">{assessmentData.period?.name || 'Assessment'}</span>
               <h1 className="mb-3 text-3xl font-bold text-gray-900">{assessmentData.title}</h1>
-              <p className="text-[15px] leading-relaxed text-gray-600">{assessmentData.description}</p>
+              <p className="text-[15px] leading-relaxed text-gray-600" style={{ whiteSpace: 'pre-wrap' }}>
+                {assessmentData.description}
+              </p>
             </div>
             <div className="mt-6 flex items-center border-t border-gray-100 pt-4 text-sm font-medium text-red-500">* Wajib diisi</div>
           </div>

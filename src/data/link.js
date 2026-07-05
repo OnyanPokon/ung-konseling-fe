@@ -86,7 +86,7 @@ export const dashboardLink = [
     icon: UserOutlined,
     roles: [Role.ADMIN],
     children: [
-      { path: '/dashboard/konseli', label: 'Konselis', element: Dashboard.Konselis, permissions: [[Action.CREATE, Model.Konselis]] },
+      { path: '/dashboard/konseli', label: 'Konseli', element: Dashboard.Konselis, permissions: [[Action.CREATE, Model.Konselis]] },
       { path: '/dashboard/konselor', label: 'Konselor', element: Dashboard.Konselors, permissions: [[Action.CREATE, Model.Konselors]] }
     ]
   },
