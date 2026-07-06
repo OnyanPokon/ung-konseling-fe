@@ -178,8 +178,8 @@ const Screening = () => {
                 <span>Fakultas</span>
               </Typography.Text>
             </div>
-            <Form.Item name="institution" rules={[{ required: true, message: 'Institusi wajib di isi' }]} className="mb-0">
-              <Input size="large" name="institution" placeholder="Masukan Institusi" />
+            <Form.Item name="institution" rules={[{ required: true, message: 'Fakultas wajib di isi' }]} className="mb-0">
+              <Input size="large" name="institution" placeholder="Masukan Fakultas" />
             </Form.Item>
           </div>
 
