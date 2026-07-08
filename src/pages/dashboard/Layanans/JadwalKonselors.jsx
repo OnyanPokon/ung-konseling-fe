@@ -25,10 +25,10 @@ const JadwalKonselors = () => {
   const fetchJadwalKonselors = React.useCallback(() => {
     execute({
       token: token,
-      page: pagination.page,
-      per_page: pagination.perPage
+      page: 1,
+      per_page: 9999
     });
-  }, [execute, pagination.page, pagination.perPage, token]);
+  }, [execute, token]);
 
   React.useEffect(() => {
     fetchJadwalKonselors();
