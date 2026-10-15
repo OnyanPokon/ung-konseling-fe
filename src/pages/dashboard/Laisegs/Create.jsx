@@ -10,54 +10,18 @@ const ANSWER_OPTIONS = [
   { value: 'sangat_setuju', label: 'Sangat Setuju' },
   { value: 'setuju', label: 'Setuju' },
   { value: 'tidak_setuju', label: 'Tidak Setuju' },
-  { value: 'sangat_tidak_setuju', label: 'Sangat Tidak Setuju' },
-  { value: 'lainnya', label: 'Lainnya' }
+  { value: 'sangat_tidak_setuju', label: 'Sangat Tidak Setuju' }
 ];
 
 const QUESTIONS = [
-  { name: 'q1_topik_sesuai', otherName: 'q1_lainnya', label: '1. Topik yang dibahas dalam layanan sesuai dengan kebutuhan saya.' },
-  { name: 'q2_pemahaman_baru', otherName: 'q2_lainnya', label: '2. Saya memperoleh pemahaman baru setelah mengikuti layanan.' },
-  { name: 'q3_merasa_lebih_baik', otherName: 'q3_lainnya', label: '3. Saya merasa lebih baik setelah mengikuti layanan.' },
-  { name: 'q4_rencana_tindakan', otherName: 'q4_lainnya', label: '4. Saya memiliki rencana tindakan setelah mengikuti layanan.' },
-  { name: 'q5_berkaitan_masalah', otherName: 'q5_lainnya', label: '5. Layanan yang saya ikuti berkaitan dengan masalah yang sedang saya hadapi.' },
-  { name: 'q6_manfaat_layanan', otherName: 'q6_lainnya', label: '6. Layanan memberikan manfaat bagi saya dalam menghadapi masalah.' },
-  { name: 'q7_layanan_sudah_baik', otherName: 'q7_lainnya', label: '7. Saya merasa layanan yang diberikan konselor sudah baik.' }
+  { name: 'q1_topik_sesuai', label: '1. Topik yang dibahas dalam layanan sesuai dengan kebutuhan saya.' },
+  { name: 'q2_pemahaman_baru', label: '2. Saya memperoleh pemahaman baru setelah mengikuti layanan.' },
+  { name: 'q3_merasa_lebih_baik', label: '3. Saya merasa lebih baik setelah mengikuti layanan.' },
+  { name: 'q4_rencana_tindakan', label: '4. Saya memiliki rencana tindakan setelah mengikuti layanan.' },
+  { name: 'q5_berkaitan_masalah', label: '5. Layanan yang saya ikuti berkaitan dengan masalah yang sedang saya hadapi.' },
+  { name: 'q6_manfaat_layanan', label: '6. Layanan memberikan manfaat bagi saya dalam menghadapi masalah.' },
+  { name: 'q7_layanan_sudah_baik', label: '7. Saya merasa layanan yang diberikan konselor sudah baik.' }
 ];
-
-const QuestionItem = ({ question, form }) => {
-  const answerValue = Form.useWatch(question.name, form);
-
-  return (
-    <>
-      <Form.Item name={question.name} className="m-0 mb-2" rules={[{ required: true, message: 'Pertanyaan ini wajib dijawab' }]}>
-        <Card title={<div className="p-2">{question.label}</div>} size="small">
-          <Radio.Group
-            onChange={(e) => {
-              if (e.target.value !== 'lainnya') {
-                form.setFieldValue(question.otherName, undefined);
-              }
-            }}
-          >
-            <Space direction="vertical">
-              {ANSWER_OPTIONS.map((opt) => (
-                <Radio key={opt.value} value={opt.value}>
-                  {opt.label}
-                </Radio>
-              ))}
-            </Space>
-          </Radio.Group>
-        </Card>
-      </Form.Item>
-      {answerValue === 'lainnya' && (
-        <Form.Item name={question.otherName} className="m-0 mb-2" rules={[{ required: true, message: 'Jawaban lainnya wajib diisi' }]}>
-          <Card size="small">
-            <TextArea placeholder="Masukan jawaban lainnya" />
-          </Card>
-        </Form.Item>
-      )}
-    </>
-  );
-};
 
 const Create = () => {
   const { token, onUnauthorized } = useAuth();
@@ -87,12 +51,6 @@ const Create = () => {
       ...values,
       sesi_konseling_id: sesi_konseling_id
     };
-
-    QUESTIONS.forEach((q) => {
-      if (values[q.name] !== 'lainnya') {
-        payload[q.otherName] = null;
-      }
-    });
 
     const { message, isSuccess } = await storeLaiseg.execute(payload, token);
 
@@ -139,8 +97,27 @@ const Create = () => {
 
             <Form onFinish={handleSubmit} form={form}>
               {QUESTIONS.map((question) => (
-                <QuestionItem key={question.name} question={question} form={form} />
+                <Form.Item key={question.name} name={question.name} className="m-0 mb-2" rules={[{ required: true, message: 'Pertanyaan ini wajib dijawab' }]}>
+                  <Card title={<div className="p-2">{question.label}</div>} size="small">
+                    <Radio.Group>
+                      <Space direction="vertical">
+                        {ANSWER_OPTIONS.map((opt) => (
+                          <Radio key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </Radio>
+                        ))}
+                      </Space>
+                    </Radio.Group>
+                  </Card>
+                </Form.Item>
               ))}
+
+              <Form.Item name="catatan_lainnya" className="m-0 mb-2">
+                <Card title={<div className="p-2">Catatan / Saran / Lainnya (Opsional)</div>} size="small">
+                  <TextArea placeholder="Masukan catatan atau masukan lainnya..." rows={4} />
+                </Card>
+              </Form.Item>
+
               <Form.Item>
                 <div className="flex w-full items-center justify-center gap-x-2">
                   <Button loading={storeLaiseg.isLoading} htmlType="submit" className="w-full" type="primary" size="large">

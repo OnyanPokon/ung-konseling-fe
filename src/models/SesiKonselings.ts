@@ -52,19 +52,13 @@ export interface IncomingApiData {
   laiseg: {
     id: number;
     q1_topik_sesuai: string | null;
-    q1_lainnya: string | null;
     q2_pemahaman_baru: string | null;
-    q2_lainnya: string | null;
     q3_merasa_lebih_baik: string | null;
-    q3_lainnya: string | null;
     q4_rencana_tindakan: string | null;
-    q4_lainnya: string | null;
     q5_berkaitan_masalah: string | null;
-    q5_lainnya: string | null;
     q6_manfaat_layanan: string | null;
-    q6_lainnya: string | null;
     q7_layanan_sudah_baik: string | null;
-    q7_lainnya: string | null;
+    catatan_lainnya: string | null;
   };
   created_at: string;
   updated_at: string;
@@ -147,19 +141,13 @@ export default class SesiKonselings extends Model {
     public laiseg: {
       id: number;
       q1_topik_sesuai: string | null;
-      q1_lainnya: string | null;
       q2_pemahaman_baru: string | null;
-      q2_lainnya: string | null;
       q3_merasa_lebih_baik: string | null;
-      q3_lainnya: string | null;
       q4_rencana_tindakan: string | null;
-      q4_lainnya: string | null;
       q5_berkaitan_masalah: string | null;
-      q5_lainnya: string | null;
       q6_manfaat_layanan: string | null;
-      q6_lainnya: string | null;
       q7_layanan_sudah_baik: string | null;
-      q7_lainnya: string | null;
+      catatan_lainnya: string | null;
     },
     public created_at: string,
     public updated_at: string
@@ -221,19 +209,13 @@ export default class SesiKonselings extends Model {
       {
         id: apiData.laiseg.id,
         q1_topik_sesuai: apiData.laiseg.q1_topik_sesuai,
-        q1_lainnya: apiData.laiseg.q1_lainnya,
         q2_pemahaman_baru: apiData.laiseg.q2_pemahaman_baru,
-        q2_lainnya: apiData.laiseg.q2_lainnya,
         q3_merasa_lebih_baik: apiData.laiseg.q3_merasa_lebih_baik,
-        q3_lainnya: apiData.laiseg.q3_lainnya,
         q4_rencana_tindakan: apiData.laiseg.q4_rencana_tindakan,
-        q4_lainnya: apiData.laiseg.q4_lainnya,
         q5_berkaitan_masalah: apiData.laiseg.q5_berkaitan_masalah,
-        q5_lainnya: apiData.laiseg.q5_lainnya,
         q6_manfaat_layanan: apiData.laiseg.q6_manfaat_layanan,
-        q6_lainnya: apiData.laiseg.q6_lainnya,
         q7_layanan_sudah_baik: apiData.laiseg.q7_layanan_sudah_baik,
-        q7_lainnya: apiData.laiseg.q7_lainnya,
+        catatan_lainnya: apiData.laiseg.catatan_lainnya,
       },
       apiData.created_at,
       apiData.updated_at

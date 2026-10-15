@@ -1,23 +1,17 @@
 import Model from './Model';
 
-export type LaisegAnswer = 'sangat_setuju' | 'setuju' | 'tidak_setuju' | 'sangat_tidak_setuju' | 'lainnya';
+export type LaisegAnswer = 'sangat_setuju' | 'setuju' | 'tidak_setuju' | 'sangat_tidak_setuju';
 
 export interface IncomingApiData {
   id: number;
   q1_topik_sesuai: LaisegAnswer | null;
-  q1_lainnya: string | null;
   q2_pemahaman_baru: LaisegAnswer | null;
-  q2_lainnya: string | null;
   q3_merasa_lebih_baik: LaisegAnswer | null;
-  q3_lainnya: string | null;
   q4_rencana_tindakan: LaisegAnswer | null;
-  q4_lainnya: string | null;
   q5_berkaitan_masalah: LaisegAnswer | null;
-  q5_lainnya: string | null;
   q6_manfaat_layanan: LaisegAnswer | null;
-  q6_lainnya: string | null;
   q7_layanan_sudah_baik: LaisegAnswer | null;
-  q7_lainnya: string | null;
+  catatan_lainnya: string | null;
   sesi_konseling: {
     id: number;
     tiket: {
@@ -64,37 +58,25 @@ export interface IncomingApiData {
 export interface OutgoingApiData {
   sesi_konseling_id: number;
   q1_topik_sesuai: LaisegAnswer;
-  q1_lainnya: string | null;
   q2_pemahaman_baru: LaisegAnswer;
-  q2_lainnya: string | null;
   q3_merasa_lebih_baik: LaisegAnswer;
-  q3_lainnya: string | null;
   q4_rencana_tindakan: LaisegAnswer;
-  q4_lainnya: string | null;
   q5_berkaitan_masalah: LaisegAnswer;
-  q5_lainnya: string | null;
   q6_manfaat_layanan: LaisegAnswer;
-  q6_lainnya: string | null;
   q7_layanan_sudah_baik: LaisegAnswer;
-  q7_lainnya: string | null;
+  catatan_lainnya: string | null;
 }
 
 interface FormValue {
   sesi_konseling_id: number;
   q1_topik_sesuai: LaisegAnswer;
-  q1_lainnya: string | null;
   q2_pemahaman_baru: LaisegAnswer;
-  q2_lainnya: string | null;
   q3_merasa_lebih_baik: LaisegAnswer;
-  q3_lainnya: string | null;
   q4_rencana_tindakan: LaisegAnswer;
-  q4_lainnya: string | null;
   q5_berkaitan_masalah: LaisegAnswer;
-  q5_lainnya: string | null;
   q6_manfaat_layanan: LaisegAnswer;
-  q6_lainnya: string | null;
   q7_layanan_sudah_baik: LaisegAnswer;
-  q7_lainnya: string | null;
+  catatan_lainnya: string | null;
 }
 
 type ReturnType<S, From, To> = S extends From[] ? To[] : To;
@@ -103,19 +85,13 @@ export default class Laiseg extends Model {
   constructor(
     public id: number,
     public q1_topik_sesuai: LaisegAnswer | null,
-    public q1_lainnya: string | null,
     public q2_pemahaman_baru: LaisegAnswer | null,
-    public q2_lainnya: string | null,
     public q3_merasa_lebih_baik: LaisegAnswer | null,
-    public q3_lainnya: string | null,
     public q4_rencana_tindakan: LaisegAnswer | null,
-    public q4_lainnya: string | null,
     public q5_berkaitan_masalah: LaisegAnswer | null,
-    public q5_lainnya: string | null,
     public q6_manfaat_layanan: LaisegAnswer | null,
-    public q6_lainnya: string | null,
     public q7_layanan_sudah_baik: LaisegAnswer | null,
-    public q7_lainnya: string | null,
+    public catatan_lainnya: string | null,
     public sesi_konseling: {
       id: number;
       tiket: {
@@ -165,19 +141,13 @@ export default class Laiseg extends Model {
     return new Laiseg(
       apiData.id,
       apiData.q1_topik_sesuai,
-      apiData.q1_lainnya,
       apiData.q2_pemahaman_baru,
-      apiData.q2_lainnya,
       apiData.q3_merasa_lebih_baik,
-      apiData.q3_lainnya,
       apiData.q4_rencana_tindakan,
-      apiData.q4_lainnya,
       apiData.q5_berkaitan_masalah,
-      apiData.q5_lainnya,
       apiData.q6_manfaat_layanan,
-      apiData.q6_lainnya,
       apiData.q7_layanan_sudah_baik,
-      apiData.q7_lainnya,
+      apiData.catatan_lainnya,
       {
         id: apiData.sesi_konseling.id,
         tiket: {
@@ -228,19 +198,13 @@ export default class Laiseg extends Model {
     const apiData: OutgoingApiData = {
       sesi_konseling_id: laiseg.sesi_konseling_id,
       q1_topik_sesuai: laiseg.q1_topik_sesuai,
-      q1_lainnya: laiseg.q1_topik_sesuai === 'lainnya' ? laiseg.q1_lainnya : null,
       q2_pemahaman_baru: laiseg.q2_pemahaman_baru,
-      q2_lainnya: laiseg.q2_pemahaman_baru === 'lainnya' ? laiseg.q2_lainnya : null,
       q3_merasa_lebih_baik: laiseg.q3_merasa_lebih_baik,
-      q3_lainnya: laiseg.q3_merasa_lebih_baik === 'lainnya' ? laiseg.q3_lainnya : null,
       q4_rencana_tindakan: laiseg.q4_rencana_tindakan,
-      q4_lainnya: laiseg.q4_rencana_tindakan === 'lainnya' ? laiseg.q4_lainnya : null,
       q5_berkaitan_masalah: laiseg.q5_berkaitan_masalah,
-      q5_lainnya: laiseg.q5_berkaitan_masalah === 'lainnya' ? laiseg.q5_lainnya : null,
       q6_manfaat_layanan: laiseg.q6_manfaat_layanan,
-      q6_lainnya: laiseg.q6_manfaat_layanan === 'lainnya' ? laiseg.q6_lainnya : null,
       q7_layanan_sudah_baik: laiseg.q7_layanan_sudah_baik,
-      q7_lainnya: laiseg.q7_layanan_sudah_baik === 'lainnya' ? laiseg.q7_lainnya : null,
+      catatan_lainnya: laiseg.catatan_lainnya ?? null,
     };
 
     return apiData as ReturnType<T, FormValue, OutgoingApiData>;
