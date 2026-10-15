@@ -21,6 +21,11 @@ export const landingLink = [
     label: 'Artikel',
     key: '/artikel',
     element: Landing.Articles
+  },
+  {
+    label: 'Tester',
+    key: '/tester',
+    element: Landing.Tester
   }
 ];
 
@@ -41,22 +46,25 @@ export const landingLink = [
  */
 export const dashboardLink = [
   {
-    label: 'Overview',
+    label: 'Dashboard',
     icon: DashboardOutlined,
     roles: [Role.KONSELOR],
-    children: [{ path: '/konselor_dashboard', label: 'Dashboard', element: Dashboard.KonselorDashboard }]
+    path: '/konselor_dashboard',
+    element: Dashboard.KonselorDashboard
   },
   {
-    label: 'Overview',
+    label: 'Dashboard',
     icon: DashboardOutlined,
     roles: [Role.KONSELI],
-    children: [{ path: '/konseli_dashboard', label: 'Dashboard', element: Dashboard.KonseliDashboard }]
+    path: '/konseli_dashboard',
+    element: Dashboard.KonseliDashboard
   },
   {
-    label: 'Overview',
+    label: 'Dashboard',
     icon: DashboardOutlined,
     roles: [Role.ADMIN],
-    children: [{ path: '/admin_dashboard', label: 'Dashboard', element: Dashboard.AdminDashboard }]
+    path: '/admin_dashboard',
+    element: Dashboard.AdminDashboard
   },
   {
     label: 'Daftar Layanan',

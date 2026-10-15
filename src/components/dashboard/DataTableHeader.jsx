@@ -34,7 +34,7 @@ export default function DataHeader({ modul, selectedData, onStore, onDeleteBatch
     });
   }
   if (user?.can(DELETE, model) && onDeleteBatch) {
-    menuItems.push({
+  menuItems.push({
       label: `Hapus ${selectedData?.length || 0} Pilihan`,
       key: 'deletebatch',
       icon: <DeleteOutlined />

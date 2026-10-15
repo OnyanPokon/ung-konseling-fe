@@ -59,7 +59,8 @@ const Matrix = () => {
         dataIndex: 'name',
         key: 'name',
         fixed: 'left',
-        ellipsis: true
+        ellipsis: true,
+        width: 250
       },
       {
         title: 'Tahun',
@@ -67,6 +68,7 @@ const Matrix = () => {
         key: 'createdAt',
         fixed: 'left',
         ellipsis: true,
+        width: 100,
         render: (value) => new Date(value).getFullYear()
       },
 
@@ -121,6 +123,7 @@ const Matrix = () => {
             data={rows}
             columns={columns}
             loading={getAllMatrixes.isLoading}
+            scroll={{ x: 'max-content' }}
             map={(row, index) => ({
               key: index,
               ...row

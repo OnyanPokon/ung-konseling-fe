@@ -1,10 +1,63 @@
 import { useAuth, useNotification, useService } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
 import { LaisegService, SesiKonselingsService } from '@/services';
-import { Alert, Button, Card, Descriptions, Form, Image, Radio, Skeleton, Typography } from 'antd';
+import { Alert, Button, Card, Descriptions, Form, Image, Radio, Skeleton, Space, Typography } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
+const ANSWER_OPTIONS = [
+  { value: 'sangat_setuju', label: 'Sangat Setuju' },
+  { value: 'setuju', label: 'Setuju' },
+  { value: 'tidak_setuju', label: 'Tidak Setuju' },
+  { value: 'sangat_tidak_setuju', label: 'Sangat Tidak Setuju' },
+  { value: 'lainnya', label: 'Lainnya' }
+];
+
+const QUESTIONS = [
+  { name: 'q1_topik_sesuai', otherName: 'q1_lainnya', label: '1. Topik yang dibahas dalam layanan sesuai dengan kebutuhan saya.' },
+  { name: 'q2_pemahaman_baru', otherName: 'q2_lainnya', label: '2. Saya memperoleh pemahaman baru setelah mengikuti layanan.' },
+  { name: 'q3_merasa_lebih_baik', otherName: 'q3_lainnya', label: '3. Saya merasa lebih baik setelah mengikuti layanan.' },
+  { name: 'q4_rencana_tindakan', otherName: 'q4_lainnya', label: '4. Saya memiliki rencana tindakan setelah mengikuti layanan.' },
+  { name: 'q5_berkaitan_masalah', otherName: 'q5_lainnya', label: '5. Layanan yang saya ikuti berkaitan dengan masalah yang sedang saya hadapi.' },
+  { name: 'q6_manfaat_layanan', otherName: 'q6_lainnya', label: '6. Layanan memberikan manfaat bagi saya dalam menghadapi masalah.' },
+  { name: 'q7_layanan_sudah_baik', otherName: 'q7_lainnya', label: '7. Saya merasa layanan yang diberikan konselor sudah baik.' }
+];
+
+const QuestionItem = ({ question, form }) => {
+  const answerValue = Form.useWatch(question.name, form);
+
+  return (
+    <>
+      <Form.Item name={question.name} className="m-0 mb-2" rules={[{ required: true, message: 'Pertanyaan ini wajib dijawab' }]}>
+        <Card title={<div className="p-2">{question.label}</div>} size="small">
+          <Radio.Group
+            onChange={(e) => {
+              if (e.target.value !== 'lainnya') {
+                form.setFieldValue(question.otherName, undefined);
+              }
+            }}
+          >
+            <Space direction="vertical">
+              {ANSWER_OPTIONS.map((opt) => (
+                <Radio key={opt.value} value={opt.value}>
+                  {opt.label}
+                </Radio>
+              ))}
+            </Space>
+          </Radio.Group>
+        </Card>
+      </Form.Item>
+      {answerValue === 'lainnya' && (
+        <Form.Item name={question.otherName} className="m-0 mb-2" rules={[{ required: true, message: 'Jawaban lainnya wajib diisi' }]}>
+          <Card size="small">
+            <TextArea placeholder="Masukan jawaban lainnya" />
+          </Card>
+        </Form.Item>
+      )}
+    </>
+  );
+};
 
 const Create = () => {
   const { token, onUnauthorized } = useAuth();
@@ -29,20 +82,17 @@ const Create = () => {
 
   const [form] = Form.useForm();
 
-  const relatedToProblem = Form.useWatch('related_to_problem', form);
-
-  console.log(relatedToProblem);
-
   const handleSubmit = async (values) => {
     const payload = {
       ...values,
-      sesi_konseling_id: sesi_konseling_id,
-      related_to_problem: values.related_to_problem === true || values.related_to_problem === 'true',
-
-      benefits_if_yes: values.related_to_problem ? values.benefits_if_yes : '-',
-
-      benefits_if_no: values.related_to_problem ? '-' : values.benefits_if_no
+      sesi_konseling_id: sesi_konseling_id
     };
+
+    QUESTIONS.forEach((q) => {
+      if (values[q.name] !== 'lainnya') {
+        payload[q.otherName] = null;
+      }
+    });
 
     const { message, isSuccess } = await storeLaiseg.execute(payload, token);
 
@@ -79,7 +129,7 @@ const Create = () => {
           <Skeleton active />
         ) : (
           <>
-            <Alert type="info" showIcon description="Isi setiap bagan formulir dengan singkat" className="mb-4" closable />
+            <Alert type="info" showIcon description="Pilih salah satu jawaban untuk setiap pertanyaan" className="mb-4" closable />
             <Descriptions bordered column={2} className="mb-2" size="small">
               <Descriptions.Item label="Hari, Tanggal Layanan">{sesiKonseling.counseling_date}</Descriptions.Item>
               <Descriptions.Item label="Jenis Layanan">{sesiKonseling.tiket.service_type}</Descriptions.Item>
@@ -88,89 +138,9 @@ const Create = () => {
             </Descriptions>
 
             <Form onFinish={handleSubmit} form={form}>
-              <Form.Item name="discussion_topic" className="m-0 mb-2" rules={[{ required: true, message: 'Topik bahasan wajib diisi' }]}>
-                <Card title={<div className="p-2">1. Topik - topik apa yang dibahas melalui layanan tersebut?</div>} size="small">
-                  <TextArea placeholder="Masukan Jawaban" />
-                </Card>
-              </Form.Item>
-              <Form.Item name="new_understanding" className="m-0 mb-2" rules={[{ required: true, message: 'Pemahaman baru wajib diisi' }]}>
-                <Card title={<div className="p-2">2. Hal - hal atau pemahaman baru apakah yang anda peroleh dari layanan tersebut?</div>} size="small">
-                  <TextArea placeholder="Masukan Jawaban" />
-                </Card>
-              </Form.Item>
-              <Form.Item name="feelings_after_service" className="m-0 mb-2" rules={[{ required: true, message: 'Perasaan setelah layanan wajib diisi' }]}>
-                <Card title={<div className="p-2">3. Bagaimanakah perasaan anda setelah mengikuti layanan tersebut?</div>} size="small">
-                  <TextArea placeholder="Masukan Jawaban" />
-                </Card>
-              </Form.Item>
-              <Form.Item name="plan_after_service" className="m-0 mb-2" rules={[{ required: true, message: 'Rencana setelah layanan wajib diisi' }]}>
-                <Card title={<div className="p-2">4. Hal - hal apakah yang akan anda lakukan setelah mengikuti layanan tersebut?</div>} size="small">
-                  <TextArea placeholder="Masukan Jawaban" />
-                </Card>
-              </Form.Item>
-              <Form.Item
-                name="related_to_problem"
-                className="m-0 mb-2"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Pilihan wajib diisi'
-                  }
-                ]}
-              >
-                <Card title={<div className="p-2">5. Apakah layanan yang anda ikuti berkaitan dengan masalah yang sedang anda hadapi?</div>} size="small">
-                  <Radio.Group
-                    options={[
-                      { value: true, label: 'Ya' },
-                      { value: false, label: 'Tidak' }
-                    ]}
-                    onChange={(e) => {
-                      if (e.target.value) {
-                        form.setFieldValue('benefits_if_no', undefined);
-                      } else {
-                        form.setFieldValue('benefits_if_yes', undefined);
-                      }
-                    }}
-                  />
-                </Card>
-              </Form.Item>
-              {String(relatedToProblem) === 'true' && (
-                <Form.Item
-                  name="benefits_if_yes"
-                  className="m-0 mb-2"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Keuntungan wajib diisi'
-                    }
-                  ]}
-                >
-                  <Card title={<div className="p-2">Jika jawaban anda &apos;Ya&apos;, apa keuntungan yang anda rasakan setelah mengikuti layanan tersebut?</div>} size="small">
-                    <TextArea placeholder="Masukan Jawaban" />
-                  </Card>
-                </Form.Item>
-              )}
-              {String(relatedToProblem) === 'false' && (
-                <Form.Item
-                  name="benefits_if_no"
-                  className="m-0 mb-2"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Keuntungan wajib diisi'
-                    }
-                  ]}
-                >
-                  <Card title={<div className="p-2">Jika jawaban anda &apos;Tidak&apos;, apa keuntungan yang anda rasakan setelah mengikuti layanan tersebut?</div>} size="small">
-                    <TextArea placeholder="Masukan Jawaban" />
-                  </Card>
-                </Form.Item>
-              )}
-              <Form.Item name="suggestion_and_messages" className="m-0 mb-2" rules={[{ required: true, message: 'Saran dan pesan wajib diisi' }]}>
-                <Card title={<div className="p-2">6. Tanggapan, saran, dan pesan apa yang ingin anda sampaikan kepada konselor terkait layanan yang anda ikuti tersebut?</div>} size="small">
-                  <TextArea placeholder="Masukan Jawaban" />
-                </Card>
-              </Form.Item>
+              {QUESTIONS.map((question) => (
+                <QuestionItem key={question.name} question={question} form={form} />
+              ))}
               <Form.Item>
                 <div className="flex w-full items-center justify-center gap-x-2">
                   <Button loading={storeLaiseg.isLoading} htmlType="submit" className="w-full" type="primary" size="large">

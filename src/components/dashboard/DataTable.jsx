@@ -15,7 +15,7 @@ export default function DataTable({ columns, data, loading, title = '', handleSe
       title: 'No',
       dataIndex: 'index',
       render: (_, __, index) => ((pagination?.page || 1) - 1) * (pagination?.perPage || 10) + (index + 1),
-      width: '5%',
+      width: 60,
       fixed: 'left'
     },
     ...columns

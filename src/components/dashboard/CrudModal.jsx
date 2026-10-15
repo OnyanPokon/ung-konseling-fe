@@ -2,7 +2,7 @@ import { CrudModalType, InputType } from '@/constants';
 import clientAsset from '@/utils/clientAsset';
 import strings from '@/utils/strings';
 import { DeleteOutlined, InboxOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Form, Input, InputNumber, Modal, TimePicker } from 'antd';
+import { Button, DatePicker, Form, Input, InputNumber, Modal, TimePicker, Radio } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import Dragger from 'antd/es/upload/Dragger';
 import PropTypes from 'prop-types';
@@ -125,6 +125,18 @@ export default function CrudModal({ isModalOpen, data: initialData, close, title
 
       case InputType.MAP_PICKER:
         return <MapPicker form={form} handleValuesChange={handleValuesChange} realtimeData={realtimeData} />;
+
+      case InputType.SCALE:
+        return (
+          <Radio.Group className="w-full flex justify-between gap-2" disabled={field.readOnly}>
+            <div className="flex flex-col items-center"><Radio value={1} /><span className="text-xs mt-1 text-center">Sangat Tidak Puas</span></div>
+            <div className="flex flex-col items-center"><Radio value={2} /><span className="text-xs mt-1 text-center">Tidak Puas</span></div>
+            <div className="flex flex-col items-center"><Radio value={3} /><span className="text-xs mt-1 text-center">Cukup Puas</span></div>
+            <div className="flex flex-col items-center"><Radio value={4} /><span className="text-xs mt-1 text-center">Puas</span></div>
+            <div className="flex flex-col items-center"><Radio value={5} /><span className="text-xs mt-1 text-center">Sangat Puas</span></div>
+          </Radio.Group>
+        );
+
       default:
         return null;
     }

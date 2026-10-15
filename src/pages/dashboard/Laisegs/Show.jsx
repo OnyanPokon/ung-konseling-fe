@@ -1,9 +1,35 @@
 import { useAuth } from '@/hooks';
 import useAbortableService from '@/hooks/useAbortableService';
 import { SesiKonselingsService } from '@/services';
-import { Card, Descriptions, Image, Skeleton, Steps, Typography } from 'antd';
+import { Card, Descriptions, Image, Skeleton, Steps, Tag, Typography } from 'antd';
 import React from 'react';
 import { useParams } from 'react-router-dom';
+
+const ANSWER_LABELS = {
+  sangat_setuju: 'Sangat Setuju',
+  setuju: 'Setuju',
+  tidak_setuju: 'Tidak Setuju',
+  sangat_tidak_setuju: 'Sangat Tidak Setuju',
+  lainnya: 'Lainnya'
+};
+
+const ANSWER_COLORS = {
+  sangat_setuju: 'green',
+  setuju: 'blue',
+  tidak_setuju: 'orange',
+  sangat_tidak_setuju: 'red',
+  lainnya: 'purple'
+};
+
+const QUESTIONS = [
+  { name: 'q1_topik_sesuai', otherName: 'q1_lainnya', label: '1. Topik yang dibahas dalam layanan sesuai dengan kebutuhan saya.' },
+  { name: 'q2_pemahaman_baru', otherName: 'q2_lainnya', label: '2. Saya memperoleh pemahaman baru setelah mengikuti layanan.' },
+  { name: 'q3_merasa_lebih_baik', otherName: 'q3_lainnya', label: '3. Saya merasa lebih baik setelah mengikuti layanan.' },
+  { name: 'q4_rencana_tindakan', otherName: 'q4_lainnya', label: '4. Saya memiliki rencana tindakan setelah mengikuti layanan.' },
+  { name: 'q5_berkaitan_masalah', otherName: 'q5_lainnya', label: '5. Layanan yang saya ikuti berkaitan dengan masalah yang sedang saya hadapi.' },
+  { name: 'q6_manfaat_layanan', otherName: 'q6_lainnya', label: '6. Layanan memberikan manfaat bagi saya dalam menghadapi masalah.' },
+  { name: 'q7_layanan_sudah_baik', otherName: 'q7_lainnya', label: '7. Saya merasa layanan yang diberikan konselor sudah baik.' }
+];
 
 const Show = () => {
   const { token, onUnauthorized } = useAuth();
@@ -56,64 +82,25 @@ const Show = () => {
               <Steps
                 current={-1}
                 direction="vertical"
-                items={[
-                  {
+                items={QUESTIONS.map((question) => {
+                  const answer = sesiKonseling.laiseg[question.name];
+                  const otherText = sesiKonseling.laiseg[question.otherName];
+
+                  return {
                     description: (
-                      <Card title={<div className="p-2">1. Topik - topik apa yang dibahas melalui layanan tersebut?</div>} size="small">
-                        {sesiKonseling.laiseg.discussion_topic}
+                      <Card title={<div className="p-2">{question.label}</div>} size="small">
+                        <Tag color={ANSWER_COLORS[answer] ?? 'default'}>
+                          {ANSWER_LABELS[answer] ?? '-'}
+                        </Tag>
+                        {answer === 'lainnya' && otherText && (
+                          <div className="mt-2">
+                            <Typography.Text type="secondary">{otherText}</Typography.Text>
+                          </div>
+                        )}
                       </Card>
                     )
-                  },
-                  {
-                    description: (
-                      <Card title={<div className="p-2">2. Hal - hal atau pemahaman baru apakah yang anda peroleh dari layanan tersebut?</div>} size="small">
-                        {sesiKonseling.laiseg.new_understanding}
-                      </Card>
-                    )
-                  },
-                  {
-                    description: (
-                      <Card title={<div className="p-2">3. Bagaimanakah perasaan anda setelah mengikuti layanan tersebut?</div>} size="small">
-                        {sesiKonseling.laiseg.feelings_after_service}
-                      </Card>
-                    )
-                  },
-                  {
-                    description: (
-                      <Card title={<div className="p-2">4. Hal - hal apakah yang akan anda lakukan setelah mengikuti layanan tersebut?</div>} size="small">
-                        {sesiKonseling.laiseg.plan_after_service}
-                      </Card>
-                    )
-                  },
-                  {
-                    description: (
-                      <Card title={<div className="p-2">4. Apakah layanan yang anda ikuti berkaitan dengan masalah yang sedang anda hadapi?</div>} size="small">
-                        {sesiKonseling.laiseg.related_to_problem ? 'Ya' : 'Tidak'}
-                      </Card>
-                    )
-                  },
-                  {
-                    description: (
-                      <Card title={<div className="p-2">5. Jika jawaban anda &apos;Ya&apos;, apa keuntungan yang anda rasakan setelah mengikuti layanan tersebut?</div>} size="small">
-                        {sesiKonseling.laiseg.benefits_if_yes}
-                      </Card>
-                    )
-                  },
-                  {
-                    description: (
-                      <Card title={<div className="p-2">6. Jika jawaban anda &apos;tidak&apos;, apa keuntungan yang anda rasakan setelah mengikuti layanan tersebut?</div>} size="small">
-                        {sesiKonseling.laiseg.benefits_if_no}
-                      </Card>
-                    )
-                  },
-                  {
-                    description: (
-                      <Card title={<div className="p-2">7. Tanggapan, saran, dan pesan apa yang ingin anda sampaikan kepada konselor terkait layanan yang anda ikuti tersebut?</div>} size="small">
-                        {sesiKonseling.laiseg.suggestions_and_messages}
-                      </Card>
-                    )
-                  }
-                ]}
+                  };
+                })}
               />
             </>
           )}

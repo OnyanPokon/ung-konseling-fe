@@ -11,7 +11,8 @@ enum InputType {
   DOCUMENT_EDITOR = 'document-editor',
   SELECT_SEARCH = 'select-search',
   MAP_PICKER = 'map-picker',
-  TIME_PICKER = 'time-picker'
+  TIME_PICKER = 'time-picker',
+  SCALE = 'scale'
 }
 
 export default InputType;
