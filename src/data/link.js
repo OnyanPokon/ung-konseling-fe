@@ -22,11 +22,7 @@ export const landingLink = [
     key: '/artikel',
     element: Landing.Articles
   },
-  {
-    label: 'Tester',
-    key: '/tester',
-    element: Landing.Tester
-  }
+
 ];
 
 /**
